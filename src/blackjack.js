@@ -1,4 +1,5 @@
 'use strict';
+import Chips from './chips.js';
 
 export default class BlackJack {
 
@@ -15,7 +16,8 @@ export default class BlackJack {
   playerTotal = 0;
   dealerTotal = 0;
   playerHandCount = 2;
-  dealerHandCount = 2;  
+  dealerHandCount = 2;
+  bet = 0;  
 
   card = {
     SA: '/table_games/img/AS.png',        
@@ -80,6 +82,9 @@ export default class BlackJack {
 
 
   constructor() {
+
+    this.chips = new Chips();
+
     this.mainField = document.querySelector('.mainField');
     this.playField = document.querySelector('.playField');
     
@@ -127,20 +132,20 @@ export default class BlackJack {
 
     this.dealBtn = document.createElement('button');
     this.dealBtn.setAttribute('class', 'ctlBtn dealBtn');        
-    this.dealBtn.style.position = 'absolute';
-    this.dealBtn.innerHTML = 'Deal';
+    //this.dealBtn.style.position = 'absolute';
+    this.dealBtn.innerHTML = 'DEAL START';
     this.dealBtn.style.left = `100px`;
 
     this.hitBtn = document.createElement('button');
     this.hitBtn.setAttribute('class', 'ctlBtn hitBtn');
-    this.hitBtn.style.position = 'absolute';
-    this.hitBtn.innerHTML = 'Hit';
+    //this.hitBtn.style.position = 'absolute';
+    this.hitBtn.innerHTML = 'HIT ME';
     this.hitBtn.style.left = `200px`;
 
     this.stayBtn = document.createElement('button');
     this.stayBtn.setAttribute('class', 'ctlBtn stayBtn');
-    this.stayBtn.style.position = 'absolute';
-    this.stayBtn.innerHTML = 'Stay';
+    //this.stayBtn.style.position = 'absolute';
+    this.stayBtn.innerHTML = 'STAY';
     this.stayBtn.style.left = `300px`;
 
     
@@ -172,7 +177,9 @@ export default class BlackJack {
       // this.showText(5,110,'dealerHand', 'Dealer Hand');
       // //this.showText(40,130,'dealerTotal', this.dealerTotal);
       // this.showText(5,200,'playerHand', 'Player Hand');
-      // this.showText(40,220,'playerTotal', this.playerTotal);      
+      // this.showText(40,220,'playerTotal', this.playerTotal);
+      this.bet = this.chips.bet;
+      this.chips.test(this.bet);
     });
     
     this.hitBtn.addEventListener('click', () => this.hit());
@@ -324,6 +331,7 @@ export default class BlackJack {
     } else {
       this.showText(40,220,'playerTotal', this.playerTotal);
       this.showText(10,300,'dealerWin','player bust!! dealer win');
+      this.chips.lose();
       return;
     }
     
@@ -347,11 +355,13 @@ export default class BlackJack {
   isBlackjack(dealerTotal, dealerHand, playerTotal, playerHand) {
     if ((dealerTotal === 11 && this.isSoftHand(dealerTotal, dealerHand)) && (playerTotal === 11 && this.isSoftHand(playerTotal, playerHand))) {
       this.showText(15,240,'blackjackTie', 'Tie BlackJack!!');
+      this.chips.tie();
       return true;
 
     } else if (dealerTotal === 11 && this.isSoftHand(dealerTotal, dealerHand)) {
       this.showText(15,150,'dealerBlackjack', 'BlackJack!!');                
       this.putCard(100,100, this.card[this.dealerHand[0]]); // dealer back-side card open
+      this.chips.lose();
       return true;
 
     } else if (playerTotal === 11 && this.isSoftHand(playerTotal, playerHand)) {
@@ -359,7 +369,7 @@ export default class BlackJack {
       this.putCard(100,100, this.card[this.dealerHand[0]]);  // dealer back-side card open
       this.$playerTotal = document.querySelector('.playerTotal');
       this.playField.removeChild(this.$playerTotal);
-                
+      this.chips.blackjack(this.bet);
       return true;
 
     } else {
@@ -413,20 +423,27 @@ export default class BlackJack {
   judge() {
     if (this.dealerTotal === this.playerTotal) { //tie
       this.showText(10,300,'tie','Tie!!');
+      this.chips.tie();
+      //this.chips.
+      //this.chips.test();      
     }
 
     else if (this.dealerTotal > 21) { // dealer bust       
       this.showText(10,300,'playerWin','dealer bust!! player win');
-
-    /*  
-    } else if (this.playerTotal > 21) {        
-      this.showText(10,300,'dealerWin','player bust!! dealer win');
-    */
-    } else if (this.playerTotal > this.dealerTotal) {        
+      //this.chips.test();
+      this.chips.win(this.bet);
+      //this.chips.modifyBalance(this.chips.balance, this.chips.bet);
+    
+    } else if (this.playerTotal > this.dealerTotal) { // player win        
       this.showText(10,300,'playerWin','player Win');
+      //this.chips.test();
+      this.chips.win(this.bet);
 
-    } else         
-      this.showText(10,300,'dealerWin','dealer Win');
+    } else {
+      this.showText(10,300,'dealerWin','dealer Win'); // dealer win
+      //this.chips.test();
+      this.chips.lose();
+    }
   }
 
   getNextCard(x, y) {

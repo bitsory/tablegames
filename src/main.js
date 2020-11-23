@@ -31,15 +31,21 @@ mainField.addEventListener('click', (event) => {
 function fieldMake(className) {
     const playField = document.createElement('div');
     const playControlField = document.createElement('div');
-    const startBtn = document.createElement('button');
+    const chipControlField = document.createElement('div');
+    //const startBtn = document.createElement('button');
 
     
     const x = subGameSelectView.clientLeft+30;
     const y = mainField.clientHeight -100 ;
     
     playField.setAttribute('class', 'playField');
+    chipControlField.setAttribute('class', 'chipControlField');
     playControlField.setAttribute('class', 'playControlField');
+    
+    const startBtn = document.createElement('div');
     startBtn.setAttribute('class', 'ctlBtn startBtn');
+    startBtn.innerHTML = '<img class="startBtn" src="/table_games/img/spadebtn.png" width="100" height="100">';
+    
     
     subGameSelectView.style.visibility = 'hidden';
 
@@ -47,17 +53,25 @@ function fieldMake(className) {
     // playField.style.left = `${x}px`;
     // playField.style.top = `${y}px`;
     //mainField.style.backgroundColor = "#006400";
+    chipControlField.style.position = 'absolute';
     playControlField.style.position = 'absolute';
+    
     //playControlField.style.left = `${x}px`;
+    chipControlField.style.bottom = `50px`;
     playControlField.style.bottom = `0px`;
+    
 
     startBtn.style.position = 'absolute';
-    startBtn.innerHTML = 'start';
+    startBtn.style.left = `44%`;
+    startBtn.style.bottom = `40%`;
+    //startBtn.innerHTML = 'start';
 
     mainField.appendChild(playField);
+    mainField.appendChild(chipControlField);
     mainField.appendChild(playControlField);
+    
     mainField.removeChild(subGameSelectView);
-    playControlField.appendChild(startBtn);
+    playField.appendChild(startBtn);
 }
 
 
