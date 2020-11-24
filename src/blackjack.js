@@ -92,43 +92,10 @@ export default class BlackJack {
 
     console.log("blackjack initialized...");
 
-    /*
-    this.item = document.createElement('img');
-    this.item.setAttribute('class', 'deck');
-    this.item.setAttribute('src', this.cardBack);
-
-    this.item2 = document.createElement('img');
-    this.item2.setAttribute('class', 'deck');
-    this.item2.setAttribute('src', this.card.SA);
-
-    this.item.style.position = 'absolute';
-    this.item.style.left = `10px`;
-    this.item.style.top = `10px`;
-
-    this.item2.style.position = 'absolute';
-    this.item2.style.left = `20px`;
-    this.item2.style.top = `20px`;
-
-    setTimeout(() => {
-      this.playField.appendChild(this.item);
-
-    }, 100);
-
-    setTimeout(() => {
-        this.playField.appendChild(this.item2);
-
-    }, 200);
-    */
-
     
     this.playControlField = document.querySelector('.playControlField');
     this.testBtn = document.querySelector('.startBtn');
 
-    
-
-    //this.mainField.appendChild(this.item);
-    //this.mainField.appendChild(this.item2);
-    //this.playControlField.removeChild(this.testBtn);
 
     this.dealBtn = document.createElement('button');
     this.dealBtn.setAttribute('class', 'ctlBtn dealBtn');        
@@ -166,20 +133,29 @@ export default class BlackJack {
       this.playField.innerHTML = '';
       this.shuffle();
     }
+
+    this.offHitAndStay();
     
     
     
 
     this.dealBtn.addEventListener('click', () => {
-      
-      this.playField.innerHTML = '';
-      this.init();
-      // this.showText(5,110,'dealerHand', 'Dealer Hand');
-      // //this.showText(40,130,'dealerTotal', this.dealerTotal);
-      // this.showText(5,200,'playerHand', 'Player Hand');
-      // this.showText(40,220,'playerTotal', this.playerTotal);
       this.bet = this.chips.bet;
-      this.chips.test(this.bet);
+      if (this.bet === 0) {
+        this.showText(200, 300, 'placebet', 'place your bet please');
+        return;
+      } else {
+        this.playField.innerHTML = '';
+        
+        if (this.init()==='blackjack') {
+          return;
+        } else {
+          this.offDealBtn();
+          this.onHitAndStay();
+          this.chips.offReset();
+          this.chips.offChip();
+        }
+      }
     });
     
     this.hitBtn.addEventListener('click', () => this.hit());
@@ -280,7 +256,7 @@ export default class BlackJack {
     this.showText(40,220,'playerTotal', this.playerTotal);
 
     if (this.isBlackjack(this.dealerTotal, this.dealerHand, this.playerTotal, this.playerHand)) {
-      return;
+      return 'blackjack';
       
     } else if (this.isSoftHand(this.playerTotal, this.playerHand)) {
       this.playerTotal = this.playerTotal + 10;
@@ -301,13 +277,11 @@ export default class BlackJack {
     console.log(`player hand : ${this.playerHand}`);
     
     this.playerTotal = this.getTotal(this.playerHand); 
-
-    this.hitAndJudge(this.playerTotal, this.playerHand);
-
     this.currentCardCount++;
     this.playerHandCount++;
     this.px = this.px + 50;
     
+    this.hitAndJudge(this.playerTotal, this.playerHand);
   }
 
   getTotal(index) {
@@ -329,9 +303,8 @@ export default class BlackJack {
       this.showText(40,220,'playerTotal', this.playerTotal);
       return;
     } else {
-      this.showText(40,220,'playerTotal', this.playerTotal);
-      this.showText(10,300,'dealerWin','player bust!! dealer win');
-      this.chips.lose();
+
+      this.judge();
       return;
     }
     
@@ -355,12 +328,16 @@ export default class BlackJack {
   isBlackjack(dealerTotal, dealerHand, playerTotal, playerHand) {
     if ((dealerTotal === 11 && this.isSoftHand(dealerTotal, dealerHand)) && (playerTotal === 11 && this.isSoftHand(playerTotal, playerHand))) {
       this.showText(15,240,'blackjackTie', 'Tie BlackJack!!');
+      this.onDealBtn();
+      this.offHitAndStay();
       this.chips.tie();
       return true;
 
     } else if (dealerTotal === 11 && this.isSoftHand(dealerTotal, dealerHand)) {
       this.showText(15,150,'dealerBlackjack', 'BlackJack!!');                
       this.putCard(100,100, this.card[this.dealerHand[0]]); // dealer back-side card open
+      this.onDealBtn();
+      this.offHitAndStay();
       this.chips.lose();
       return true;
 
@@ -369,6 +346,8 @@ export default class BlackJack {
       this.putCard(100,100, this.card[this.dealerHand[0]]);  // dealer back-side card open
       this.$playerTotal = document.querySelector('.playerTotal');
       this.playField.removeChild(this.$playerTotal);
+      this.onDealBtn();
+      this.offHitAndStay();
       this.chips.blackjack(this.bet);
       return true;
 
@@ -381,31 +360,32 @@ export default class BlackJack {
 
     if (total <= 7 && (hand.indexOf("SA") !== -1 || hand.indexOf("CA") !== -1 || hand.indexOf("DA") !== -1 || hand.indexOf("HA") !== -1)) {
       console.log("soft17");
-      return total;
+      return total; // soft 17
 
     } else if (total > 7 && total <= 11 && (hand.indexOf("SA") !== -1 || hand.indexOf("CA") !== -1 || hand.indexOf("DA") !== -1 || hand.indexOf("HA") !== -1)) {
       console.log("soft18");
-      return total + 10;
+      return total + 10; // soft 18~20
 
     } else { 
       console.log("hard");
-      return total;
+      return total; // hard number
     }
   }
 
 
   stay() {
     this.putCard(100,100, this.card[this.dealerHand[0]]); // dealer back-side card open
-    let timer = setInterval(() => { // 종료조건 : dealer total 17 이상, not soft
+    let timer = setInterval(() => { // finish condition : dealer total is higher than 17 and not soft
       let tmp = this.isSoftSeventeen(this.dealerTotal, this.dealerHand);
 
       if (tmp >= 17) {
         this.dealerTotal = tmp;
         this.showText(40,130,'dealerTotal', this.dealerTotal);
         clearInterval(timer);
-        this.judge();
+        
+        this.judge(); // check win or lose 
 
-      } else {
+      } else { // dealer must hit under 17
         this.getNextCard(this.dx, this.dy);        
         this.dealerHand.push(this.shuffledCard[this.currentCardCount]);
         this.dealerTotal = this.getTotal(this.dealerHand);
@@ -421,29 +401,35 @@ export default class BlackJack {
   }
 
   judge() {
+    
     if (this.dealerTotal === this.playerTotal) { //tie
       this.showText(10,300,'tie','Tie!!');
-      this.chips.tie();
-      //this.chips.
-      //this.chips.test();      
-    }
+      this.chips.tie(this.bet);
+           
+    } else if (this.playerTotal > 21) { // player bust
+      
+      this.showText(40,220,'playerTotal', this.playerTotal);
+      this.showText(10,300,'dealerWin','player bust!! dealer win');    
+      this.chips.lose();
 
-    else if (this.dealerTotal > 21) { // dealer bust       
+    } else if (this.dealerTotal > 21) { // dealer bust       
       this.showText(10,300,'playerWin','dealer bust!! player win');
-      //this.chips.test();
-      this.chips.win(this.bet);
-      //this.chips.modifyBalance(this.chips.balance, this.chips.bet);
+      this.chips.win(this.bet);      
     
     } else if (this.playerTotal > this.dealerTotal) { // player win        
       this.showText(10,300,'playerWin','player Win');
-      //this.chips.test();
       this.chips.win(this.bet);
 
     } else {
       this.showText(10,300,'dealerWin','dealer Win'); // dealer win
-      //this.chips.test();
       this.chips.lose();
     }
+
+    // round finish and prepare next round
+    this.onDealBtn();
+    this.offHitAndStay();
+    this.chips.onReset();
+    this.chips.onChip();
   }
 
   getNextCard(x, y) {
@@ -520,6 +506,34 @@ export default class BlackJack {
       }
     }
     return result;
+  }
+
+  onDealBtn() {
+    const dealBtn = document.querySelector('.dealBtn');
+    dealBtn.disabled = false;
+  }
+
+  offDealBtn() {
+    const dealBtn = document.querySelector('.dealBtn');
+    dealBtn.disabled = true;
+    
+  }
+
+  onHitAndStay() {
+    const hitBtn = document.querySelector('.hitBtn');
+    const stayBtn = document.querySelector('.stayBtn');
+    hitBtn.disabled = false;
+    stayBtn.disabled = false;
+  }
+
+  offHitAndStay() { // after round, wait for bet and deal
+    const hitBtn = document.querySelector('.hitBtn');
+    const stayBtn = document.querySelector('.stayBtn');
+    hitBtn.disabled = true;
+    stayBtn.disabled = true;
+    
+    // const test = document.querySelector('.resetBetBtn');
+    // test.disabled = false;
   }
 
 
