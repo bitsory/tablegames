@@ -1,10 +1,11 @@
 'use strict';
 import Chips from './chips.js';
+import Deck from './deck.js';
 
 export default class BlackJack {
 
-  cardDeck = []; 
-  shuffledCard = [];
+  //cardDeck = []; 
+  //shuffledCard = [];
   currentCardCount = 0;
 
   px = 200;
@@ -82,17 +83,16 @@ export default class BlackJack {
 
 
   constructor() {
+    console.log("blackjack initialized...");
 
     this.chips = new Chips();
+    this.deck = new Deck();
+    
+    console.log(this.deck);
+    console.log(this.deck.shuffledCard[0]);
 
     this.mainField = document.querySelector('.mainField');
     this.playField = document.querySelector('.playField');
-    
-      
-
-    console.log("blackjack initialized...");
-
-    
     this.playControlField = document.querySelector('.playControlField');
     this.testBtn = document.querySelector('.startBtn');
 
@@ -114,24 +114,16 @@ export default class BlackJack {
     //this.stayBtn.style.position = 'absolute';
     this.stayBtn.innerHTML = 'STAY';
     this.stayBtn.style.left = `300px`;
-
-    
-
-    
-    
+   
     this.playControlField.appendChild(this.dealBtn);
     this.playControlField.appendChild(this.hitBtn);
     this.playControlField.appendChild(this.stayBtn);
-
-
-
-    
 
     if (this.playField.hasChildNodes) {
       
       console.log("field check");
       this.playField.innerHTML = '';
-      this.shuffle();
+      //this.deck.shuffle();
     }
 
     this.offHitAndStay();
@@ -228,16 +220,16 @@ export default class BlackJack {
 
     this.dealInit();
 
-    this.playerHand.push(this.shuffledCard[this.currentCardCount]);
+    this.playerHand.push(this.deck.shuffledCard[this.currentCardCount]);
     this.putCard(100,200, this.card[this.playerHand[0]]);  // player first card
     
-    this.dealerHand.push(this.shuffledCard[this.currentCardCount]);
+    this.dealerHand.push(this.deck.shuffledCard[this.currentCardCount]);
     this.putCard(100,100, this.card.back);  // dealer first card : shows back side
     
-    this.playerHand.push(this.shuffledCard[this.currentCardCount]);
+    this.playerHand.push(this.deck.shuffledCard[this.currentCardCount]);
     this.putCard(150,200, this.card[this.playerHand[1]]);  // player second
     
-    this.dealerHand.push(this.shuffledCard[this.currentCardCount]);
+    this.dealerHand.push(this.deck.shuffledCard[this.currentCardCount]);
     this.putCard(150,100, this.card[this.dealerHand[1]]);  // dealer second
     
 
@@ -273,7 +265,7 @@ export default class BlackJack {
     
     this.getNextCard(this.px, this.py);
     
-    this.playerHand.push(this.shuffledCard[this.currentCardCount]);
+    this.playerHand.push(this.deck.shuffledCard[this.currentCardCount]);
     console.log(`player hand : ${this.playerHand}`);
     
     this.playerTotal = this.getTotal(this.playerHand); 
@@ -387,7 +379,7 @@ export default class BlackJack {
 
       } else { // dealer must hit under 17
         this.getNextCard(this.dx, this.dy);        
-        this.dealerHand.push(this.shuffledCard[this.currentCardCount]);
+        this.dealerHand.push(this.deck.shuffledCard[this.currentCardCount]);
         this.dealerTotal = this.getTotal(this.dealerHand);
         this.showText(40,130,'dealerTotal', this.dealerTotal);
         this.currentCardCount++;
@@ -435,7 +427,7 @@ export default class BlackJack {
   getNextCard(x, y) {
     this.item = document.createElement('img');
     this.item.setAttribute('class', 'deck');
-    this.item.setAttribute('src', this.card[this.shuffledCard[this.currentCardCount]]);
+    this.item.setAttribute('src', this.card[this.deck.shuffledCard[this.currentCardCount]]);
 
     this.item.style.position = 'absolute';
     this.item.style.left = `${x}px`;
@@ -444,7 +436,7 @@ export default class BlackJack {
     this.playField.appendChild(this.item);
 
   }
-
+  
   numberRecognize(item) {
     let result = item.slice(1,3);
     if (result ==='10' || result === 'J' || result === 'Q' || result === 'K') {
@@ -457,7 +449,7 @@ export default class BlackJack {
   }
 
 
-
+  /*
   shuffle() {
     let card = ['SA', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'SJ', 'SQ', 'SK',
                 'DA', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'DJ', 'DQ', 'DK',
@@ -507,6 +499,7 @@ export default class BlackJack {
     }
     return result;
   }
+  */
 
   onDealBtn() {
     const dealBtn = document.querySelector('.dealBtn');
@@ -532,8 +525,6 @@ export default class BlackJack {
     hitBtn.disabled = true;
     stayBtn.disabled = true;
     
-    // const test = document.querySelector('.resetBetBtn');
-    // test.disabled = false;
   }
 
 
