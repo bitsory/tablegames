@@ -8,17 +8,18 @@ export default class BlackJack {
   //shuffledCard = [];
   currentCardCount = 0;
 
-  px = 200;
-  py = 200;
-  dx = 200;
-  dy = 100;   
+  // px = 200; // hit card position
+  // py = 200;
+  // dx = 200;
+  // dy = 100;    
   playerHand = [];
   dealerHand = [];
   playerTotal = 0;
   dealerTotal = 0;
   playerHandCount = 2;
   dealerHandCount = 2;
-  bet = 0;  
+  bet = 0; 
+  isDouble = false; 
 
   card = {
     SA: '/table_games/img/AS.png',        
@@ -109,6 +110,12 @@ export default class BlackJack {
     this.hitBtn.innerHTML = 'HIT ME';
     this.hitBtn.style.left = `200px`;
 
+    this.doubleBtn = document.createElement('button');
+    this.doubleBtn.setAttribute('class', 'ctlBtn doubleBtn');
+    //this.hitBtn.style.position = 'absolute';
+    this.doubleBtn.innerHTML = 'Double Down! X2';
+    this.doubleBtn.style.left = `200px`;
+
     this.stayBtn = document.createElement('button');
     this.stayBtn.setAttribute('class', 'ctlBtn stayBtn');
     //this.stayBtn.style.position = 'absolute';
@@ -117,6 +124,7 @@ export default class BlackJack {
    
     this.playControlField.appendChild(this.dealBtn);
     this.playControlField.appendChild(this.hitBtn);
+    this.playControlField.appendChild(this.doubleBtn);
     this.playControlField.appendChild(this.stayBtn);
 
     if (this.playField.hasChildNodes) {
@@ -152,6 +160,8 @@ export default class BlackJack {
     
     this.hitBtn.addEventListener('click', () => this.hit());
 
+    this.doubleBtn.addEventListener('click', () => this.doubleDown());
+
     this.stayBtn.addEventListener('click', () => this.stay());
 
   }  // constructor
@@ -182,10 +192,10 @@ export default class BlackJack {
 
 
   dealInit() {
-    this.px = 200;
-    this.py = 200;
-    this.dx = 200;
-    this.dy = 100;
+    this.px = 450;
+    this.py = 260;
+    this.dx = 450;
+    this.dy = 80;
     
     this.playerHand = [];
     this.dealerHand = [];
@@ -193,6 +203,7 @@ export default class BlackJack {
     this.dealerTotal = 0;
     this.playerHandCount = 2;
     this.dealerHandCount = 2;
+    this.isDouble = false;
   }
 
 
@@ -221,16 +232,16 @@ export default class BlackJack {
     this.dealInit();
 
     this.playerHand.push(this.deck.shuffledCard[this.currentCardCount]);
-    this.putCard(100,200, this.card[this.playerHand[0]]);  // player first card
+    this.putCard(350,260, this.card[this.playerHand[0]]);  // player first card
     
     this.dealerHand.push(this.deck.shuffledCard[this.currentCardCount]);
-    this.putCard(100,100, this.card.back);  // dealer first card : shows back side
+    this.putCard(350,80, this.card.back);  // dealer first card : shows back side
     
     this.playerHand.push(this.deck.shuffledCard[this.currentCardCount]);
-    this.putCard(150,200, this.card[this.playerHand[1]]);  // player second
+    this.putCard(400,260, this.card[this.playerHand[1]]);  // player second
     
     this.dealerHand.push(this.deck.shuffledCard[this.currentCardCount]);
-    this.putCard(150,100, this.card[this.dealerHand[1]]);  // dealer second
+    this.putCard(400,80, this.card[this.dealerHand[1]]);  // dealer second
     
 
     console.log(`player hand : ${this.playerHand}`);
@@ -272,8 +283,13 @@ export default class BlackJack {
     this.currentCardCount++;
     this.playerHandCount++;
     this.px = this.px + 50;
-    
-    this.hitAndJudge(this.playerTotal, this.playerHand);
+
+    if (!this.isDouble) {
+      this.hitAndJudge(this.playerTotal, this.playerHand);
+    } else {
+      this.hitAndJudge(this.playerTotal, this.playerHand);
+      this.stay();
+    }
   }
 
   getTotal(index) {
@@ -294,11 +310,23 @@ export default class BlackJack {
     } else if (total <= 21) {
       this.showText(40,220,'playerTotal', this.playerTotal);
       return;
-    } else {
-
+    } else { // player bust
       this.judge();
       return;
     }
+    
+  }
+
+  doubleDown() {
+    this.isDouble = true;
+    this.hit();
+    
+    let tmpBet = this.bet;
+    let tmpBalance = this.chips.balance;
+    this.chips.modifyBalance(tmpBalance-tmpBet, tmpBet*2);
+
+    this.bet = this.bet + tmpBet;
+    this.chips.balance = tmpBalance - tmpBet;
     
   }
 
@@ -315,6 +343,10 @@ export default class BlackJack {
     }
   }
 
+  openDealerBackSideCard() {
+    this.putCard(350,80, this.card[this.dealerHand[0]]);
+  }
+
   
 
   isBlackjack(dealerTotal, dealerHand, playerTotal, playerHand) {
@@ -327,7 +359,8 @@ export default class BlackJack {
 
     } else if (dealerTotal === 11 && this.isSoftHand(dealerTotal, dealerHand)) {
       this.showText(15,150,'dealerBlackjack', 'BlackJack!!');                
-      this.putCard(100,100, this.card[this.dealerHand[0]]); // dealer back-side card open
+      this.openDealerBackSideCard();
+      //this.putCard(350,80, this.card[this.dealerHand[0]]); // dealer back-side card open
       this.onDealBtn();
       this.offHitAndStay();
       this.chips.lose();
@@ -335,7 +368,8 @@ export default class BlackJack {
 
     } else if (playerTotal === 11 && this.isSoftHand(playerTotal, playerHand)) {
       this.showText(15,240,'playerBlackjack', 'BlackJack!!');
-      this.putCard(100,100, this.card[this.dealerHand[0]]);  // dealer back-side card open
+      this.openDealerBackSideCard();
+      //this.putCard(350,80, this.card[this.dealerHand[0]]);  // dealer back-side card open
       this.$playerTotal = document.querySelector('.playerTotal');
       this.playField.removeChild(this.$playerTotal);
       this.onDealBtn();
@@ -366,7 +400,8 @@ export default class BlackJack {
 
 
   stay() {
-    this.putCard(100,100, this.card[this.dealerHand[0]]); // dealer back-side card open
+    this.openDealerBackSideCard();
+    //this.putCard(350,80, this.card[this.dealerHand[0]]); // dealer back-side card open
     let timer = setInterval(() => { // finish condition : dealer total is higher than 17 and not soft
       let tmp = this.isSoftSeventeen(this.dealerTotal, this.dealerHand);
 
@@ -401,7 +436,8 @@ export default class BlackJack {
     } else if (this.playerTotal > 21) { // player bust
       
       this.showText(40,220,'playerTotal', this.playerTotal);
-      this.showText(10,300,'dealerWin','player bust!! dealer win');    
+      this.showText(10,300,'dealerWin','player bust!! dealer win');  
+      this.openDealerBackSideCard();  
       this.chips.lose();
 
     } else if (this.dealerTotal > 21) { // dealer bust       
@@ -448,59 +484,6 @@ export default class BlackJack {
     return parseInt(result);
   }
 
-
-  /*
-  shuffle() {
-    let card = ['SA', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'SJ', 'SQ', 'SK',
-                'DA', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'DJ', 'DQ', 'DK',
-                'CA', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'CJ', 'CQ', 'CK',
-                'HA', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9', 'H10', 'HJ', 'HQ', 'HK',
-                ];  
-    
-    let num = this.getRandomDeck(0,51,52);
-
-    console.log(num);
-    
-    for (let i = 0; i < 52 ; i++) {     
-      this.shuffledCard.push(card[num[i]]);
-    }    
-    
-    console.log(this.shuffledCard);
-    
-  }
-    
-  getRandom(min, max) {
-    return Math.floor((Math.random() * (max - min + 1)) + min);
-  }
-
-  getRandomDeck(min, max, count) {
-      
-    let result = [];
-
-    while(1)
-    {
-      // store the number which from function getRandom in the varable index   
-      // getRandom 으로 뽑힌 숫자를 변수 index에 저장
-      let index = this.getRandom(min, max); 
-  
-      // remove repetition index value
-      if (result.indexOf(index) > -1) { // index 값의 중복제거
-        continue;
-      }
-
-      //insert to result array 
-      result.push(index);  // getRandom 으로 뽑힌 숫자를 result 배열에 삽입
-      console.log(`count = ${count}`)
-  
-      // exit loop when result array complete 
-      if (result.length == count) { // result 배열이 완성되면 종료
-        break;
-      }
-    }
-    return result;
-  }
-  */
-
   onDealBtn() {
     const dealBtn = document.querySelector('.dealBtn');
     dealBtn.disabled = false;
@@ -514,15 +497,19 @@ export default class BlackJack {
 
   onHitAndStay() {
     const hitBtn = document.querySelector('.hitBtn');
+    const doubleBtn = document.querySelector('.doubleBtn');
     const stayBtn = document.querySelector('.stayBtn');
     hitBtn.disabled = false;
+    doubleBtn.disabled = false;
     stayBtn.disabled = false;
   }
 
   offHitAndStay() { // after round, wait for bet and deal
     const hitBtn = document.querySelector('.hitBtn');
+    const doubleBtn = document.querySelector('.doubleBtn');
     const stayBtn = document.querySelector('.stayBtn');
     hitBtn.disabled = true;
+    doubleBtn.disabled = true;
     stayBtn.disabled = true;
     
   }

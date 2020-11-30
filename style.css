@@ -49,14 +49,15 @@ nav {
 }
 
 .mainField {
-    display: flex;
-    position: relative;
+    display: flex; 
+    position: relative; 
     max-width: 800px;
+    min-width: 600px;
 
     margin: 30px auto;
-    /* margin:  auto; */
-    width: 80%;
-    height: 80vh;
+    margin:  auto;
+    width: 800px;
+    height: 600px;
     
     background-color: lightcyan
 }
@@ -97,10 +98,16 @@ nav {
 }
 
 .playField {
-    display: flex;
+    /* display: flex; */
     width: 100%;
     height: 100%;
-    background-color:darkgreen;
+    max-width: 100%;
+    max-height: 100%;
+    background: url('/table_games/img/tablebackground.jpg') center/cover no-repeat;
+    /* background-size: 100% 100%;
+    background-repeat: no-repeat; */
+    /* background-attachment: fixed; */
+    /* background-color:darkgreen; */
 }
 
 .playControlField {
@@ -111,7 +118,7 @@ nav {
     align-items: center;
     /* align-content: center; */  
     justify-content: space-between; 
-    background-color: rgb(150, 150, 150);
+    /* background-color: rgb(150, 150, 150); */
 }
 
 .chipControlField {
@@ -122,7 +129,7 @@ nav {
     align-items: center;
     /* align-content: center;
     justify-content: center; */
-    background-color: rgba(211, 211, 211, 0.87);
+    /* background-color: rgba(211, 211, 211, 0.87); */
 }
 
 
@@ -185,6 +192,7 @@ nav {
     margin-left: 40px;
     outline: none;
     cursor: pointer;
+    background-color: white;
     transition: transform 200ms ease-in;
 }
 
@@ -196,11 +204,15 @@ nav {
     margin-left: 50px;
     font-size: 25px;
     font-style: inherit;
+    color: white;
 }
 
 .deck {
     display: block;
     width: 50px;
     height: 80px;
+
+    /* width: 6%;
+    height: 11%; */
 }
 

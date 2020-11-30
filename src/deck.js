@@ -18,6 +18,12 @@ export default class Deck {
     
     let num = this.getRandomDeck(0,51,52); // 52 cards, single deck
 
+    //double deck card array : doubledeck = card.concat(card);
+    /*
+    let doubledeck = card.concat(card);
+    console.log(doubledeck);
+    */
+   
     console.log(num);
     
     for (let i = 0; i < 52 ; i++) {     
