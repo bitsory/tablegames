@@ -4,14 +4,9 @@ import Deck from './deck.js';
 
 export default class BlackJack {
 
-  //cardDeck = []; 
-  //shuffledCard = [];
-  currentCardCount = 0;
 
-  // px = 200; // hit card position
-  // py = 200;
-  // dx = 200;
-  // dy = 100;    
+  currentCardCount = 0;
+   
   playerHand = [];
   dealerHand = [];
   playerTotal = 0;
@@ -20,68 +15,6 @@ export default class BlackJack {
   dealerHandCount = 2;
   bet = 0; 
   isDouble = false; 
-
-  card = {
-    SA: '/table_games/img/AS.png',        
-    S2: '/table_games/img/2S.png',
-    S3: '/table_games/img/3S.png',
-    S4: '/table_games/img/4S.png',
-    S5: '/table_games/img/5S.png',
-    S6: '/table_games/img/6S.png',
-    S7: '/table_games/img/7S.png',
-    S8: '/table_games/img/8S.png',
-    S9: '/table_games/img/9S.png',
-    S10: '/table_games/img/10S.png',
-    SJ: '/table_games/img/JS.png',
-    SQ: '/table_games/img/QS.png',
-    SK: '/table_games/img/KS.png',
-  
-    HA: '/table_games/img/AH.png',
-    H2: '/table_games/img/2H.png',
-    H3: '/table_games/img/3H.png',
-    H4: '/table_games/img/4H.png',
-    H5: '/table_games/img/5H.png',
-    H6: '/table_games/img/6H.png',
-    H7: '/table_games/img/7H.png',
-    H8: '/table_games/img/8H.png',
-    H9: '/table_games/img/9H.png',
-    H10: '/table_games/img/10H.png',
-    HJ: '/table_games/img/JH.png',
-    HQ: '/table_games/img/QH.png',
-    HK: '/table_games/img/KH.png',
-  
-    DA: '/table_games/img/AD.png',        
-    D2: '/table_games/img/2D.png',
-    D3: '/table_games/img/3D.png',
-    D4: '/table_games/img/4D.png',
-    D5: '/table_games/img/5D.png',
-    D6: '/table_games/img/6D.png',
-    D7: '/table_games/img/7D.png',
-    D8: '/table_games/img/8D.png',
-    D9: '/table_games/img/9D.png',
-    D10: '/table_games/img/10D.png',
-    DJ: '/table_games/img/JD.png',
-    DQ: '/table_games/img/QD.png',
-    DK: '/table_games/img/KD.png',
-  
-    CA: '/table_games/img/AC.png',        
-    C2: '/table_games/img/2C.png',
-    C3: '/table_games/img/3C.png',
-    C4: '/table_games/img/4C.png',
-    C5: '/table_games/img/5C.png',
-    C6: '/table_games/img/6C.png',
-    C7: '/table_games/img/7C.png',
-    C8: '/table_games/img/8C.png',
-    C9: '/table_games/img/9C.png',
-    C10: '/table_games/img/10C.png',
-    CJ: '/table_games/img/JC.png',
-    CQ: '/table_games/img/QC.png',
-    CK: '/table_games/img/KC.png',
-    
-    back: '/table_games/img/back.png'
-      
-  };
-
 
   constructor() {
     console.log("blackjack initialized...");
@@ -142,7 +75,7 @@ export default class BlackJack {
     this.dealBtn.addEventListener('click', () => {
       this.bet = this.chips.bet;
       if (this.bet === 0) {
-        this.showText(200, 300, 'placebet', 'place your bet please');
+        this.showText(350, 400, 'placebet', 'PLACE YOUR BET PLEASE');
         return;
       } else {
         this.playField.innerHTML = '';
@@ -191,7 +124,7 @@ export default class BlackJack {
   }
 
 
-  dealInit() {
+  dealValueInit() {
     this.px = 450;
     this.py = 260;
     this.dx = 450;
@@ -229,8 +162,31 @@ export default class BlackJack {
 
   init() {
 
-    this.dealInit();
+    this.dealValueInit();
+    
+    setTimeout(() => {
+      this.playerHand.push(this.deck.shuffledCard[this.currentCardCount]);
+      this.putCard(350,260, this.deck.card[this.playerHand[0]]);  // player first card
 
+    }, 0);
+    
+    setTimeout(() => {
+      this.dealerHand.push(this.deck.shuffledCard[this.currentCardCount]);
+      this.putCard(350,80, this.deck.card.back);  // dealer first card : shows back side
+      
+    },300);
+
+    setTimeout(() => {
+      this.playerHand.push(this.deck.shuffledCard[this.currentCardCount]);
+      this.putCard(400,260, this.deck.card[this.playerHand[1]]);  // player second
+    },600);
+
+    setTimeout(() => {
+      this.dealerHand.push(this.deck.shuffledCard[this.currentCardCount]);
+      this.putCard(400,80, this.deck.card[this.dealerHand[1]]);  // dealer second
+    },900);
+
+    /*
     this.playerHand.push(this.deck.shuffledCard[this.currentCardCount]);
     this.putCard(350,260, this.card[this.playerHand[0]]);  // player first card
     
@@ -243,33 +199,35 @@ export default class BlackJack {
     this.dealerHand.push(this.deck.shuffledCard[this.currentCardCount]);
     this.putCard(400,80, this.card[this.dealerHand[1]]);  // dealer second
     
+    */
+    setTimeout(() => {
+      console.log(`player hand : ${this.playerHand}`);
+      console.log(`dealer hand : ${this.dealerHand}`);
 
-    console.log(`player hand : ${this.playerHand}`);
-    console.log(`dealer hand : ${this.dealerHand}`);
+      this.playerTotal = this.getTotal(this.playerHand);
+      this.dealerTotal = this.getTotal(this.dealerHand);
 
-    this.playerTotal = this.getTotal(this.playerHand);
-    this.dealerTotal = this.getTotal(this.dealerHand);
+      console.log(`player total : ${this.playerTotal}`);
+      console.log(`dealer total : ${this.dealerTotal}`);
 
-    console.log(`player total : ${this.playerTotal}`);
-    console.log(`dealer total : ${this.dealerTotal}`);
+      this.showText(250,90,'dealerHand', 'Dealer Hand');
+      //this.showText(40,130,'dealerTotal', this.dealerTotal);
+      this.showText(250,270,'playerHand', 'Player Hand');
+      this.showText(280,290,'playerTotal', this.playerTotal);
 
-    this.showText(5,110,'dealerHand', 'Dealer Hand');
-    //this.showText(40,130,'dealerTotal', this.dealerTotal);
-    this.showText(5,200,'playerHand', 'Player Hand');
-    this.showText(40,220,'playerTotal', this.playerTotal);
-
-    if (this.isBlackjack(this.dealerTotal, this.dealerHand, this.playerTotal, this.playerHand)) {
-      return 'blackjack';
-      
-    } else if (this.isSoftHand(this.playerTotal, this.playerHand)) {
-      this.playerTotal = this.playerTotal + 10;
-      this.showText(30,240,'soft', 'SOFT');
-    } else {
-      this.showText(30,240,'soft', '');
-      return;
-      
-    }
-  
+      if (this.isBlackjack(this.dealerTotal, this.dealerHand, this.playerTotal, this.playerHand)) {
+        return 'blackjack';
+        
+      } else if (this.isSoftHand(this.playerTotal, this.playerHand)) {
+        this.playerTotal = this.playerTotal + 10;
+        this.showText(30,240,'soft', 'SOFT');
+      } else {
+        this.showText(30,240,'soft', '');
+        return;
+        
+      }
+    }, 1000);
+    
   }
 
   hit() {
@@ -344,30 +302,32 @@ export default class BlackJack {
   }
 
   openDealerBackSideCard() {
-    this.putCard(350,80, this.card[this.dealerHand[0]]);
+    this.putCard(350,80, this.deck.card[this.dealerHand[0]]);
   }
 
   
 
   isBlackjack(dealerTotal, dealerHand, playerTotal, playerHand) {
     if ((dealerTotal === 11 && this.isSoftHand(dealerTotal, dealerHand)) && (playerTotal === 11 && this.isSoftHand(playerTotal, playerHand))) {
-      this.showText(15,240,'blackjackTie', 'Tie BlackJack!!');
+      this.showText(350,200,'blackjackTie', 'BlackJack Tie!!');
       this.onDealBtn();
       this.offHitAndStay();
       this.chips.tie();
+      this.chips.onChip();
       return true;
 
     } else if (dealerTotal === 11 && this.isSoftHand(dealerTotal, dealerHand)) {
-      this.showText(15,150,'dealerBlackjack', 'BlackJack!!');                
+      this.showText(350,200,'dealerBlackjack', 'Dealer BlackJack!!');                
       this.openDealerBackSideCard();
       //this.putCard(350,80, this.card[this.dealerHand[0]]); // dealer back-side card open
       this.onDealBtn();
       this.offHitAndStay();
       this.chips.lose();
+      this.chips.onChip();
       return true;
 
     } else if (playerTotal === 11 && this.isSoftHand(playerTotal, playerHand)) {
-      this.showText(15,240,'playerBlackjack', 'BlackJack!!');
+      this.showText(350,200,'playerBlackjack', 'BlackJack!!');
       this.openDealerBackSideCard();
       //this.putCard(350,80, this.card[this.dealerHand[0]]);  // dealer back-side card open
       this.$playerTotal = document.querySelector('.playerTotal');
@@ -375,6 +335,7 @@ export default class BlackJack {
       this.onDealBtn();
       this.offHitAndStay();
       this.chips.blackjack(this.bet);
+      this.chips.onChip();
       return true;
 
     } else {
@@ -407,7 +368,7 @@ export default class BlackJack {
 
       if (tmp >= 17) {
         this.dealerTotal = tmp;
-        this.showText(40,130,'dealerTotal', this.dealerTotal);
+        this.showText(280,110,'dealerTotal', this.dealerTotal);
         clearInterval(timer);
         
         this.judge(); // check win or lose 
@@ -416,7 +377,7 @@ export default class BlackJack {
         this.getNextCard(this.dx, this.dy);        
         this.dealerHand.push(this.deck.shuffledCard[this.currentCardCount]);
         this.dealerTotal = this.getTotal(this.dealerHand);
-        this.showText(40,130,'dealerTotal', this.dealerTotal);
+        this.showText(280,110,'dealerTotal', this.dealerTotal);
         this.currentCardCount++;
         this.dealerHandCount++;
         this.dx = this.dx + 50;
@@ -430,26 +391,26 @@ export default class BlackJack {
   judge() {
     
     if (this.dealerTotal === this.playerTotal) { //tie
-      this.showText(10,300,'tie','Tie!!');
+      this.showText(350,200,'tie','Tie!!');
       this.chips.tie(this.bet);
            
     } else if (this.playerTotal > 21) { // player bust
       
       this.showText(40,220,'playerTotal', this.playerTotal);
-      this.showText(10,300,'dealerWin','player bust!! dealer win');  
+      this.showText(350,200,'dealerWin','player bust!! dealer win');  
       this.openDealerBackSideCard();  
       this.chips.lose();
 
     } else if (this.dealerTotal > 21) { // dealer bust       
-      this.showText(10,300,'playerWin','dealer bust!! player win');
+      this.showText(350,200,'playerWin','dealer bust!! player win');
       this.chips.win(this.bet);      
     
     } else if (this.playerTotal > this.dealerTotal) { // player win        
-      this.showText(10,300,'playerWin','player Win');
+      this.showText(350,200,'playerWin','Player Win');
       this.chips.win(this.bet);
 
     } else {
-      this.showText(10,300,'dealerWin','dealer Win'); // dealer win
+      this.showText(350,200,'dealerWin','Dealer Win'); // dealer win
       this.chips.lose();
     }
 
@@ -463,7 +424,7 @@ export default class BlackJack {
   getNextCard(x, y) {
     this.item = document.createElement('img');
     this.item.setAttribute('class', 'deck');
-    this.item.setAttribute('src', this.card[this.deck.shuffledCard[this.currentCardCount]]);
+    this.item.setAttribute('src', this.deck.card[this.deck.shuffledCard[this.currentCardCount]]);
 
     this.item.style.position = 'absolute';
     this.item.style.left = `${x}px`;

@@ -17,46 +17,42 @@ export default class Chips {
         //this.mainField = document.querySelector('.mainField');
         this.chipControlField = document.querySelector('.chipControlField');
 
-        this.chipBtn1 = document.createElement('span');
-        this.chipBtn5 = document.createElement('div');
-        this.chipBtn25 = document.createElement('div');
-        this.chipBtn100 = document.createElement('div');
-        this.resetBetBtn = document.createElement('div');
+        this.chipBtn1 = document.createElement('input');
+        this.chipBtn5 = document.createElement('input');
+        this.chipBtn25 = document.createElement('input');
+        this.chipBtn100 = document.createElement('input');
+        this.resetBetBtn = document.createElement('input');
         this.showBalance = document.createElement('span');
         this.showBet = document.createElement('span');
         
         this.showBalance.setAttribute('class', 'balance');
         this.showBet.setAttribute('class', 'bet');
         
-        this.chipBtn1.innerHTML = '<input type="image" class="chipBtn" src="/table_games/img/chip_one.png" width="50" height="50">';        
-        this.chipBtn5.innerHTML = '<input type="image" class="chipBtn" src="/table_games/img/chip_five.png" width="50" height="50">';
-        this.chipBtn25.innerHTML = '<input type="image" class="chipBtn" src="/table_games/img/chip_quater.png" width="50" height="50">';        
-        this.chipBtn100.innerHTML = '<input type="image" class="chipBtn" src="/table_games/img/chip_hundred.png" width="50" height="50">';        
-        this.resetBetBtn.innerHTML = '<input type="image" class="resetBetBtn" src="/table_games/img/reset.png" width="50" height="50">';
-        
-        //this.balance.innerText = this.balance;
-        // this.chipBtn1.style.position = 'absolute';
-        // this.chipBtn5.style.position = 'absolute';
-        // this.chipBtn25.style.position = 'absolute';
-        // this.chipBtn100.style.position = 'absolute';
-        
-        this.chipControlField.appendChild(this.chipBtn1);
-        this.chipControlField.appendChild(this.chipBtn5);
-        this.chipControlField.appendChild(this.chipBtn25);
-        this.chipControlField.appendChild(this.chipBtn100);
+       
+
+        this.setChipButtons(this.chipBtn1, "chipBtn", "/table_games/img/chip_one.png");
+        this.setChipButtons(this.chipBtn5, "chipBtn", "/table_games/img/chip_five.png");
+        this.setChipButtons(this.chipBtn25, "chipBtn", "/table_games/img/chip_quater.png");
+        this.setChipButtons(this.chipBtn100, "chipBtn", "/table_games/img/chip_hundred.png");
         this.chipControlField.appendChild(this.showBalance);
-        this.chipControlField.appendChild(this.showBet);
-        this.chipControlField.appendChild(this.resetBetBtn);
-        
+        this.chipControlField.appendChild(this.showBet);       
         this.showBalance.innerHTML = `Balance : $${this.balance}`;
         this.showBet.innerHTML = `Bet : $${this.bet}`;        
-
+        this.setChipButtons(this.resetBetBtn, "resetBetBtn", "/table_games/img/reset.png");
+        
         this.chipBtn1.addEventListener('click', this.onClick1);
         this.chipBtn5.addEventListener('click', this.onClick2);
         this.chipBtn25.addEventListener('click', this.onClick3);
         this.chipBtn100.addEventListener('click', this.onClick4);
         this.resetBetBtn.addEventListener('click', this.onClickResetBet);
 
+    }
+
+    setChipButtons(name, attribute, url) {
+        name.setAttribute('class', attribute);
+        name.type = "image";
+        name.src = url;
+        this.chipControlField.appendChild(name);
     }
 
 
@@ -93,6 +89,33 @@ export default class Chips {
         this.balance = this.balance + tmp;
         this.bet = this.bet - tmp;
         this.modifyBalance(this.balance, this.bet);
+
+        // test code for animation
+        this.chipControlField = document.querySelector('.chipControlField');
+        this.test = document.createElement('img');
+        this.test.setAttribute('class', 'test');
+        this.test.src = "/table_games/img/back.png";
+        this.test.style.position = 'absolute';
+        this.chipControlField.appendChild(this.test);
+
+        let start = Date.now();
+
+        let timer = setInterval(() => {
+        let timePassed = Date.now() - start;
+
+        this.test.style.bottom = timePassed / 2 + 'px';
+
+        if (timePassed > 400) {
+            clearInterval(timer);
+            this.chipControlField.removeChild(this.test);
+        }
+      }, 20);
+        //
+        
+    }
+
+    draw(timePassed) {
+        resetBetBtn.style.left = timePassed / 5 + 'px';
     }
 
     modifyBalance(balance, bet) {
@@ -108,6 +131,7 @@ export default class Chips {
         console.log(`chips : blackjack ${this.balance}`);
         this.modifyBalance(this.balance, 0);
         this.bet = 0;
+        
     }
 
     win(bet) {
@@ -130,9 +154,7 @@ export default class Chips {
         this.bet = 0;        
     }
 
-    test(test) {
-        console.log(test);
-    }
+    
 
     offReset() {        
         const resetBet = document.querySelector('.resetBetBtn');
