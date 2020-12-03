@@ -104,6 +104,7 @@ export default class Chips {
         let timePassed = Date.now() - start;
 
         this.test.style.bottom = timePassed / 2 + 'px';
+        //this.test.style.left = timePassed / 2 + 'px';
 
         if (timePassed > 400) {
             clearInterval(timer);

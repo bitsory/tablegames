@@ -1,18 +1,15 @@
 'use strict';
-import BlackJack from './blackjack.js';
+import Baccarat from './baccarat.js';
 
-const playBtnBjLucky = document.querySelector('.playbtn');
+const playBtnBCDragon = document.querySelector('.playbtn');
 const mainField = document.querySelector('.mainField');
 const subGameSelectView = document.querySelector('.subGameSelectView');
 
-
-
-
-playBtnBjLucky.addEventListener('click', () => {
-    console.log('btn');
+playBtnBCDragon.addEventListener('click', () => {
+    console.log('baccarat btn');
     console.log(mainField);
 
-    fieldMake('blackjack BJlucky');
+    fieldMake('baccarat dragon');
 
     // playField.setAttribute('class', 'className');
     // gameField.appendChild(playField);
@@ -43,6 +40,9 @@ function fieldMake(className) {
     playControlField.setAttribute('class', 'playControlField');
     
     const startBtn = document.createElement('div');
+    const settingBtn = document.createElement('div');
+    settingBtn.setAttribute('class', 'settingBtn');
+    settingBtn.innerHTML = '<i class="fas fa-cog fa-3x" onClick="test()"></i>'
     startBtn.setAttribute('class', 'ctlBtn startBtn');
     startBtn.innerHTML = '<img class="startBtn" src="/table_games/img/spadebtn.png" width="100" height="100">';
     
@@ -66,43 +66,21 @@ function fieldMake(className) {
     startBtn.style.bottom = `40%`;
     //startBtn.innerHTML = 'start';
 
+    settingBtn.style.position = 'absolute';
+    settingBtn.style.right = `3%`;
+    settingBtn.style.top = `10%`;
+
     mainField.appendChild(playField);
     mainField.appendChild(chipControlField);
     mainField.appendChild(playControlField);
     
     mainField.removeChild(subGameSelectView);
     playField.appendChild(startBtn);
+    playField.appendChild(settingBtn);
 }
 
-
-
 function start() {
-    console.log('game started...');
-    const blackjack = new BlackJack();
-    //playControlField.removeChild(startBtn);
-    
-/*
-    const item = document.createElement('img');
-    item.setAttribute('class', 'deck');
-    item.setAttribute('src', card.back);
-
-    const item2 = document.createElement('img');
-    item2.setAttribute('class', 'deck');
-    item2.setAttribute('src', card.SnA);
-
-    item.style.position = 'absolute';
-    item.style.left = `10px`;
-    item.style.top = `10px`;
-
-    item2.style.position = 'absolute';
-    item2.style.left = `20px`;
-    item2.style.top = `20px`;
-
-    mainField.appendChild(item);
-    mainField.appendChild(item2);
-    //mainField.appendChild(img2);
-*/
-    
-    
+    console.log('baccarat game started...');
+    const baccarat = new Baccarat();
 
 }
