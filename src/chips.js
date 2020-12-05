@@ -40,10 +40,10 @@ export default class Chips {
         this.showBet.innerHTML = `Bet : $${this.bet}`;        
         this.setChipButtons(this.resetBetBtn, "resetBetBtn", "/table_games/img/reset.png");
         
-        this.chipBtn1.addEventListener('click', this.onClick1);
-        this.chipBtn5.addEventListener('click', this.onClick2);
-        this.chipBtn25.addEventListener('click', this.onClick3);
-        this.chipBtn100.addEventListener('click', this.onClick4);
+        this.chipBtn1.addEventListener('click', this.onChipBtn1);
+        this.chipBtn5.addEventListener('click', this.onChipBtn5);
+        this.chipBtn25.addEventListener('click', this.onChipBtn25);
+        this.chipBtn100.addEventListener('click', this.onChipBtn100);
         this.resetBetBtn.addEventListener('click', this.onClickResetBet);
 
     }
@@ -53,30 +53,36 @@ export default class Chips {
         name.type = "image";
         name.src = url;
         this.chipControlField.appendChild(name);
+        
+
     }
 
 
-    onClick1 = () => {
+    onChipBtn1 = () => {
         console.log("chips : one");
+        this.chipBtn1.style.border = 'solid #0000FF';
         this.balance = this.balance - 1;
         this.bet = this.bet + 1;
         this.modifyBalance(this.balance, this.bet);
         
     };
-    onClick2 = () => {
+    onChipBtn5 = () => {
         console.log("chips : five");
+        this.chipBtn5.style.border = 'solid #0000FF';
         this.balance = this.balance - 5;
         this.bet = this.bet + 5;
         this.modifyBalance(this.balance, this.bet);
     };
-    onClick3 = () => {
+    onChipBtn25 = () => {
         console.log("chips : quater");
+        this.chipBtn25.style.border = 'solid #0000FF';
         this.balance = this.balance - 25;
         this.bet = this.bet + 25;
         this.modifyBalance(this.balance, this.bet);
     };
-    onClick4 = () => {
+    onChipBtn100 = () => {
         console.log("chips : hundred");
+        this.chipBtn100.style.border = 'solid #0000FF';
         this.balance = this.balance - 100;
         this.bet = this.bet + 100;
         this.modifyBalance(this.balance, this.bet);

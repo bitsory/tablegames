@@ -1,10 +1,11 @@
 'use strict';
 import Chips from './chips.js';
 import Deck from './deck.js';
+import BJLucky from './bj/bjlucky.js';
 
 export default class BlackJack {
 
-
+  
   currentCardCount = 0;
    
   playerHand = [];
@@ -17,20 +18,30 @@ export default class BlackJack {
   isDouble = false; 
 
   constructor() {
+    
+
     console.log("blackjack initialized...");
+    
+    this.mainField = document.querySelector('.mainField');
+    
+    //this.makeField();
+    
+    this.playField = document.querySelector('.playField');
+    this.playField.innerHTML = '';
 
     this.chips = new Chips();
     this.deck = new Deck();
+    this.bjlucky = new BJLucky();
     
     console.log(this.deck);
     console.log(this.deck.shuffledCard[0]);
 
-    this.mainField = document.querySelector('.mainField');
-    this.playField = document.querySelector('.playField');
+    
+
+    
+    
     this.playControlField = document.querySelector('.playControlField');
-    this.testBtn = document.querySelector('.startBtn');
-
-
+    
     this.dealBtn = document.createElement('button');
     this.dealBtn.setAttribute('class', 'ctlBtn dealBtn');        
     //this.dealBtn.style.position = 'absolute';
@@ -54,18 +65,26 @@ export default class BlackJack {
     //this.stayBtn.style.position = 'absolute';
     this.stayBtn.innerHTML = 'STAY';
     this.stayBtn.style.left = `300px`;
+
+    // this.chipSpot = document.createElement('input');
+    // this.chipSpot.setAttribute('class', 'chipSpot');
+    // this.chipSpot.type = "image";
+    // this.chipSpot.src = '/table_games/img/chipspot.png';
+    // this.chipSpot.style.position = 'absolute';
+    // this.chipSpot.style.left = `40%`;
+    // this.chipSpot.style.bottom = `20%`;
+
+    
+    // this.playField.appendChild(this.chipSpot);
+
+
    
     this.playControlField.appendChild(this.dealBtn);
     this.playControlField.appendChild(this.hitBtn);
     this.playControlField.appendChild(this.doubleBtn);
     this.playControlField.appendChild(this.stayBtn);
 
-    if (this.playField.hasChildNodes) {
-      
-      console.log("field check");
-      this.playField.innerHTML = '';
-      //this.deck.shuffle();
-    }
+    
 
     this.offHitAndStay();
     
@@ -78,7 +97,9 @@ export default class BlackJack {
         this.showText(350, 400, 'placebet', 'PLACE YOUR BET PLEASE');
         return;
       } else {
-        this.playField.innerHTML = '';
+        
+        let deck = document.querySelectorAll('.deck, .soft, .judgement');
+        deck.forEach( (item) => this.playField.removeChild(item));
         
         if (this.init()==='blackjack') {
           return;
@@ -98,6 +119,47 @@ export default class BlackJack {
     this.stayBtn.addEventListener('click', () => this.stay());
 
   }  // constructor
+
+  makeField() {
+    this.playField = document.createElement('div');
+    this.playControlField = document.createElement('div');
+    this.chipControlField = document.createElement('div');
+    //const startBtn = document.createElement('button');
+
+    
+    //const x = subGameSelectView.clientLeft+30;
+    //const y = mainField.clientHeight -100 ;
+    
+    this.playField.setAttribute('class', 'playField');
+    this.chipControlField.setAttribute('class', 'chipControlField');
+    this.playControlField.setAttribute('class', 'playControlField');
+    
+    
+    
+    
+    //subGameSelectView.style.visibility = 'hidden';
+
+    this.playField.style.position = 'absolute';
+    // playField.style.left = `${x}px`;
+    // playField.style.top = `${y}px`;
+    //mainField.style.backgroundColor = "#006400";
+    this.chipControlField.style.position = 'absolute';
+    this.playControlField.style.position = 'absolute';
+    
+    //playControlField.style.left = `${x}px`;
+    this.chipControlField.style.bottom = `50px`;
+    this.playControlField.style.bottom = `0px`;
+    
+
+    
+
+    this.mainField.appendChild(this.playField);
+    this.mainField.appendChild(this.chipControlField);
+    this.mainField.appendChild(this.playControlField);
+    
+   
+    
+}
     
    
 
@@ -309,7 +371,7 @@ export default class BlackJack {
 
   isBlackjack(dealerTotal, dealerHand, playerTotal, playerHand) {
     if ((dealerTotal === 11 && this.isSoftHand(dealerTotal, dealerHand)) && (playerTotal === 11 && this.isSoftHand(playerTotal, playerHand))) {
-      this.showText(350,200,'blackjackTie', 'BlackJack Tie!!');
+      this.showText(350,200,'judgement', 'BlackJack Tie!!');
       this.onDealBtn();
       this.offHitAndStay();
       this.chips.tie();
@@ -317,7 +379,7 @@ export default class BlackJack {
       return true;
 
     } else if (dealerTotal === 11 && this.isSoftHand(dealerTotal, dealerHand)) {
-      this.showText(350,200,'dealerBlackjack', 'Dealer BlackJack!!');                
+      this.showText(350,200,'judgement', 'Dealer BlackJack!!');                
       this.openDealerBackSideCard();
       //this.putCard(350,80, this.card[this.dealerHand[0]]); // dealer back-side card open
       this.onDealBtn();
@@ -327,7 +389,7 @@ export default class BlackJack {
       return true;
 
     } else if (playerTotal === 11 && this.isSoftHand(playerTotal, playerHand)) {
-      this.showText(350,200,'playerBlackjack', 'BlackJack!!');
+      this.showText(350,200,'judgement', 'BlackJack!!');
       this.openDealerBackSideCard();
       //this.putCard(350,80, this.card[this.dealerHand[0]]);  // dealer back-side card open
       this.$playerTotal = document.querySelector('.playerTotal');
@@ -391,26 +453,26 @@ export default class BlackJack {
   judge() {
     
     if (this.dealerTotal === this.playerTotal) { //tie
-      this.showText(350,200,'tie','Tie!!');
+      this.showText(350,200,'judgement','Tie!!');
       this.chips.tie(this.bet);
            
     } else if (this.playerTotal > 21) { // player bust
       
       this.showText(40,220,'playerTotal', this.playerTotal);
-      this.showText(350,200,'dealerWin','player bust!! dealer win');  
+      this.showText(350,200,'judgement','player bust!! dealer win');  
       this.openDealerBackSideCard();  
       this.chips.lose();
 
     } else if (this.dealerTotal > 21) { // dealer bust       
-      this.showText(350,200,'playerWin','dealer bust!! player win');
+      this.showText(350,200,'judgement','dealer bust!! player win');
       this.chips.win(this.bet);      
     
     } else if (this.playerTotal > this.dealerTotal) { // player win        
-      this.showText(350,200,'playerWin','Player Win');
+      this.showText(350,200,'judgement','Player Win');
       this.chips.win(this.bet);
 
     } else {
-      this.showText(350,200,'dealerWin','Dealer Win'); // dealer win
+      this.showText(350,200,'judgement','Dealer Win'); // dealer win
       this.chips.lose();
     }
 

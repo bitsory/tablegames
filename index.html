@@ -5,12 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/8576b98074.js" crossorigin="anonymous"></script>
-    
+    <script type='module' src="/table_games/src/main.js" defer></script>
+    <!-- <script type='module' src="/table_games/src/blackjack_main.js" defer></script> -->
     <title>Document</title>
 </head>
 <body>
     <section class="head">
-        <nav class="nav_bar">
+        <nav class="navbar">
+            <a href="/table_games/index.html">Home</a>
+            <a href="#news">About</a>
+            <div class="dropdown blackjack" onclick="BJdropDown()">
+                <button class="dropbtn BJdrop">Blackjack</button>
+                <div class="dropdown-content" id="BJsubgameDropDown">
+                    <a href="javascript:BJluckylucky();">Lucky Lucky</a>
+                    <a href="#">Kings Bounty</a>
+                    <a href="#">Dealer Bust</a>
+                    <a href="#">Trilux</a>
+                    <a href="#">Tie</a>
+                    <a href="javascript:test();">Test</a>
+                </div>
+            </div>
+            <div class="dropdown baccarat" onclick="BCdropDown()">
+                <button class="dropbtn BCdrop">Baccarat</button>
+                <div class="dropdown-content" id="BCsubgameDropDown">
+                    <a href="#">Dragon Bonus</a>
+                    <a href="#">Pairs</a>
+                    <a href="#">Dragon 7  Panda 8</a>
+                    <a href="#">Nine Seven</a>
+                  
+                </div>
+            </div>
+            <div class="dropdown craps" onclick="CRdropDown()">
+                <button class="dropbtn CRdrop">Craps</button>
+                <div class="dropdown-content" id="CRsubgameDropDown">
+                    <a href="#">Tall, Small and All Bonus</a>
+                    <a href="#">Fire Bet</a>
+                    <a href="#">Repeater Bet</a>
+                    <a href="#">Crapless Crap</a>
+                  
+                </div>
+            </div>
+            <div class="dropdown carnival" onclick="CVdropDown()">
+                <button class="dropbtn CVdrop">Carnival Games</button>
+                <div class="dropdown-content" id="CVsubgameDropDown">
+                    <a href="#">Let It Ride</a>
+                    <a href="#">Three Card Poker</a>
+                    <a href="#">Texas Hol'em</a>
+                    <a href="#">Mississipi stud</a>
+                    <a href="#">Crazy 4 Poker</a>
+                    <a href="#">High Card Flush</a>
+                    <a href="#">DJ Wild</a>
+                  
+                </div>
+            </div>
+
+        </nav>
+
+        <!-- <nav class="nav_bar">
             <ul class="navbar_menu">
                
                 <li><a href="/table_games/index.html">Home</a></li>
@@ -20,7 +71,7 @@
                 <li><a href="">Carnival Games</a></li>
                 
             </ul>          
-        </nav>
+        </nav> -->
     </section>
     
     <section class="mainField">Hello world!!
@@ -28,6 +79,8 @@
         <!-- <div class="game_field"></div> -->
 
     </section>
-    <footer class="footer"></footer>
+    <footer class="foot">
+        <section class="footer">CopyRight@</section>
+    </footer>
 </body>
 </html>
