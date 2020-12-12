@@ -1,4 +1,5 @@
 body {
+
      margin: 0;
 }
 
@@ -58,14 +59,19 @@ i {
 .mainField {
     display: flex; 
     position: relative; 
-    max-width: 800px;
-    min-width: 600px;
+    /* max-width: 70rem;
+    max-height: 70rem; */
+    /* max-width: 800px;
+    min-width: 600px; */
 
     margin: 30px auto;
     margin:  auto;
+    /* width: 55rem;
+    height: 41rem; */
+
     width: 800px;
     height: 600px;
-    
+        
     background-color: white
 }
 
@@ -234,7 +240,7 @@ i {
 
 .chipBtn:focus {    
     transform: scale(1.1);
-    /* border: solid yellow 2px; */
+    outline: solid yellow 2px;
 }
 
 .startBtn {
