@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/8576b98074.js" crossorigin="anonymous"></script>
-    <script type='module' src="/table_games/src/main.js" defer></script>
+    <script type='module' src="/table_games/src/index.js" defer></script>
     <!-- <script type='module' src="/table_games/src/blackjack_main.js" defer></script> -->
     <title>Document</title>
 </head>
@@ -17,8 +17,8 @@
             <div class="dropdown blackjack" onclick="BJdropDown()">
                 <button class="dropbtn BJdrop">Blackjack</button>
                 <div class="dropdown-content" id="BJsubgameDropDown">
-                    <a href="javascript:BJluckylucky();">Lucky Lucky</a>
-                    <a href="#">Kings Bounty</a>
+                    <a href="javascript:blackjack('BJluckylucky');">Lucky Lucky</a>
+                    <a href="javascript:blackjack('BJkings');">Kings Bounty</a>
                     <a href="#">Dealer Bust</a>
                     <a href="#">Trilux</a>
                     <a href="#">Tie</a>
@@ -28,7 +28,7 @@
             <div class="dropdown baccarat" onclick="BCdropDown()">
                 <button class="dropbtn BCdrop">Baccarat</button>
                 <div class="dropdown-content" id="BCsubgameDropDown">
-                    <a href="#">Dragon Bonus</a>
+                    <a href="javascript:baccarat('BCdragonbonus');">Dragon Bonus</a>
                     <a href="#">Pairs</a>
                     <a href="#">Dragon 7  Panda 8</a>
                     <a href="#">Nine Seven</a>

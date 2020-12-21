@@ -37,12 +37,15 @@ export default class BJLucky {
 
     }
 
-    setMainBet(item) {
-        
+    setMainBet(item) {        
         this.mainBet = item;
     }
 
-    setClickListener = (click) => {
+    setClickListener = function(click) {
+        this.onClickItem = click;
+    }
+
+    setClickListener2 = (click) => {
         this.onClickItem = click;
     }
     
@@ -63,35 +66,10 @@ export default class BJLucky {
             this.onClickItem && this.onClickItem(this.mainBet);
             //this.onClickItem && this.onClickItem(this.bet);
         }
-        // if (this.bet === 25) {
-            
-        //     chipBtn25.style.width = '55px';
-        //     chipBtn25.style.height = '55px';
-        //     chipBtn25.style.outline = 'solid yellow 2px';
-        // }
-
-        // else if (this.bet === 100) {
-            
-        //     chipBtn100.style.width = '55px';
-        //     chipBtn100.style.height = '55px';
-        //     chipBtn100.style.outline = 'solid yellow 2px';
-        // } else {
-        //     chipBtn25.style.width = '50px';
-        //     chipBtn25.style.height = '50px';
-        //     chipBtn25.style.outline = 'none';
-
-        //     chipBtn100.style.width = '50px';
-        //     chipBtn100.style.height = '50px';
-        //     chipBtn100.style.outline = 'none';
-        // }
-
-            
+        
         
     }
 
-    // onSidebet() {
-
-    // }
 
 
 }

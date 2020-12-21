@@ -1,4 +1,5 @@
 'use strict';
+import Baccarat from './baccarat.js';
 import BlackJack from './blackjack.js';
 
 window.BJdropDown = function() {
@@ -51,10 +52,15 @@ window.test = function() {
     console.log("dropdown test");
 }
 
-window.BJluckylucky = function() {
+window.blackjack = function(subgame) {
     console.log('BJluckylucky game started...');
     //const blackjack = new BlackJack();
-    makeField();
+    makeField('blackjack', subgame);
+}
+
+window.baccarat = (subgame) => {
+    console.log("BC BCdragonBonus game started...");
+    makeField('baccarat', subgame);
 }
 
 // const dropdown = document.querySelector('.dropdown');
@@ -66,7 +72,7 @@ window.BJluckylucky = function() {
 
 // });
 
-window.makeField = () => {
+window.makeField = (maingame, subgame) => {
     console.log('field maker initialized...');
 
     const mainField = document.querySelector('.mainField');
@@ -88,12 +94,25 @@ window.makeField = () => {
     settingBtn.innerHTML = '<i class="fas fa-cog fa-3x" onClick="test()"></i>'
     startBtn.setAttribute('class', 'ctlBtn startBtn');
     startBtn.type = "image";
-    startBtn.src = '/table_games/img/spadebtn.png';
+
+    switch(maingame) {
+        case 'blackjack': {
+            startBtn.src = '/table_games/img/blackjack/bjstart.png';
+            break;
+        }
+        case 'baccarat': {
+            startBtn.src = '/table_games/img/baccarat/bcstart.png';
+            break;
+        }
+    }
+
+    // if (maingame === 'blackjack') {
+    //     startBtn.src = '/table_games/img/spadebtn.png';
+    // } else if (maingame === 'baccarat') {
+    //     startBtn.src = '/table_games/img/baccarat/bcstart.png';
+    // }
     
-
-
     //setButtons(startBtn, 'ctlBtn startBtn', "/table_games/img/spadebtn.png")
-    
     
     // startBtn.setAttribute('class', 'ctlBtn startBtn');
     // startBtn.innerHTML = '<img class="startBtn" src="/table_games/img/spadebtn.png" width="100" height="100" onclick="BJstart()">';
@@ -128,13 +147,32 @@ window.makeField = () => {
     playField.appendChild(startBtn);
     playField.appendChild(settingBtn);
 
-  
-
-   
-
     startBtn.addEventListener('click', () => {
-        console.log("BJ start");
-        const blackjack = new BlackJack();
+        if (maingame === 'blackjack') {
+            console.log("BJ start");
+            console.log(subgame);
+            switch(subgame) {
+                case 'BJluckylucky': {
+                    console.log("switch");
+                    const blackjackLucky = new BlackJack('BJlucky');
+                    break;
+                }
+                case 'BJkings': {
+                    const blackjackKings = new BlackJack('BJkings');
+                    break;
+                }
+            }
+            
+        } else if (maingame === 'baccarat') {
+            console.log("BC start");
+            console.log(subgame);
+            switch (subgame) {  
+                case 'BCdragonbonus': {
+                    const baccaratDragonBonus = new Baccarat();
+                    break;
+                }
+            }
+        }
     });
 }
 

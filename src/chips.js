@@ -86,13 +86,15 @@ export default class Chips {
             
         } else if (target.matches('.resetBetBtn')) {
             console.log("chips : reset");
-            //this.onClickItem && this.onClickItem('reset');
-            let tmp = this.bet;
+            this.onClickItem && this.onClickItem('reset');
             
+            /*
+            let tmp = this.bet;
             this.balance = this.balance + tmp;
             this.bet = this.bet - tmp;
             this.modifyBalance(this.balance, this.bet);
-
+            */
+           
             // test code for animation
             this.chipControlField = document.querySelector('.chipControlField');
             this.test = document.createElement('img');

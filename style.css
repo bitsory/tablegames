@@ -254,7 +254,8 @@ i {
     margin-left: 40px;
     outline: none;
     cursor: pointer;
-    background-color: white;
+    border-radius: 50px;
+    background-color: white; 
     
     transition: transform 200ms ease-in;
 }

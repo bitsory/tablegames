@@ -17,7 +17,7 @@ export default class BlackJack {
   //bet = 0; 
   isDouble = false; 
   
-  constructor() {
+  constructor(subgame) {
     
 
     console.log("blackjack initialized...");
@@ -32,8 +32,13 @@ export default class BlackJack {
     
     this.chips = new Chips();
     this.bet = new Bet();
-    this.deck = new Deck();
-    this.bjlucky = new BJLucky();
+    this.deck = new Deck(2);
+
+    if (subgame === 'BJlucky') {
+      this.bjlucky = new BJLucky();
+    } else if (subgame === 'BJkings') {
+      this.bjkings = new BJLucky();
+    }
     
     console.log(this.deck);
     console.log(this.deck.shuffledCard[0]);
@@ -89,7 +94,7 @@ export default class BlackJack {
         return;
       } else {
         
-        let deck = document.querySelectorAll('.deck, .soft, .judgement, .placebet');
+        let deck = document.querySelectorAll('.deck, .soft, .judgement, .placebet, .dealerTotal, .playerTotal');
         deck.forEach( (item) => this.playField.removeChild(item));
         
         if (this.init()==='blackjack') {
@@ -111,6 +116,9 @@ export default class BlackJack {
    
     this.chips.setClickListener(item => {
       console.log("blackjack : setclicklistener")
+      if (item === 'reset') {
+        this.reset();
+      } else 
       this.clickItem(item)
     });
 
@@ -118,6 +126,13 @@ export default class BlackJack {
     
   }  // constructor
 
+  reset() {
+    console.log("blackjack : reset");
+    let tmp = this.bet.bet;
+    this.bet.balance = this.bet.balance + tmp;
+    this.bet.bet = this.bet.bet - tmp;
+    this.bet.modifyBalance(this.bet.balance, this.bet.bet);
+  }
 
   clickItem(item) {
     console.log(`clickitem : ${item}`);
