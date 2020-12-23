@@ -106,16 +106,6 @@ window.makeField = (maingame, subgame) => {
         }
     }
 
-    // if (maingame === 'blackjack') {
-    //     startBtn.src = '/table_games/img/spadebtn.png';
-    // } else if (maingame === 'baccarat') {
-    //     startBtn.src = '/table_games/img/baccarat/bcstart.png';
-    // }
-    
-    //setButtons(startBtn, 'ctlBtn startBtn', "/table_games/img/spadebtn.png")
-    
-    // startBtn.setAttribute('class', 'ctlBtn startBtn');
-    // startBtn.innerHTML = '<img class="startBtn" src="/table_games/img/spadebtn.png" width="100" height="100" onclick="BJstart()">';
     
     
     playField.style.position = 'absolute';

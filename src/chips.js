@@ -27,10 +27,10 @@ export default class Chips {
         
        
 
-        this.setChipButtons(this.chipBtn1, "chipBtn chipBtn1", "/table_games/img/chip_one.png");
-        this.setChipButtons(this.chipBtn5, "chipBtn chipBtn5", "/table_games/img/chip_five.png");
-        this.setChipButtons(this.chipBtn25, "chipBtn chipBtn25", "/table_games/img/chip_quater.png");
-        this.setChipButtons(this.chipBtn100, "chipBtn chipBtn100", "/table_games/img/chip_hundred.png");
+        this.setChipButtons(this.chipBtn1, "chipBtn chipBtn1", "/table_games/img/chips/chip_one.png");
+        this.setChipButtons(this.chipBtn5, "chipBtn chipBtn5", "/table_games/img/chips/chip_five.png");
+        this.setChipButtons(this.chipBtn25, "chipBtn chipBtn25", "/table_games/img/chips/chip_quater.png");
+        this.setChipButtons(this.chipBtn100, "chipBtn chipBtn100", "/table_games/img/chips/chip_hundred.png");
         // this.chipControlField.appendChild(this.showBalance);
         // this.chipControlField.appendChild(this.showBet);       
         // this.showBalance.innerHTML = `Balance : $${this.balance}`;
@@ -97,10 +97,13 @@ export default class Chips {
            
             // test code for animation
             this.chipControlField = document.querySelector('.chipControlField');
-            this.test = document.createElement('img');
+            this.test = document.createElement('span');
             this.test.setAttribute('class', 'test');
-            this.test.src = "/table_games/img/back.png";
+            //this.test.src = "/table_games/img/deck/back.png";
+            this.test.innerHTML = `-${this.bet}`;
             this.test.style.position = 'absolute';
+            this.test.style.left = `63%`;
+            this.test.style.bottom = `30%`;
             this.chipControlField.appendChild(this.test);
 
             let start = Date.now();
@@ -108,18 +111,18 @@ export default class Chips {
             let timer = setInterval(() => {
             let timePassed = Date.now() - start;
 
-            this.test.style.bottom = timePassed / 2 + 'px';
+            this.test.style.bottom = timePassed / 20 + 'px'; // digit : as fast as low digit
             //this.test.style.left = timePassed / 2 + 'px';
 
-            if (timePassed > 400) {
+            if (timePassed > 700) { // digit : duration
                 clearInterval(timer);
                 this.chipControlField.removeChild(this.test);
                 }
-            }, 20);
+            }, 1); // digit : as slow as smooth
         }
     }
 
-
+    /*
     onChipBtn1 = () => {
         console.log("chips : one");
         // this.chipBtn1.style.border = 'solid #0000FF';
@@ -157,6 +160,8 @@ export default class Chips {
         console.log(target);
         this.onClickItem && this.onClickItem(this.tmp);
     };
+
+    */
 
     onClickResetBet = () =>{
         console.log("chips : reset");
