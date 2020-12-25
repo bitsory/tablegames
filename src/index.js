@@ -92,7 +92,7 @@ window.makeField = (maingame, subgame) => {
     
     settingBtn.setAttribute('class', 'settingBtn');
     settingBtn.innerHTML = '<i class="fas fa-cog fa-3x" onClick="test()"></i>'
-    startBtn.setAttribute('class', 'ctlBtn startBtn');
+    startBtn.setAttribute('class', 'ctlBtn startBtn animated css');
     startBtn.type = "image";
 
     switch(maingame) {

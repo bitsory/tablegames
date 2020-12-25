@@ -8,15 +8,43 @@ import BJDealer from './bj/bjdealer.js';
 
 export default class BlackJack {
   
+  JUDGEMENT_X = 350;
+  JUDGEMENT_Y = 200;
+
+  JUDGEMENT_SPLIT_LEFT_X = 230;
+  JUDGEMENT_SPLIT_LEFT_Y = 200;
+
+  JUDGEMENT_SPLIT_RIGHT_X = 500;
+  JUDGEMENT_SPLIT_RIGHTY = 200;
+
+  PLACE_BET_X = 350; 
+  PLACE_BET_Y = 400;
+
+  TEXTUP_SINGLE_PLAY = 47;
+  TEXTUP_SPLIT_PLAY_LEFT = 32;
+  TEXTUP_SPLIT_PLAY_RIGHT = 65;
+
+  DEALER_TOTAL_X = 380;
+  DEALER_TOTAL_Y = 160;
+
+  PLAYER_TOTAL_X = 380;
+  PLAYER_TOTAL_Y = 235;
+
+  PLAYER_TOTAL_SPLIT_LEFT_X = 230;
+  PLAYER_TOTAL_SPLIT_LEFT_Y = 235;
+
+  PLAYER_TOTAL_SPLIT_RIGHT_X = 500;
+  PLAYER_TOTAL_SPLIT_RIGHT_Y = 235;
+
   currentCardCount = 0;
    
-  playerHand = [];
-  dealerHand = [];
-  playerTotal = 0;
-  dealerTotal = 0;
-  playerHandCount = 2;
-  dealerHandCount = 2;
-  //bet = 0; 
+  // playerHand = [];
+  // dealerHand = [];
+  // playerTotal = 0;
+  // dealerTotal = 0;
+  // playerHandCount = 2;
+  // dealerHandCount = 2;
+   
   isDouble = false; 
   isSplit = false;
   isSplitAndLeftHand = true;
@@ -25,25 +53,19 @@ export default class BlackJack {
     
 
     console.log("blackjack initialized...");
-    
     this.mainField = document.querySelector('.mainField');
-    
-    //this.makeField();
-    
     this.playField = document.querySelector('.playField');
     this.playField.innerHTML = '';
-
-    
-    this.chips = new Chips();
-    this.bet = new Bet();
-    this.deck = new Deck(2);
 
     if (subgame === 'BJlucky') {
       this.bjlucky = new BJLucky();
     } else if (subgame === 'BJkings') {
       this.bjkings = new BJLucky();
     }
-
+    
+    this.chips = new Chips();
+    this.bet = new Bet();
+    this.deck = new Deck(2);
     this.bjplayer = new BJPlayer();
     this.bjdealer = new BJDealer();
     
@@ -53,6 +75,7 @@ export default class BlackJack {
     this.playControlField = document.querySelector('.playControlField');
     this.chipControlField = document.querySelector('.chipControlField');
 
+    
     this.dealBtn = document.createElement('button');
     this.dealBtn.setAttribute('class', 'ctlBtn dealBtn');        
     //this.dealBtn.style.position = 'absolute';
@@ -74,7 +97,7 @@ export default class BlackJack {
     this.splitBtn = document.createElement('button');
     this.splitBtn.setAttribute('class', 'ctlBtn splitBtn');
     //this.hitBtn.style.position = 'absolute';
-    this.splitBtn.innerHTML = 'Split';
+    this.splitBtn.innerHTML = 'SPLIT';
     this.splitBtn.style.left = `200px`;
 
     this.stayBtn = document.createElement('button');
@@ -82,83 +105,126 @@ export default class BlackJack {
     //this.stayBtn.style.position = 'absolute';
     this.stayBtn.innerHTML = 'STAY';
     this.stayBtn.style.left = `300px`;
+    
+   
+    // this.buttonMaker('dealBtn', 'ctlBtn dealBtn', 'DEAL START');
+    // this.buttonMaker('this.hitBtn', 'ctlBtn hitBtn', 'HIT');
+    // this.buttonMaker('this.doubleBtn', 'ctlBtn doubleBtn', 'Double Down! X2');
+    // this.buttonMaker('this.splitBtn', 'ctlBtn splitBtn', 'SPLIT');
+    // this.buttonMaker('this.stayBtn', 'ctlBtn stayBtn', 'STAY');
 
    
+
+
     this.playControlField.appendChild(this.dealBtn);
     this.playControlField.appendChild(this.hitBtn);
     this.playControlField.appendChild(this.doubleBtn);
     this.playControlField.appendChild(this.splitBtn);
     this.playControlField.appendChild(this.stayBtn);
-
     
-
     this.offHitAndStay();
-    
-    
-    
 
+    //////////////////////  control button event listener //////////////////
     this.dealBtn.addEventListener('click', () => {
       //this.bet = this.bet.bet;
-      if (this.bet.bet === 0) {
-        this.showText(350, 400, 'placebet', 'PLACE YOUR BET PLEASE');
+      if (this.bjplayer.bet === 0) {
+        this.showText(this.PLACE_BET_X, this.PLACE_BET_Y, 'placebet', 'PLACE YOUR BET PLEASE');
         return;
       } else {
         
-        let deck = document.querySelectorAll('.deck, .soft, .judgement, .judgement2, .placebet, .dealerTotal, .playerTotal, .playerTotal2, .pointer');
-        deck.forEach( (item) => this.playField.removeChild(item));
-        
+        this.clearElement('clearItemForNewRound' , '.deck, .soft, .judgement, .judgement2, .placebet, .dealerTotal, .playerTotal, .playerTotal2, .textUp');
+                
         if (this.init()==='blackjack') {
           return;
         } else {
           this.offDealBtn();
-          this.onHitAndStay();
-          //this.onSplitBtn();
+          this.onHitAndStay();          
           this.chips.offReset();
-          this.chips.offChip();
+          this.chips.offChip();          
         } 
       }
     });
     
     this.hitBtn.addEventListener('click', () => this.hit());
-
     this.doubleBtn.addEventListener('click', () => this.doubleDown());
-
     this.splitBtn.addEventListener('click', () => this.split());
-
     this.stayBtn.addEventListener('click', () => this.stay());
    
     this.chips.setClickListener(item => {
       console.log("blackjack : setclicklistener")
       if (item === 'reset') {
-        this.reset();
+        this.resetBet();
       } else 
-      this.clickItem(item)
+      this.clickChip(item)
     });
 
-    this.bjlucky.setClickListener(item => this.BJClickItem(item));
-    
-  }  // constructor
+    this.bjlucky.setClickListener(item => {      
+      this.BJClickItem(item)
+      this.clearElement('textUp' , '.textUp');
+    });
 
-  reset() {
-    console.log("blackjack : reset");
-    let tmp = this.bet.bet;
-    this.bet.balance = this.bet.balance + tmp;
-    this.bet.bet = this.bet.bet - tmp;
-    this.bet.modifyBalance(this.bet.balance, this.bet.bet);
+    this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.bet, this.bjplayer.winning);
+
+  }  /// constructor
+
+  resetBet() {    
+    this.bjplayer.setBalance(-this.bjplayer.bet);
+    this.bjplayer.initBetAndWinning();    
+    this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.bet, this.bjplayer.winning);
   }
 
-  clickItem(item) {
-    console.log(`clickitem : ${item}`);
-    this.bjlucky.setMainBet(item);
+  clickChip(item) {    
+    this.bjlucky.setBJluckyBet(item);
   }
 
   BJClickItem(item) {
-    this.bet.setBet(item);
-    this.bet.setBalance(item);
-    this.bet.modifyBalance(this.bet.balance, this.bet.bet);
+    this.bjplayer.setBet(item);
+    this.bjplayer.setBalance(item);
+    this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.bet, this.bjplayer.winning);
   }
       
-  
+  isBlackjack(dealerTotal, dealerHand, playerTotal, playerHand) {
+    if ((dealerTotal === 11 && this.isSoftHand(dealerTotal, dealerHand)) && (playerTotal === 11 && this.isSoftHand(playerTotal, playerHand))) {
+      this.showText(this.JUDGEMENT_X, this.JUDGEMENT_Y,'judgement', 'BlackJack Tie!!');      
+      this.openDealerBackSideCard();
+      this.bjplayer.tie();
+      this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.bet, this.bjplayer.winning, 'tie');      
+      return false;
+
+    } else if (dealerTotal === 11 && this.isSoftHand(dealerTotal, dealerHand)) {
+      this.showText(this.JUDGEMENT_X, this.JUDGEMENT_Y,'judgement', 'Dealer BlackJack!!');                
+      this.openDealerBackSideCard();      
+      this.bjplayer.lose();
+      this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.bet, this.bjplayer.winning, 'lose');      
+      return true;
+
+    } else if (playerTotal === 11 && this.isSoftHand(playerTotal, playerHand)) {
+      this.showText(this.JUDGEMENT_X, this.JUDGEMENT_Y,'judgement', 'BlackJack!!');
+      this.openDealerBackSideCard();      
+      this.bjplayer.blackjack();
+      this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.bet, this.bjplayer.winning, 'blackjack');      
+      return true;
+
+    } else {
+      return false;
+    }      
+  }
+
+  isSoftSeventeen(total, hand) {
+
+    if (total <= 7 && (hand.indexOf("SA") !== -1 || hand.indexOf("CA") !== -1 || hand.indexOf("DA") !== -1 || hand.indexOf("HA") !== -1)) {
+      console.log("soft17");
+      return total; // soft 17
+
+    } else if (total > 7 && total <= 11 && (hand.indexOf("SA") !== -1 || hand.indexOf("CA") !== -1 || hand.indexOf("DA") !== -1 || hand.indexOf("HA") !== -1)) {
+      console.log("soft18");
+      return total + 10; // soft 18~20
+
+    } else { 
+      console.log("hard");
+      return total; // hard number
+    }
+  }
 
 
 
@@ -196,13 +262,6 @@ export default class BlackJack {
     this.bjplayer.init();
     this.bjdealer.init();
     
-    // this.playerHand = [];
-    // this.dealerHand = [];
-    // this.playerTotal = 0;
-    // this.dealerTotal = 0;
-    // this.playerHandCount = 2;
-    // this.dealerHandCount = 2;
-    // this.isDouble = false;
   }
 
 
@@ -257,76 +316,45 @@ export default class BlackJack {
       console.log(`init: ${this.currentCardCount}`);
     },900);
 
-    /*
-    this.playerHand.push(this.deck.shuffledCard[this.currentCardCount]);
-    this.putCard(350,260, this.card[this.playerHand[0]]);  // player first card
-    
-    this.dealerHand.push(this.deck.shuffledCard[this.currentCardCount]);
-    this.putCard(350,80, this.card.back);  // dealer first card : shows back side
-    
-    this.playerHand.push(this.deck.shuffledCard[this.currentCardCount]);
-    this.putCard(400,260, this.card[this.playerHand[1]]);  // player second
-    
-    this.dealerHand.push(this.deck.shuffledCard[this.currentCardCount]);
-    this.putCard(400,80, this.card[this.dealerHand[1]]);  // dealer second
-    
-    */
-    setTimeout(() => {
-      console.log(`player hand : ${this.bjplayer.hand}`);
-      console.log(`dealer hand : ${this.bjdealer.hand}`);
-
+    setTimeout(() => {      
       this.bjplayer.setTotal(this.bjplayer.hand);//this.playerTotal = this.getTotal(this.playerHand);
       this.bjdealer.setTotal(this.bjdealer.hand);
-
-      console.log(`player total : ${this.bjplayer.total}`);
-      console.log(`dealer total : ${this.bjdealer.total}`);
-
-      //this.showText(250,90,'dealerHand', 'Dealer Hand');
-     // this.showText(40,130,'dealerTotal', this.dealerTotal);
-      
-      //this.showText(250,270,'playerHand', 'Player Hand');
-      this.showText(380,235,'playerTotal', this.bjplayer.total);
-
-      console.log(`init: ${this.currentCardCount}`);
-      console.log(this.bjplayer);
+     
+      this.showText(this.PLAYER_TOTAL_X, this.PLAYER_TOTAL_Y,'playerTotal', this.bjplayer.total);
 
       if (this.isBlackjack(this.bjdealer.total, this.bjdealer.hand, this.bjplayer.total, this.bjplayer.hand)) {
+        
+        this.bet.textUp(this.TEXTUP_SINGLE_PLAY, this.bjplayer.bet, this.bjplayer.winIndex);
+        this.onDealBtn();
+        this.offHitAndStay();
+        this.chips.onChip();
+        this.bjplayer.initBetAndWinning();        
         return 'blackjack';
         
       } else if (this.isSoftHand(this.bjplayer.total, this.bjplayer.hand)) {
-        this.bjplayer.total = this.bjplayer.total + 10;
-        //this.showText(30,240,'soft', 'SOFT');
-      } else {
-        //this.showText(30,240,'soft', '');
+        this.bjplayer.total = this.bjplayer.total + 10;        
+      } else {        
         return;        
       }
     }, 1000);    
   }
 
-  // getSplitHandPosition(childpos) {
-  //   let parentPos = document.querySelector('.playField').getBoundingClientRect();
-  //   let relativePos = {};
-
-  //   relativePos.top = childPos.top - parentPos.top,
-  //   relativePos.right = childPos.right - parentPos.right,
-  //   relativePos.bottom = childPos.bottom - parentPos.bottom,
-  //   relativePos.left = childPos.left - parentPos.left;
-  // }
 
   getNextCard(who) {
+    console.log(`who : ${who}`);
     const nextCardClassValue = this.isSplit? (this.isSplitAndLeftHand? `playerDeck${[this.bjplayer.handCount]} splitLeft${[this.bjplayer.splitCount]}` : `playerDeck${[this.secondBJplayer.handCount]} splitRight${[this.secondBJplayer.splitCount]}`) 
                                 : `playerDeck${[this.bjplayer.handCount]}`;
     
     const childposClassValue = this.isSplit? (this.isSplitAndLeftHand? `splitLeft${[this.bjplayer.splitCount-1]}` : `splitRight${[this.secondBJplayer.splitCount-1]}`) 
-                                : `playerDeck${[this.bjplayer.handCount-1]}` ;
+                                : `playerDeck${[this.bjplayer.handCount-1]}`;
     
     console.log(`getnextcard issplit: ${this.isSplit}, isSplitAndLeftHand: ${this.isSplitAndLeftHand}`);
     
     this.item = document.createElement('img');
-    if (who === 'player') {
+    if (!(who === 'dealer')) { // player hit
       this.item.setAttribute('class', `deck ${nextCardClassValue}`); // 다음 카드의 class value 지정
       this.childPos = document.querySelector(`.${childposClassValue}`).getBoundingClientRect(); // 다음 카드를 놓을 위치를 찾기 위해 바로 이전카드의 좌표 정보를 가져온다
-    } else {
+    } else if (who === 'dealer') {  /// dealer hit
       this.item.setAttribute('class', `deck dealerDeck${[this.bjdealer.handCount]}`);
       this.childPos = document.querySelector(`.dealerDeck${[this.bjdealer.handCount-1]}`).getBoundingClientRect();
     }
@@ -342,7 +370,10 @@ export default class BlackJack {
     relativePos.left = this.childPos.left - parentPos.left;
 
     this.item.style.position = 'absolute';
-    this.item.style.left = `${relativePos.left+30}px`; // this.item.style.left = `${x}px`;
+    if (who && who.isDouble) {
+      this.item.style.transform = 'rotate(90deg)';       
+    }
+    this.item.style.left = `${relativePos.left + 30}px`; // this.item.style.left = `${x}px`;
     this.item.style.top = `${relativePos.top}px`; // this.item.style.top = `${y}px`;
 
     this.playField.appendChild(this.item);
@@ -357,30 +388,19 @@ export default class BlackJack {
       this.secondBJplayer.handCount++;
       this.secondBJplayer.splitCount++;
     }
-    
-
 
   }
 
-  hit = () => {
+  hit() {
     
     const player = this.isSplit ? (this.isSplitAndLeftHand? this.bjplayer : this.secondBJplayer) : this.bjplayer;
-    //const player = this.bjplayer;
-    console.log(`init: ${this.deck.shuffledCard}`);
-    console.log(`hit: ${this.currentCardCount}`);
-    console.log(`hit issplit: ${this.isSplit}, isSplitAndLeftHand: ${this.isSplitAndLeftHand}`);
-    
-    this.getNextCard('player');
-    
+        
+    this.getNextCard(player);
     player.hand.push(this.deck.shuffledCard[this.currentCardCount]); //this.bjplayer.hand.push(this.deck.shuffledCard[this.currentCardCount]);
-    console.log(`player hand : ${this.bjplayer.hand}`);
-    
     player.setTotal(player.hand);//this.playerTotal = this.getTotal(this.playerHand); 
-    console.log(`player total : ${player.total}`);
     this.currentCardCount++;
-    //player.handCount++;
-    //this.px = this.px + 50;
-    console.log(`player hand count : ${player.handCount}`);
+    this.splitBtn.disabled=true;
+    if (!this.isSplit) {this.doubleBtn.disabled=true;}
 
     if (!player.isDouble) { // check double down
       this.hitAndJudge(player.total, player.hand); // just hit
@@ -410,20 +430,20 @@ export default class BlackJack {
     if (this.isSoftHand(total, hand)) { // in case of player hand is soft... keep playing
       player.total = player.total + 10;
       if (!this.isSplit) { // not split, single hand
-        this.showText(380,235,'playerTotal', player.total);
+        this.showText(this.PLAYER_TOTAL_X, this.PLAYER_TOTAL_Y,'playerTotal', player.total);
       } else if (this.isSplitAndLeftHand) { // split, left hand 
-        this.showText(230,235,'playerTotal', player.total);
-      } else {
-        this.showText(500,235,'playerTotal2', player.total);
+        this.showText(this.PLAYER_TOTAL_SPLIT_LEFT_X, this.PLAYER_TOTAL_SPLIT_LEFT_Y,'playerTotal', player.total);
+      } else {  /// split, right hand
+        this.showText(this.PLAYER_TOTAL_SPLIT_RIGHT_X, this.PLAYER_TOTAL_SPLIT_RIGHT_Y,'playerTotal2', player.total);
       }
       return;
     } else if (total <= 21) { // not soft, under 21... keep playing
       if (!this.isSplit) { // not split, single hand
-        this.showText(380,235,'playerTotal', player.total);
+        this.showText(this.PLAYER_TOTAL_X, this.PLAYER_TOTAL_Y,'playerTotal', player.total);
       } else if (this.isSplitAndLeftHand) { // split, left hand 
-        this.showText(230,235,'playerTotal', player.total);
+        this.showText(this.PLAYER_TOTAL_SPLIT_LEFT_X, this.PLAYER_TOTAL_SPLIT_LEFT_Y,'playerTotal', player.total);
       } else {
-        this.showText(500,235,'playerTotal2', player.total);
+        this.showText(this.PLAYER_TOTAL_SPLIT_RIGHT_X, this.PLAYER_TOTAL_SPLIT_RIGHT_Y,'playerTotal2', player.total);
       }
       return;
     } else { // player bust
@@ -433,47 +453,40 @@ export default class BlackJack {
   }
 
   
-  // hitAndJudge(total, hand) {
-    
-    
-  //   if (this.isSoftHand(total, hand)) {
-  //     this.bjplayer.total = this.bjplayer.total + 10;
-  //     this.showText(40,220,'playerTotal', this.bjplayer.total);
-  //     return;
-  //   } else if (total <= 21) {
-  //     this.showText(40,220,'playerTotal', this.bjplayer.total);
-  //     return;
-  //   } else { // player bust
-  //     this.judge();
-  //     return;
-  //   }    
-  // }
 
   doubleDown() {
     const player = this.isSplit ? (this.isSplitAndLeftHand? this.bjplayer : this.secondBJplayer) : this.bjplayer;
-    if ((!this.isSplit) || (this.isSplit && !this.isSplitAndLeftHand)) { this.offHitAndStay(); }
-    player.isDouble = true;
-    this.hit();
+    if ((!this.isSplit) || (this.isSplit && !this.isSplitAndLeftHand)) { this.offHitAndStay(); } // button off
     
-    let tmpBet = this.bet.bet;
-    let tmpBalance = this.bet.balance;
-    this.bet.modifyBalance(tmpBalance-tmpBet, tmpBet*2);
+    player.isDouble = true;    
 
-    this.bet.bet = this.bet.bet + tmpBet;
-    this.bet.balance = tmpBalance - tmpBet;
+    player.setDouble();
+
+    if (player === this.secondBJplayer) {this.bjplayer.balance = this.bjplayer.balance - player.bet/2}
+    let bet = player.bet + (this.isSplit? this.secondBJplayer.bet : 0);
+    //console.log(`double : ${player.bet}, ${this.secondBJplayer.bet}`);
+    console.log(`double : ${bet}`);
+    this.bet.modifyBalance(player.balance, bet, player.winning);
+    this.hit();  // isDouble would be true -> just one card can be draw
+    // require double btn disabled code insert
     
   }
 
   
 
   split() {
-    this.onSplitBtn();
+    
     console.log("split");
     this.secondBJplayer = new BJPlayer();
-
+    
     this.secondBJplayer.hand = this.bjplayer.hand.splice(-1);
     this.bjplayer.setTotal(this.bjplayer.hand);
     this.secondBJplayer.setTotal(this.secondBJplayer.hand);
+
+    this.secondBJplayer.setBet(this.bjplayer.bet);
+    this.bjplayer.setBalance(this.bjplayer.bet);
+
+    this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.bet + this.secondBJplayer.bet, this.bjplayer.winning + this.secondBJplayer.winning);
 
     this.isSplit = true;
     this.isSplitAndLeftHand = true;
@@ -485,7 +498,7 @@ export default class BlackJack {
     playerDeck1.setAttribute('class','deck playerDeck1 splitRight0');
 
     const pointer = document.createElement('img');
-    pointer.setAttribute('class', 'pointer pointer');
+    pointer.setAttribute('class', 'pointer animated css');
     
     pointer.setAttribute('src', '/table_games/img/pointer_white.png');
     pointer.style.position = 'absolute';
@@ -496,18 +509,17 @@ export default class BlackJack {
 
     const playerTotal = document.querySelector('.playerTotal');
     this.playField.removeChild(playerTotal);
+
+    this.splitBtn.disabled = true;
     
   }
 
   isSoftHand(total, hand) {    
     
     if (total <= 11 && (hand.indexOf("SA") !== -1 || hand.indexOf("CA") !== -1 || hand.indexOf("DA") !== -1 || hand.indexOf("HA") !== -1)) {
-      //this.showText(30,240,'soft', 'SOFT');
       return true;
       
     } else {
-      // this.$soft = document.querySelector('.soft');
-      // this.playField.removeChild(this.$soft);
       return false;
     }
   }
@@ -517,90 +529,33 @@ export default class BlackJack {
     this.putCard(380,80, 'deck', this.deck.card[this.bjdealer.hand[1]]);
     this.currentCardCount--; // function putcard already increase currentCardCount
   }
-
-  
-
-  isBlackjack(dealerTotal, dealerHand, playerTotal, playerHand) {
-    if ((dealerTotal === 11 && this.isSoftHand(dealerTotal, dealerHand)) && (playerTotal === 11 && this.isSoftHand(playerTotal, playerHand))) {
-      this.showText(350,200,'judgement', 'BlackJack Tie!!');
-      this.onDealBtn();
-      this.offHitAndStay();
-      this.bet.tie();
-      this.chips.onChip();
-      return false;
-
-    } else if (dealerTotal === 11 && this.isSoftHand(dealerTotal, dealerHand)) {
-      this.showText(350,200,'judgement', 'Dealer BlackJack!!');                
-      this.openDealerBackSideCard();
-      //this.putCard(350,80, this.card[this.dealerHand[0]]); // dealer back-side card open
-      this.onDealBtn();
-      this.offHitAndStay();
-      this.bet.lose();
-      this.chips.onChip();
-      return true;
-
-    } else if (playerTotal === 11 && this.isSoftHand(playerTotal, playerHand)) {
-      this.showText(350,200,'judgement', 'BlackJack!!');
-      this.openDealerBackSideCard();
-      //this.putCard(350,80, this.card[this.dealerHand[0]]);  // dealer back-side card open
-      this.$playerTotal = document.querySelector('.playerTotal');
-      this.playField.removeChild(this.$playerTotal);
-      this.onDealBtn();
-      this.offHitAndStay();
-      this.bet.blackjack(this.bet.bet);
-      this.chips.onChip();
-      return true;
-
-    } else {
-      return false;
-    }      
-  }
-
-  isSoftSeventeen(total, hand) {
-
-    if (total <= 7 && (hand.indexOf("SA") !== -1 || hand.indexOf("CA") !== -1 || hand.indexOf("DA") !== -1 || hand.indexOf("HA") !== -1)) {
-      console.log("soft17");
-      return total; // soft 17
-
-    } else if (total > 7 && total <= 11 && (hand.indexOf("SA") !== -1 || hand.indexOf("CA") !== -1 || hand.indexOf("DA") !== -1 || hand.indexOf("HA") !== -1)) {
-      console.log("soft18");
-      return total + 10; // soft 18~20
-
-    } else { 
-      console.log("hard");
-      return total; // hard number
-    }
-  }
-
-
   stay() {
 
     if ((!this.isSplit) || (this.isSplit && !this.isSplitAndLeftHand)) { // in case of not split, or split and finish right hand 
       console.log(`stay  : if condition enter`);
       this.openDealerBackSideCard();
 
-      const player = this.isSplit ? (this.isSplitAndLeftHand? this.bjplayer : this.secondBJplayer) : this.bjplayer;
+      //const player = this.isSplit ? (this.isSplitAndLeftHand? this.bjplayer : this.secondBJplayer) : this.bjplayer;
       
-      //this.putCard(350,80, this.card[this.dealerHand[0]]); // dealer back-side card open
       let timer = setInterval(() => { // finish condition : dealer total is higher than 17 and not soft
         let tmp = this.isSoftSeventeen(this.bjdealer.total, this.bjdealer.hand);
 
         if (tmp >= 17) {
           this.bjdealer.total = tmp;
-          this.showText(380,157,'dealerTotal', this.bjdealer.total);
+          this.showText(this.DEALER_TOTAL_X, this.DEALER_TOTAL_Y,'dealerTotal', this.bjdealer.total);
           clearInterval(timer);
           
           
           this.judge(); // check win or lose 
 
         } else { // dealer must hit under 17
-          this.getNextCard();        
+          this.getNextCard('dealer');        
           this.bjdealer.hand.push(this.deck.shuffledCard[this.currentCardCount]);
           this.bjdealer.setTotal(this.bjdealer.hand);
-          this.showText(380,157,'dealerTotal', this.bjdealer.total);
+          this.showText(this.DEALER_TOTAL_X, this.DEALER_TOTAL_Y,'dealerTotal', this.bjdealer.total);
           this.currentCardCount++;
           this.bjdealer.handCount++;
-          // this.dx = this.dx + 50;
+         
 
           console.log(`dealer hand : ${this.bjdealer.hand}`);
           console.log(`dealer total : ${this.bjdealer.total}`);
@@ -610,7 +565,7 @@ export default class BlackJack {
       
       this.isSplitAndLeftHand = false;
       this.pointer = document.querySelector('.pointer');
-      this.pointer.setAttribute('class', 'pointer pointerRight');
+      this.pointer.setAttribute('class', 'pointerRight animated css');
 
     }   
   }
@@ -619,47 +574,53 @@ export default class BlackJack {
     const player = this.isSplit ? this.bjplayer : this.bjplayer;
     const secondBJplayer = this.secondBJplayer;  
 
-    if (!this.isSplit) { // not split, single hand play
+    if (!this.isSplit) { /////// not split, single hand play  ////////////
       if (this.bjdealer.total === player.total) { //tie
-        this.showText(350,200,'judgement','Tie!!');
-        this.bet.tie(this.bet.bet);
-             
+        this.showText(this.JUDGEMENT_X, this.JUDGEMENT_Y,'judgement','Tie!!');        
+        player.tie();
+                     
       } else if (player.total > 21) { // player bust
         
-        this.showText(380,220,'playerTotal', player.total);
-        this.showText(350,200,'judgement','player bust!! dealer win');  
+        this.showText(this.PLAYER_TOTAL_X,this.PLAYER_TOTAL_Y,'playerTotal', player.total);
+        this.showText(this.JUDGEMENT_X,this.JUDGEMENT_Y,'judgement','player bust!! dealer win');  
         this.openDealerBackSideCard();  
-        this.bet.lose();
-  
+        player.lose();
+          
       } else if (this.bjdealer.total > 21) { // dealer bust       
-        this.showText(350,200,'judgement','dealer bust!! player win');
-        this.bet.win(this.bet.bet);      
-      
+        this.showText(this.JUDGEMENT_X, this.JUDGEMENT_Y,'judgement','dealer bust!! player win');
+        player.win(player.bet);
+              
       } else if (player.total > this.bjdealer.total) { // player win        
-        this.showText(350,200,'judgement','Player Win');
-        this.bet.win(this.bet.bet);
-  
+        this.showText(this.JUDGEMENT_X, this.JUDGEMENT_Y,'judgement','Player Win');
+        player.win();
+          
       } else {
-        this.showText(350,200,'judgement','Dealer Win'); // dealer win
-        this.bet.lose();
+        this.showText(this.JUDGEMENT_X, this.JUDGEMENT_Y,'judgement','Dealer Win'); // dealer win
+        player.lose();
+        
       }
       // round finish and prepare next round
+      this.bet.modifyBalance(player.balance, player.bet, player.winning, player.winIndex);
+      this.bet.textUp(this.TEXTUP_SINGLE_PLAY, player.bet, player.winIndex);
       this.onDealBtn();
       this.offHitAndStay();
       this.chips.onReset();
       this.chips.onChip();
+      player.initBetAndWinning();
+            
       return;
 
-    } else if (this.isSplit && this.isSplitAndLeftHand) { // split, Left hand just have finished
+    //////////////////////////////   split, Left hand just have finished(came from hitAndJudge();)  /////////////////////////
+    } else if (this.isSplit && this.isSplitAndLeftHand) { 
       // left hand can judge the bust only without finish right hand 
-      if (player.total > 21) { // player bust
+      if (player.total > 21) { // player(left hand) bust
         
-        this.showText(230,220,'playerTotal', player.total);
-        this.showText(230,200,'judgement','bust!');  
-        //this.openDealerBackSideCard();  
-        //this.bet.lose();
+        this.showText(this.PLAYER_TOTAL_SPLIT_LEFT_X, this.PLAYER_TOTAL_SPLIT_LEFT_Y,'playerTotal', player.total);
+        this.showText(this.JUDGEMENT_SPLIT_LEFT_X, this.JUDGEMENT_SPLIT_LEFT_Y,'judgement','bust!');  
+        
       }   
-
+      player.lose();
+      
       this.isSplitAndLeftHand = false;
 
       this.pointer = document.querySelector('.pointer');
@@ -667,13 +628,17 @@ export default class BlackJack {
 
       return;
 
-    } else { // split, Right hand finish
-      // left and right hands compare with dealer hand unless they are still not bust
+    /////////////////////////////////// split, Right hand finish ////////////////////////////
+    } else { 
+      // left and right hands can compare with dealer hand both of them unless they are still not bust
 
       if ((player.total < 22) && (secondBJplayer.total > 21)) { // left hand still playing, but right hand bust
-        this.showText(500,235,'playerTotal2', secondBJplayer.total);
-        this.showText(500,200,'judgement2','bust!');
+        this.showText(this.PLAYER_TOTAL_SPLIT_RIGHT_X, this.PLAYER_TOTAL_SPLIT_RIGHT_Y,'playerTotal2', secondBJplayer.total);
+        this.showText(this.JUDGEMENT_SPLIT_RIGHT_X, this.JUDGEMENT_SPLIT_RIGHTY,'judgement2','bust!');
         this.openDealerBackSideCard();
+        secondBJplayer.lose();
+        player.lose(); //right hand bust, affect bjplayer's total balance
+        this.bet.textUp(this.TEXTUP_SPLIT_PLAY_RIGHT, secondBJplayer.bet, secondBJplayer.winIndex, 'right');
 
         // dealer card flip
         setTimeout(() => {
@@ -682,14 +647,14 @@ export default class BlackJack {
       
             if (tmp >= 17) {
               this.bjdealer.total = tmp;
-              this.showText(380,157,'dealerTotal', this.bjdealer.total);
+              this.showText(this.DEALER_TOTAL_X, this.DEALER_TOTAL_Y,'dealerTotal', this.bjdealer.total);
               clearInterval(timer);
                 
             } else { // dealer must hit under 17
-              this.getNextCard();        
+              this.getNextCard('dealer');        
               this.bjdealer.hand.push(this.deck.shuffledCard[this.currentCardCount]);
               this.bjdealer.setTotal(this.bjdealer.hand);
-              this.showText(380,157,'dealerTotal', this.bjdealer.total);
+              this.showText(this.DEALER_TOTAL_X, this.DEALER_TOTAL_Y,'dealerTotal', this.bjdealer.total);
               this.currentCardCount++;
               this.bjdealer.handCount++;
               
@@ -700,66 +665,84 @@ export default class BlackJack {
         // left hand judge
         setTimeout(() => {
           if (this.bjdealer.total === player.total) { //tie
-            this.showText(230,200,'judgement','Tie!!');
+            this.showText(this.JUDGEMENT_SPLIT_LEFT_X, this.JUDGEMENT_SPLIT_LEFT_Y,'judgement','Tie!!');
+            player.tie();
             //this.bet.tie(this.bet.bet);             
       
           } else if (this.bjdealer.total > 21) { // dealer bust       
-            this.showText(230,200,'judgement','dealer bust!! player win');
+            this.showText(this.JUDGEMENT_SPLIT_LEFT_X, this.JUDGEMENT_SPLIT_LEFT_Y,'judgement','dealer bust!! player win');
+            player.win();
             //this.bet.win(this.bet.bet);      
           
           } else if (player.total > this.bjdealer.total) { // player win        
-            this.showText(230,200,'judgement','Player Win');
+            this.showText(this.JUDGEMENT_SPLIT_LEFT_X, this.JUDGEMENT_SPLIT_LEFT_Y,'judgement','Player Win');
+            player.win();
             //this.bet.win(this.bet.bet);
       
           } else if (player.total < this.bjdealer.total) {
-            this.showText(230,200,'judgement','Dealer Win'); // dealer win
+            this.showText(this.JUDGEMENT_SPLIT_LEFT_X, this.JUDGEMENT_SPLIT_LEFT_Y,'judgement','Dealer Win'); // dealer win
+            player.lose();
             //this.bet.lose();
           }
         }, 800);
 
-
-      } else if (secondBJplayer.total < 22) {  // split, left and right hand both playing
+      ////////////////////////// split, left and right hand both playing ///////////////////////////
+      } else if (secondBJplayer.total < 22) {  
 
         // Left hand judge if Left hand playing
         if (player.total < 22) {
           if (this.bjdealer.total === player.total) { //tie
-            this.showText(230,200,'judgement','Tie!!');
+            this.showText(this.JUDGEMENT_SPLIT_LEFT_X, this.JUDGEMENT_SPLIT_LEFT_Y, 'judgement','Tie!!');
+            player.tie();
             //this.bet.tie(this.bet.bet);             
       
           } else if (this.bjdealer.total > 21) { // dealer bust       
-            this.showText(230,200,'judgement','dealer bust!! player win');
+            this.showText(this.JUDGEMENT_SPLIT_LEFT_X, this.JUDGEMENT_SPLIT_LEFT_Y, 'judgement','dealer bust!! player win');
+            player.win();
             //this.bet.win(this.bet.bet);      
           
           } else if (player.total > this.bjdealer.total) { // player win        
-            this.showText(230,200,'judgement','Player Win');
+            this.showText(this.JUDGEMENT_SPLIT_LEFT_X, this.JUDGEMENT_SPLIT_LEFT_Y, 'judgement','Player Win');
+            player.win();
             //this.bet.win(this.bet.bet);
       
           } else if (player.total < this.bjdealer.total) {
-            this.showText(230,200,'judgement','Dealer Win'); // dealer win
+            this.showText(this.JUDGEMENT_SPLIT_LEFT_X, this.JUDGEMENT_SPLIT_LEFT_Y, 'judgement','Dealer Win'); // dealer win
+            player.lose();
             //this.bet.lose();
           } 
         }
         //Right hand judge
         if (this.bjdealer.total === secondBJplayer.total) { //tie
-          this.showText(500,200,'judgement2','Tie!!');
+          this.showText(this.JUDGEMENT_SPLIT_RIGHT_X, this.JUDGEMENT_SPLIT_RIGHTY, 'judgement2','Tie!!');
+          secondBJplayer.tie();
           //this.bet.tie(this.bet.bet);             
     
         } else if (this.bjdealer.total > 21) { // dealer bust       
-          this.showText(500,200,'judgement2','dealer bust!! player win');
+          this.showText(this.JUDGEMENT_SPLIT_RIGHT_X, this.JUDGEMENT_SPLIT_RIGHTY,'judgement2','dealer bust!! player win');
+          secondBJplayer.win();
+          player.balance = player.balance + secondBJplayer.bet + secondBJplayer.winning;
           //this.bet.win(this.bet.bet);      
         
         } else if (secondBJplayer.total > this.bjdealer.total) { // player win        
-          this.showText(500,200,'judgement2','Player Win');
+          this.showText(this.JUDGEMENT_SPLIT_RIGHT_X, this.JUDGEMENT_SPLIT_RIGHTY,'judgement2','Player Win');
+          secondBJplayer.win();
+          player.balance = player.balance + secondBJplayer.bet + secondBJplayer.winning;
           //this.bet.win(this.bet.bet);
     
         } else if (secondBJplayer.total < this.bjdealer.total) {
-          this.showText(500,200,'judgement2','Dealer Win'); // dealer win
+          this.showText(this.JUDGEMENT_SPLIT_RIGHT_X, this.JUDGEMENT_SPLIT_RIGHTY,'judgement2','Dealer Win'); // dealer win
+          secondBJplayer.lose();
           //this.bet.lose();
         }
+
+
       } else if ((player.total > 21) && (secondBJplayer.total > 21)){
         // both hand bust, just open the dealer card
-        this.showText(500,235,'playerTotal2', secondBJplayer.total);
-        this.showText(500,200,'judgement2','bust!');
+        this.showText(this.PLAYER_TOTAL_SPLIT_RIGHT_X, this.PLAYER_TOTAL_SPLIT_RIGHT_Y,'playerTotal2', secondBJplayer.total);
+        this.showText(this.JUDGEMENT_SPLIT_RIGHT_X, this.JUDGEMENT_SPLIT_RIGHTY,'judgement2','bust!');
+        player.lose();
+        secondBJplayer.lose();
         this.openDealerBackSideCard();
       }
 
@@ -769,42 +752,42 @@ export default class BlackJack {
       this.chips.onChip();
       this.isSplit = false;
 
+      console.log(`split modify bal: ${player.balance}`);
+      let tmpWin = player.winning + secondBJplayer.winning;
+      let tmpBet = player.bet + secondBJplayer.bet;
+      
+
+      // console.log(`split modify bet: ${player.bet}, ${secondBJplayer.bet}`);
+      console.log(`split modify tmpWin: ${tmpWin}`);
+      console.log(`split modify Wining: ${player.winning}, ${secondBJplayer.winning}`);
+      console.log(`split modify Wining: ${player.winIndex}, ${secondBJplayer.winIndex}`);
+
+      this.bet.textUp(this.TEXTUP_SPLIT_PLAY_LEFT, player.bet, player.winIndex, 'left');
+      this.bet.textUp(this.TEXTUP_SPLIT_PLAY_RIGHT, secondBJplayer.bet, secondBJplayer.winIndex, 'right');
+      this.bet.modifyBalance(player.balance, tmpBet, tmpWin, 'split');
+
+      this.bjplayer.initBetAndWinning();      
+      this.clearElement('pointer', '.pointerRight');
     }
+    
   }
 
-  // judge() {
-    
-    
-  //   if (this.bjdealer.total === this.bjplayer.total) { //tie
-  //     this.showText(350,200,'judgement','Tie!!');
-  //     this.bet.tie(this.bet.bet);
-           
-  //   } else if (this.bjplayer.total > 21) { // player bust
-      
-  //     this.showText(40,220,'playerTotal', this.bjplayer.total);
-  //     this.showText(350,200,'judgement','player bust!! dealer win');  
-  //     this.openDealerBackSideCard();  
-  //     this.bet.lose();
+  clearElement(name, className) {
+    name = document.querySelectorAll(className);
+    name && name.forEach( (item) => this.playField.removeChild(item));
+  }
 
-  //   } else if (this.bjdealer.total > 21) { // dealer bust       
-  //     this.showText(350,200,'judgement','dealer bust!! player win');
-  //     this.bet.win(this.bet.bet);      
+
+  buttonMaker = (btnVal, className, btnName) => {
     
-  //   } else if (this.bjplayer.total > this.bjdealer.total) { // player win        
-  //     this.showText(350,200,'judgement','Player Win');
-  //     this.bet.win(this.bet.bet);
+    btnVal = document.createElement('button');
+    btnVal.setAttribute('class', className);        
+    
+    btnVal.innerHTML = btnName;
+    btnVal.style.left = `150px`;
+    this.playControlField.appendChild(btnVal);
+  }
 
-  //   } else {
-  //     this.showText(350,200,'judgement','Dealer Win'); // dealer win
-  //     this.bet.lose();
-  //   }
-
-  //   // round finish and prepare next round
-  //   this.onDealBtn();
-  //   this.offHitAndStay();
-  //   this.chips.onReset();
-  //   this.chips.onChip();
-  // }
   
   
   numberRecognize(item) {
@@ -849,6 +832,12 @@ export default class BlackJack {
   onSplitBtn() {
     if (this.bjplayer.hand[0].substr(1) === this.bjplayer.hand[1].substr(1)) {
       this.splitBtn.disabled = false;
+    }
+  }
+
+  onDoubleDownBtn(player) {
+    if (player.hand.length === 2) {
+      this.doubleBtn.disabled = false;
     }
   }
 

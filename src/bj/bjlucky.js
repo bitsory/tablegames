@@ -3,7 +3,7 @@
 
 export default class BJLucky {
 
-    mainBet = 0;
+    bet = 0;
     BJLuckyMainBet = 0;
     BJLuckySideBet = 0;
 
@@ -37,19 +37,15 @@ export default class BJLucky {
 
     }
 
-    setMainBet(item) {        
-        this.mainBet = item;
+    setBJluckyBet(item) {        
+        this.bet = item;
     }
 
     setClickListener = function(click) {
         this.onClickItem = click;
     }
 
-    setClickListener2 = (click) => {
-        this.onClickItem = click;
-    }
     
-
 
     onMainbet = (event) => {
 
@@ -63,7 +59,7 @@ export default class BJLucky {
         console.log(`bjlucky : ${this.BJLuckyMainBet}`);
 
         if (target.matches('.BJmainbet')) {
-            this.onClickItem && this.onClickItem(this.mainBet);
+            this.onClickItem && this.onClickItem(this.bet);
             //this.onClickItem && this.onClickItem(this.bet);
         }
         
