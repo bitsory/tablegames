@@ -10,6 +10,7 @@ export default class BJPlayer extends BJPublic{
     splitCount = 1;
     
     balance = 1000;
+    BalanceOfBeginningRound = 0;
     bet = 0;
     winning = 0;
     winIndex = 0;
@@ -52,6 +53,11 @@ export default class BJPlayer extends BJPublic{
         this.winning = bet;
     }
 
+    setBalanceOfBeginningRound() {
+        this.BalanceOfBeginningRound = this.balance;
+
+    }
+
     
 
     setDouble() {
@@ -63,15 +69,17 @@ export default class BJPlayer extends BJPublic{
     }
 
     blackjack() {
-        this.setWinning(this.bet*1.5);
-        this.balance = this.balance + this.bet + this.winning;
+        let winning = this.bet*2.5;
+        this.setWinning(winning);
+        this.balance = this.balance + this.winning;
         this.winIndex = 'blackjack';
         
     }
 
     win() {
-        this.setWinning(this.bet);
-        this.balance = this.balance + this.bet + this.winning ;
+        let winning = this.bet*2;
+        this.setWinning(winning);
+        this.balance = this.balance + this.winning ;
         this.winIndex = 'win';
     }
 
@@ -80,8 +88,7 @@ export default class BJPlayer extends BJPublic{
         this.winIndex = 'tie';
     }
 
-    lose() {
-        this.balance = this.balance;
+    lose() {     
         this.winIndex = 'lose';
     }
 

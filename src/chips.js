@@ -55,26 +55,13 @@ export default class Chips {
         const target = event.target;
         console.log(target);
         if (target.matches('.chipBtn1')) {
-            // this.balance = this.balance - 5;
-            // this.bet = this.bet + 5;
-            // this.modifyBalance(this.balance, this.bet);
             this.onClickItem && this.onClickItem(1);
         } else if (target.matches('.chipBtn5')) {
-            // this.balance = this.balance - 5;
-            // this.bet = this.bet + 5;
-            // this.modifyBalance(this.balance, this.bet);
             this.onClickItem && this.onClickItem(5);
         } else if (target.matches('.chipBtn25')) {
-            // this.balance = this.balance - 25;
-            // this.bet = this.bet + 25;
-            // this.modifyBalance(this.balance, this.bet);
             this.onClickItem && this.onClickItem(25);
         } else if (target.matches('.chipBtn100')) {
-            // this.balance = this.balance - 100;
-            // this.bet = this.bet + 100;
-            // this.modifyBalance(this.balance, this.bet);
             this.onClickItem && this.onClickItem(100);
-            
         } else if (target.matches('.resetBetBtn')) {
             console.log("chips : reset");
             this.onClickItem && this.onClickItem('reset');            

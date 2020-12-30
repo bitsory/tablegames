@@ -121,7 +121,7 @@ window.makeField = (maingame, subgame) => {
     
 
     startBtn.style.position = 'absolute';
-    startBtn.style.left = `44%`;
+    startBtn.style.left = `43%`;
     startBtn.style.bottom = `50%`;
     //startBtn.innerHTML = 'start';
 
