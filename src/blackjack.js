@@ -163,6 +163,8 @@ export default class BlackJack {
   }  /// constructor
 
   resetBet() {    
+    this.clearElement('stackUpChip', '.stackUpChip');
+    //this.bjlucky.resetBetStack();
     this.bjplayer.setBalance(-this.bjplayer.bet);
     this.bjplayer.initBetAndWinning();    
     this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.bet, this.bjplayer.winning);
@@ -175,7 +177,10 @@ export default class BlackJack {
   BJClickItem(item) {
     this.bjplayer.setBet(item);
     this.bjplayer.setBalance(item);
-    this.bjlucky.setBetStack(item);
+    this.clearElement('stackUpChip', '.stackUpChip');
+    //this.bjlucky.setBetStack(item);
+    this.bjlucky.stackUpChip(this.bjplayer.bet);
+    
     this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.bet, this.bjplayer.winning);
   }
       

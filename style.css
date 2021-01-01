@@ -542,6 +542,11 @@ i {
     color: red;    
 }
 
+.stackUpChip {
+    width: 5%;
+    height: 5%;
+}
+
 
 @media screen and (max-width : 600px) {
     .mainField {
