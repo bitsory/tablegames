@@ -19,14 +19,7 @@ export default class Chips {
         this.chipBtn25 = document.createElement('input');
         this.chipBtn100 = document.createElement('input');
         this.resetBetBtn = document.createElement('input');
-        // this.showBalance = document.createElement('span');
-        // this.showBet = document.createElement('span');
-        
-        // this.showBalance.setAttribute('class', 'balance');
-        // this.showBet.setAttribute('class', 'bet');
-        
        
-
         this.setChipButtons(this.chipBtn1, "chipBtn chipBtn1", "/table_games/img/chips/chip_one.png");
         this.setChipButtons(this.chipBtn5, "chipBtn chipBtn5", "/table_games/img/chips/chip_five.png");
         this.setChipButtons(this.chipBtn25, "chipBtn chipBtn25", "/table_games/img/chips/chip_quater.png");
@@ -56,6 +49,7 @@ export default class Chips {
         console.log(target);
         if (target.matches('.chipBtn1')) {
             this.onClickItem && this.onClickItem(1);
+            //console.log(this.onClickItem);
         } else if (target.matches('.chipBtn5')) {
             this.onClickItem && this.onClickItem(5);
         } else if (target.matches('.chipBtn25')) {

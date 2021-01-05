@@ -7,7 +7,7 @@ export default class BJPublic {
         for (let i = 0; i < index.length; i++) {
           total = total + this.numberRecognize(index[i]);
         }
-        console.log(`public total : ${total}`);
+        
         return total;
     }
 
@@ -18,19 +18,18 @@ export default class BJPublic {
         } else if (result === 'A') {
           result = 1;
         }
-        console.log(result);
+        
         return parseInt(result);
     }
 
     isSoftHand(total, hand) {    
     
         if (total <= 11 && (hand.indexOf("SA") !== -1 || hand.indexOf("CA") !== -1 || hand.indexOf("DA") !== -1 || hand.indexOf("HA") !== -1)) {
-          //this.showText(30,240,'soft', 'SOFT');
+         
           return true;
           
         } else {
-          // this.$soft = document.querySelector('.soft');
-          // this.playField.removeChild(this.$soft);
+          
           return false;
         }
       }

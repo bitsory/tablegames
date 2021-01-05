@@ -16,7 +16,7 @@ export default class BJPlayer extends BJPublic{
     winIndex = 0;
 
     mainBet = 0;
-    subBet = 0;
+    sideBet = 0;
 
 
     // constructor() {
@@ -47,6 +47,14 @@ export default class BJPlayer extends BJPublic{
 
     setBet(bet) {
         this.bet = this.bet + bet;
+    }
+
+    setMainBet(bet) {
+        this.mainBet = this.mainBet + bet;
+    }
+
+    setSideBet(bet) {
+        this.sideBet = this.sideBet + bet;
     }
 
     setWinning(bet) {

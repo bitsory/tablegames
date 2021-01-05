@@ -1,0 +1,15 @@
+
+.ctlBtn {
+    width: 15%;
+    height: 15%;
+    /* margin: 10px; */
+    outline: none;
+    cursor: pointer;
+    /* font-size: 25px; */
+    transition: transform 200ms ease-in;
+
+}
+
+.ctlBtn:hover {    
+    transform: scale(1.1);
+}
