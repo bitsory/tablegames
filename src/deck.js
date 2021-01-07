@@ -69,33 +69,29 @@ export default class Deck {
   defualtDeck = ['SA', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'SJ', 'SQ', 'SK',
           'DA', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'DJ', 'DQ', 'DK',
           'CA', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'CJ', 'CQ', 'CK',
-          'HA', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9', 'H10', 'HJ', 'HQ', 'HK',
-  ];
+          'HA', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9', 'H10', 'HJ', 'HQ', 'HK'];
 
   
   
   constructor(decks) {
       console.log("deck initialized...");
-      this.shuffle(decks); 
+      //this.shuffle(decks); 
       //this.shuffledCard = ['H10', 'H7', 'H10', 'H6', 'H10', 'H10', 'H10','H10','CK'];
       //this.shuffledCard = ['H10', 'H5', 'H10', 'H8', 'H10', 'H10', 'H10','H10','CK'];
       //this.shuffledCard = ['H5', 'H5', 'H5', 'H8', 'H10', 'H10', 'H10','H10','CK'];
       //this.shuffledCard = ['H10', 'H10', 'H10', 'H10', 'H10', 'H10', 'H10','H10','CK'];
-      //this.shuffledCard = ['HA', 'H10', 'S7', 'H10', 'H6', 'H8', 'H10','H10','CK'];
-      //this.shuffledCard = ['H7', 'H10', 'S7', 'H5', 'H10', 'H8', 'H10','H10','CK'];
+      //this.shuffledCard = ['HA', 'H4', 'S10', 'HA', 'H6', 'H8', 'H10','H10','CK'];
+      this.shuffledCard = ['H7', 'H10', 'S7', 'H5', 'H10', 'H8', 'H10','H10','CK'];
   }
 
   shuffle(count) {
     const lengthOfCard = this.defualtDeck.length * count;
     this.howManyDecks(count);
     const num = this.getRandomDeck(0, lengthOfCard-1, lengthOfCard); 
-
-    console.log(num);
     
     for (let i = 0; i < lengthOfCard ; i++) {     
       this.shuffledCard.push(this.resultDeck[num[i]]);
     }
-    console.log(this.shuffledCard);    
   } 
 
 

@@ -3,7 +3,11 @@
 
 export default class BJLucky {
 
-    STACK_UP_CHIP_POS_X = 49.5;
+    MAINBET_STACK_UP_CHIP_POS_X = 49.3;
+    MAINBET_STACK_UP_CHIP_POS_Y = 23;
+    SIDEBET_STACK_UP_CHIP_POS_X = 56.5;
+    SIDEBET_STACK_UP_CHIP_POS_Y = 36;
+
     bet = 0;
     BJLuckyMainBet = 0;
     BJLuckySideBet = 0;
@@ -21,8 +25,8 @@ export default class BJLucky {
         this.mainbetSpot.type = "image";
         this.mainbetSpot.src = '/table_games/img/mainbet.png';
         this.mainbetSpot.style.position = 'absolute';
-        this.mainbetSpot.style.left = `47%`;
-        this.mainbetSpot.style.bottom = `25%`;
+        this.mainbetSpot.style.left = `45%`;
+        this.mainbetSpot.style.bottom = `22%`;
 
         this.sidebetSpot = document.createElement('input');
         this.sidebetSpot.setAttribute('class', 'BJbet BJsidebet');
@@ -41,6 +45,10 @@ export default class BJLucky {
 
     }
 
+    test(a, b, c) {
+        console.log(a, b, c);
+    }
+ 
     setBJluckyBet(item) {        
         this.bet = item;        
     }
@@ -88,46 +96,23 @@ export default class BJLucky {
         }
     }
 
-    /*
-    resetBetStack() {
-        this.betStack = [];
-    }
 
-    setBetStack(bet) {
-        
-        let betStackLen = this.betStack.length;
-        let index = 0;
-
-        //console.log(`betstack Length : ${betStackLen}`);
-        if (bet === 0) return;
-
-        if (betStackLen === 0) {
-            console.log("betStack initialized...");
-            this.betStack.push(bet);
-        } else {
-
-            for (let i = 0 ; i < betStackLen  ; i++) {  /// index search loop
-                console.log(`betstack Length : ${betStackLen}`);
-                if (bet < this.betStack[i] || bet == this.betStack[i]) {
-                    console.log(`setBetStack : i = ${i}`);
-                    index = i;
-                    break;
-                } 
-                index = betStackLen;
-            }
-
-            this.betStack.splice(index, 0 , bet);
-                        
+    stackUpChip(bet, index) {
+        let spotX, spotY;
+        let chipIndex;
+         
+        if (index === 'main') {
+            spotX = this.MAINBET_STACK_UP_CHIP_POS_X;
+            spotY = this.MAINBET_STACK_UP_CHIP_POS_Y;
+            chipIndex = 'mainBetStackUPChip';
+            console.log(chipIndex);
+        } else if(index === 'side') {
+            spotX = this.SIDEBET_STACK_UP_CHIP_POS_X;
+            spotY = this.SIDEBET_STACK_UP_CHIP_POS_Y;
+            chipIndex = 'sideBetStackUPChip';
         }
-        for (let i = this.betStack.length ; i > 0  ; i--) {
-            //console.log("putTestChip");
-            console.log(this.betStack[i]);
-            this.stackUpChip(this.betStack[i-1], betStackLen - i);
-        }       
-    }
-    */
+             
 
-    stackUpChip(bet) {
         const quo1000 = Math.floor(bet / 1000);
         const remainder1000 = bet % 1000;
         const quo500 = Math.floor(remainder1000 / 500);
@@ -153,12 +138,12 @@ export default class BJLucky {
 
         for (let i = 0 ; i < quo1000 ; i++) {
             test = document.createElement('img');
-            test.setAttribute('class', 'stackUpChip stackUpChip1000');
+            test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip1000`);
             test.type = "image";
             test.src = '/table_games/img/chips/stackUpChip1000.png';
             test.style.position = 'absolute';
-            test.style.left = `${this.STACK_UP_CHIP_POS_X}%`;
-            test.style.bottom = `${25 + high}%`;
+            test.style.left = `${spotX}%`;
+            test.style.bottom = `${spotY + high}%`;
 
             this.playField.appendChild(test);
             high = high + 0.7;
@@ -166,12 +151,12 @@ export default class BJLucky {
 
         for (let i = 0 ; i < quo500 ; i++) {
             test = document.createElement('img');
-            test.setAttribute('class', 'stackUpChip stackUpChip500');
+            test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip500`);
             test.type = "image";
             test.src = '/table_games/img/chips/stackUpChip500.png';           
             test.style.position = 'absolute';
-            test.style.left = `${this.STACK_UP_CHIP_POS_X}%`;
-            test.style.bottom = `${25 + high}%`;
+            test.style.left = `${spotX}%`;
+            test.style.bottom = `${spotY + high}%`;
 
             this.playField.appendChild(test);
             high = high + 0.7;
@@ -179,12 +164,12 @@ export default class BJLucky {
 
         for (let i = 0 ; i < quo100 ; i++) {
             test = document.createElement('img');
-            test.setAttribute('class', 'stackUpChip stackUpChip100');
+            test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip100`);
             test.type = "image";
             test.src = '/table_games/img/chips/stackUpChip100.png';            
             test.style.position = 'absolute';
-            test.style.left = `${this.STACK_UP_CHIP_POS_X}%`;
-            test.style.bottom = `${25 + high}%`;
+            test.style.left = `${spotX}%`;
+            test.style.bottom = `${spotY + high}%`;
 
             this.playField.appendChild(test);
             high = high + 0.7;
@@ -193,12 +178,12 @@ export default class BJLucky {
 
         for (let i = 0 ; i < quo25 ; i++) {
             test = document.createElement('img');
-            test.setAttribute('class', 'stackUpChip stackUpChip25');
+            test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip25`);
             test.type = "image";
             test.src = '/table_games/img/chips/stackUpChip25.png';            
             test.style.position = 'absolute';
-            test.style.left = `${this.STACK_UP_CHIP_POS_X}%`;
-            test.style.bottom = `${25 + high}%`;
+            test.style.left = `${spotX}%`;
+            test.style.bottom = `${spotY + high}%`;
 
             this.playField.appendChild(test);
             high = high + 0.7;
@@ -206,13 +191,13 @@ export default class BJLucky {
 
         for (let i = 0 ; i < quo5 ; i++) {
             test = document.createElement('img');
-            test.setAttribute('class', 'stackUpChip stackUpChip5');
+            test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip5`);
             test.type = "image";
             test.src = '/table_games/img/chips/stackUpChip5.png';
             console.log("testbet25");
             test.style.position = 'absolute';
-            test.style.left = `${this.STACK_UP_CHIP_POS_X}%`;
-            test.style.bottom = `${25 + high}%`;
+            test.style.left = `${spotX}%`;
+            test.style.bottom = `${spotY + high}%`;
 
             this.playField.appendChild(test);
             high = high + 0.7;
@@ -220,12 +205,12 @@ export default class BJLucky {
 
         for (let i = 0 ; i < remainder5 ; i++) {
             test = document.createElement('img');
-            test.setAttribute('class', 'stackUpChip stackUpChip1');
+            test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip1`);
             test.type = "image";
             test.src = '/table_games/img/chips/stackUpChip1.png';            
             test.style.position = 'absolute';
-            test.style.left = `${this.STACK_UP_CHIP_POS_X}%`;
-            test.style.bottom = `${25 + high}%`;
+            test.style.left = `${spotX}%`;
+            test.style.bottom = `${spotY + high}%`;
 
             this.playField.appendChild(test);
             high = high + 0.7;
@@ -233,6 +218,7 @@ export default class BJLucky {
         
     }
 
+    /*
     loopForStackChip(qunatity, stackUpChip, height) {
         //let height = high;
         for (let i = 0 ; i < qunatity ; i++) {
@@ -248,16 +234,16 @@ export default class BJLucky {
             this.heightForStackChip = this.heightForStackChip + 0.7;
         }
         
-    }
+    }*/
 
     offBet() {
-        this.mainbet.disabled = true;
-        this.sidebet.disabled = true;
+        this.mainbetSpot.disabled = true;
+        this.sidebetSpot.disabled = true;
     }
 
     onBet() {
-        this.mainbet.disabled = false;
-        this.sidebet.disabled = false;
+        this.mainbetSpot.disabled = false;
+        this.sidebetSpot.disabled = false;
     }
 
 

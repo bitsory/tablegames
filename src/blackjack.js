@@ -1,10 +1,12 @@
 'use strict';
 import Chips from './chips.js';
 import Deck from './deck.js';
-import BJLucky from './bj/bjlucky.js';
+//import BJLucky from './bj/bjlucky.js';
 import Bet from './bet.js';
 import BJPlayer from './bj/bjPlayer.js';
 import BJDealer from './bj/bjdealer.js';
+import Test from './test.js';
+
 
 export default class BlackJack {
   
@@ -41,6 +43,8 @@ export default class BlackJack {
   isDouble = false; 
   isSplit = false;
   isSplitAndLeftHand = true;
+
+  
   
   constructor(subgame) {    
 
@@ -49,51 +53,56 @@ export default class BlackJack {
     this.playField = document.querySelector('.playField');
     this.playField.innerHTML = '';
 
+    /*
     if (subgame === 'BJlucky') {
       this.bjlucky = new BJLucky();
     } else if (subgame === 'BJkings') {
       this.bjkings = new BJLucky();
     }
+    */
     
     this.chips = new Chips();
     this.bet = new Bet();
     this.deck = new Deck(2);
     this.bjplayer = new BJPlayer();
     this.bjdealer = new BJDealer();
+
+    
+
     
     console.log(this.deck);
     console.log(this.deck.shuffledCard[0]);
     
     this.playControlField = document.querySelector('.playControlField');
     this.chipControlField = document.querySelector('.chipControlField');
-
     
-    this.dealBtn = document.createElement('button');
-    this.dealBtn.setAttribute('class', 'playBtn dealBtn');        
-    //this.dealBtn.style.position = 'absolute';
-    this.dealBtn.innerHTML = 'DEAL START';
-    this.dealBtn.style.left = `100px`;
-    this.chipControlField.appendChild(this.dealBtn);
-
+    this.dealBtn = document.createElement('input');
     this.hitBtn = document.createElement('input');
     this.doubleBtn = document.createElement('input');
     this.splitBtn = document.createElement('input');
     this.stayBtn = document.createElement('input');
 
+    this.setControlButtons(this.dealBtn, 'chipBtn playBtn', '/table_games/img/blackjack/playbtn.png', 45, 0);
     this.setControlButtons(this.hitBtn, 'ctlBtn hitBtn', '/table_games/img/blackjack/ctrlBtnHit.png', 13, 30);
     this.setControlButtons(this.doubleBtn, 'ctlBtn doubleBtn', '/table_games/img/blackjack/ctrlBtnDD.png', 13, 45);
     this.setControlButtons(this.splitBtn, 'ctlBtn splitBtn', '/table_games/img/blackjack/ctrlBtnSplit.png', 13, 15);
     this.setControlButtons(this.stayBtn, 'ctlBtn stayBtn', '/table_games/img/blackjack/ctrlBtnStand.png', 72, 30);
 
+    this.chipControlField.appendChild(this.dealBtn);
 
+    this.t1 = new Test();
     //this.offHitAndStay();
 
     //////////////////////  control button event listener //////////////////
     this.dealBtn.addEventListener('click', () => {
 
+      this.bjplayer.setRebet(this.bjplayer.mainBet); /// setup for next round rebet
+      console.log(this.t1.t1);
+      //this.bjlucky.test(this.t1.t1);
+
       this.clearElement('clearItemForNewRound' , '.deck, .soft, .judgement, .judgement2, .placebet, .dealerTotal, .playerTotal, .playerTotal2, .textUp');
             
-      if (this.bjplayer.bet === 0) {
+      if (this.bjplayer.mainBet + this.bjplayer.sideBet === 0) {
         this.showText(this.PLACE_BET_X, this.PLACE_BET_Y, 'placebet', 'PLACE YOUR BET PLEASE');
         this.clearElement('stackUpChip', '.stackUpChip');
 
@@ -101,7 +110,7 @@ export default class BlackJack {
       } else {
         
         this.clearElement('clearItemForNewRound' , '.deck, .soft, .judgement, .judgement2, .placebet, .dealerTotal, .playerTotal, .playerTotal2, .textUp');
-                
+        //////////////////////  call init function /////////////////              
         if (this.init()==='blackjack') {
           return;
         } else {
@@ -113,7 +122,7 @@ export default class BlackJack {
 
           this.chips.offReset();
           this.chips.offChip(); 
-          this.bjlucky.offBet();         
+          this.bet.offBet();         
         } 
       }
     });
@@ -127,17 +136,20 @@ export default class BlackJack {
       console.log("blackjack : setclicklistener")
       if (item === 'reset') {
         this.resetBet();
+      } else if (item === 'rebet') {
+        this.rebet();      
       } else 
       this.clickChip(item)
     });
 
-    this.bjlucky.setMainBetClickListener(item => {      
+    this.bet.setMainBetClickListener(item => {      
       this.BJClickItem(item, 'main')      
       this.clearElement('textUp' , '.textUp');
     });   
 
-    this.bjlucky.setSideBetClickListener(item => {      
-      this.BJClickItem(item, 'side')      
+    this.bet.setRightSideBetClickListener(item => {
+      console.log("right side click listener");      
+      this.BJClickItem(item, 'rightside')      
       this.clearElement('textUp' , '.textUp');
     }); 
 
@@ -156,31 +168,46 @@ export default class BlackJack {
     //this.chipControlField.appendChild(name);
 }
 
+  rebet() {
+    const rebet = this.bjplayer.rebet;
+    if (rebet == 0 || rebet === this.bjplayer.mainBet) {
+      return;
+    } else {
+      this.resetBet();
+      this.bjplayer.setMainBet(rebet);
+      this.bjplayer.setBalance(rebet);
+      this.bet.stackUpChip(rebet, 'main');    
+      this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.mainBet, this.bjplayer.sideBet,this.bjplayer.winning);
+    }
+  }
+
   resetBet() {    
     this.clearElement('stackUpChip', '.stackUpChip');
     //this.bjlucky.resetBetStack();
-    this.bjplayer.setBalance(-this.bjplayer.bet);
+    this.bjplayer.setBalance(-this.bjplayer.mainBet-this.bjplayer.sideBet);
     this.bjplayer.initBetAndWinning();    
     this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.mainBet, this.bjplayer.sideBet,this.bjplayer.winning);
   }
 
   clickChip(item) {    
-    this.bjlucky.setBJluckyBet(item);
+    this.bet.setSelectedBet(item);
   }
 
  
   BJClickItem(item, index) {
-    this.clearElement('stackUpChip', '.stackUpChip');
+    //this.clearElement('stackUpChip', '.stackUpChip');
     if (index === 'main') {
       console.log("mainbet");
+      this.clearElement('stackUpChip', '.mainBetStackUPChip, .winMainBetStackUPChip, .doubleDownStackUPChip');
       this.bjplayer.setMainBet(item);
       this.bjplayer.setBalance(item);
-      this.bjlucky.stackUpChip(this.bjplayer.mainBet);
-    } else if(index === 'side') {
-      console.log("sidebet");
+      this.bet.stackUpChip(this.bjplayer.mainBet, index);
+    } else if(index === 'rightside') {
+      console.log("right sidebet");
+      this.clearElement('stackUpChip', '.rightSideBetStackUPChip');
       this.bjplayer.setSideBet(item);
       this.bjplayer.setBalance(item);
-      this.bjlucky.stackUpChip(this.bjplayer.sideBet);
+      this.bet.stackUpChip(this.bjplayer.sideBet, index);
 
     }
     // this.bjplayer.setBet(item);
@@ -195,23 +222,18 @@ export default class BlackJack {
   isBlackjack(dealerTotal, dealerHand, playerTotal, playerHand) {
     if ((dealerTotal === 11 && this.isSoftHand(dealerTotal, dealerHand)) && (playerTotal === 11 && this.isSoftHand(playerTotal, playerHand))) {
       this.showText(this.JUDGEMENT_X, this.JUDGEMENT_Y,'judgement', 'BlackJack Tie!!');      
-      this.openDealerBackSideCard();
       this.bjplayer.tie();
-      this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.mainBet, this.bjplayer.sideBet,this.bjplayer.winning);
       return true;
 
     } else if (dealerTotal === 11 && this.isSoftHand(dealerTotal, dealerHand)) {
       this.showText(this.JUDGEMENT_X, this.JUDGEMENT_Y,'judgement', 'Dealer BlackJack!!');                
-      this.openDealerBackSideCard();      
       this.bjplayer.lose();
-      this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.mainBet, this.bjplayer.sideBet,this.bjplayer.winning);
       return true;
 
     } else if (playerTotal === 11 && this.isSoftHand(playerTotal, playerHand)) {
       this.showText(this.JUDGEMENT_X, this.JUDGEMENT_Y,'judgement', 'BlackJack!!');
-      this.openDealerBackSideCard();      
       this.bjplayer.blackjack();
-      this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.mainBet, this.bjplayer.sideBet,this.bjplayer.winning);
+      this.bet.stackUpChip(this.bjplayer.mainBet*1.5, 'win');
       return true;
 
     } else {
@@ -322,7 +344,8 @@ export default class BlackJack {
       console.log(`init: ${this.currentCardCount}`);
     },900);
 
-    setTimeout(() => {      
+    setTimeout(() => {
+      //this.bjlucky.test(this.bjplayer.hand[0], this.bjplayer.hand[1], this.bjdealer.hand[1]);      
       this.bjplayer.setTotal(this.bjplayer.hand);
       this.bjdealer.setTotal(this.bjdealer.hand);
      
@@ -330,7 +353,9 @@ export default class BlackJack {
 
       if (this.isBlackjack(this.bjdealer.total, this.bjdealer.hand, this.bjplayer.total, this.bjplayer.hand)) {
         
-        this.bet.textUp(this.TEXTUP_SINGLE_PLAY, this.bjplayer.bet, this.bjplayer.winIndex);
+        this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.mainBet, this.bjplayer.sideBet,this.bjplayer.winning);
+        this.bet.textUp(this.TEXTUP_SINGLE_PLAY, this.bjplayer.mainBet, this.bjplayer.winIndex);
+        this.openDealerBackSideCard();
         this.prepareNextRound();
         return 'blackjack';
         
@@ -392,7 +417,7 @@ export default class BlackJack {
   }
 
   hit() {
-    
+       
     const player = this.isSplit ? (this.isSplitAndLeftHand? this.bjplayer : this.secondBJplayer) : this.bjplayer;
         
     this.getNextCard(player);
@@ -467,6 +492,7 @@ export default class BlackJack {
     //console.log(`double : ${player.bet}, ${this.secondBJplayer.bet}`);
     console.log(`double : ${bet}`);
     this.bet.modifyBalance(this.bjplayer.balance, bet, player.winning);
+    this.bet.stackUpChip(this.bjplayer.mainBet/2, 'double');
     this.hit();  // isDouble would be true -> just one card can be draw
     // require double btn disabled code insert
     
@@ -484,10 +510,10 @@ export default class BlackJack {
     this.bjplayer.setTotal(this.bjplayer.hand);
     this.secondBJplayer.setTotal(this.secondBJplayer.hand);
 
-    this.secondBJplayer.setBet(this.bjplayer.bet);
-    this.bjplayer.setBalance(this.bjplayer.bet);
+    this.secondBJplayer.setMainBet(this.bjplayer.mainBet);
+    this.bjplayer.setBalance(this.bjplayer.mainBet);
 
-    this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.bet + this.secondBJplayer.bet, this.bjplayer.sideBet, this.bjplayer.winning + this.secondBJplayer.winning);
+    this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.mainBet + this.secondBJplayer.mainBet, this.bjplayer.sideBet, this.bjplayer.winning + this.secondBJplayer.winning);
     
 
     this.isSplit = true;
@@ -500,6 +526,24 @@ export default class BlackJack {
     playerDeck0.setAttribute('class','deck playerDeck0 splitLeft0');
     playerDeck1.setAttribute('class','deck playerDeck1 splitRight0');
 
+    const mainBetStackUPChipLeft = document.querySelectorAll('.mainBetStackUPChip');
+    mainBetStackUPChipLeft && mainBetStackUPChipLeft.forEach( (item) => {
+      const cln = item.cloneNode(true);
+      item.style.left = '30%';
+      item.setAttribute('class','stackUpChip mainBetStackUPChip splitChipLeft');
+      
+      
+        
+        cln.style.right = '';
+        cln.setAttribute('class','stackUpChip mainBetStackUPChip splitChipRight');
+        this.playField.appendChild(cln);
+    
+
+
+      console.log(cln);
+    });
+
+ 
     const pointer = document.createElement('img');
     pointer.setAttribute('class', 'pointer animated css');
     
@@ -522,7 +566,6 @@ export default class BlackJack {
         this.stay();
         return;
       }, 500); 
-
 
     } else {
       console.log("not ace split");
@@ -615,24 +658,31 @@ export default class BlackJack {
           
       } else if (this.bjdealer.total > 21) { // dealer bust       
         this.showText(this.JUDGEMENT_X, this.JUDGEMENT_Y,'judgement','dealer bust!! player win');
-        player.win(player.bet);
+        player.win();
+        //this.bet.stackUpChip(player.mainBet, 'win');
               
       } else if (player.total > this.bjdealer.total) { // player win        
         this.showText(this.JUDGEMENT_X, this.JUDGEMENT_Y,'judgement','Player Win');
         player.win();
+        
           
       } else {
         this.showText(this.JUDGEMENT_X, this.JUDGEMENT_Y,'judgement','Dealer Win'); // dealer win
-        player.lose();
+        player.lose();        
         
       }
 
       // round finish and prepare next round
-      this.bet.modifyBalance(player.balance, player.bet, player.winning, player.winIndex);
-      this.bet.textUp(this.TEXTUP_SINGLE_PLAY, player.bet, player.winIndex);
+      if (player.winIndex === 'win') { this.bet.stackUpChip(player.mainBet, 'win'); }
+      if (player.winIndex === 'lose') { 
+        console.log("lose stackup clear");
+        this.clearElement('stackUpChip', '.mainBetStackUPChip, .winMainBetStackUPChip, .doubleDownStackUPChip'); 
+      }
+      this.bet.modifyBalance(player.balance, player.mainBet, player.sideBet, player.winning);
+      this.bet.textUp(this.TEXTUP_SINGLE_PLAY, player.mainBet, player.winIndex);
       this.bet.animateBalance(player.BalanceOfBeginningRound, player.BalanceOfBeginningRound + player.winning, 1000);
       this.prepareNextRound();      
-      console.log(`${this.bjplayer.balance},${this.bjplayer.bet},${this.bjplayer.winning}`)
+      //console.log(`${this.bjplayer.balance},${this.bjplayer.bet},${this.bjplayer.winning}`)
 
       // this.onDealBtn();
       // this.offHitAndStay();
@@ -716,17 +766,17 @@ export default class BlackJack {
 
           this.isSplit = false;
 
-          console.log(`come on`);
           let tmpWin = player.winning + secondBJplayer.winning;
-          let tmpBet = player.bet + secondBJplayer.bet;
+          let tmpMainBet = player.mainBet + secondBJplayer.mainBet;
+          let tmpSideBet = player.sideBet + secondBJplayer.sideBet;
           console.log(`split modify tmpWin: ${tmpWin}`);
           console.log(`split modify Wining: ${player.winning}, ${secondBJplayer.winning}`);
           console.log(`split modify Wining: ${player.winIndex}, ${secondBJplayer.winIndex}`);
       
           this.showText(this.DEALER_TOTAL_X, this.DEALER_TOTAL_Y,'dealerTotal', this.bjdealer.total);
-          this.bet.textUp(this.TEXTUP_SPLIT_PLAY_LEFT, player.bet, player.winIndex, 'left');
-          this.bet.textUp(this.TEXTUP_SPLIT_PLAY_RIGHT, secondBJplayer.bet, secondBJplayer.winIndex, 'right');
-          this.bet.modifyBalance(player.balance, tmpBet, tmpWin);
+          this.bet.textUp(this.TEXTUP_SPLIT_PLAY_LEFT, player.mainBet, player.winIndex, 'left');
+          this.bet.textUp(this.TEXTUP_SPLIT_PLAY_RIGHT, secondBJplayer.mainBet, secondBJplayer.winIndex, 'right');
+          this.bet.modifyBalance(player.balance, tmpMainBet, tmpSideBet, tmpWin);
           this.bet.animateBalance(player.BalanceOfBeginningRound, player.BalanceOfBeginningRound + tmpWin, 1000);
 
           this.prepareNextRound();
@@ -797,7 +847,8 @@ export default class BlackJack {
 
       console.log(`split modify bal: ${player.balance}`);
       let tmpWin = player.winning + secondBJplayer.winning;
-      let tmpBet = player.bet + secondBJplayer.bet;      
+      let tmpMainBet = player.mainBet + secondBJplayer.mainBet;
+      let tmpSideBet = player.sideBet + secondBJplayer.sideBet;      
 
       // console.log(`split modify bet: ${player.bet}, ${secondBJplayer.bet}`);
       
@@ -808,9 +859,9 @@ export default class BlackJack {
       console.log(`split modify WinIndex: ${player.winIndex}, ${secondBJplayer.winIndex}`);
 
       this.showText(this.DEALER_TOTAL_X, this.DEALER_TOTAL_Y,'dealerTotal', this.bjdealer.total);
-      this.bet.textUp(this.TEXTUP_SPLIT_PLAY_LEFT, player.bet, player.winIndex, 'left');
-      this.bet.textUp(this.TEXTUP_SPLIT_PLAY_RIGHT, secondBJplayer.bet, secondBJplayer.winIndex, 'right');
-      this.bet.modifyBalance(player.balance, tmpBet, tmpWin);
+      this.bet.textUp(this.TEXTUP_SPLIT_PLAY_LEFT, player.mainBet, player.winIndex, 'left');
+      this.bet.textUp(this.TEXTUP_SPLIT_PLAY_RIGHT, secondBJplayer.mainBet, secondBJplayer.winIndex, 'right');
+      this.bet.modifyBalance(player.balance, tmpMainBet, tmpSideBet, tmpWin);
       this.bet.animateBalance(player.BalanceOfBeginningRound, player.BalanceOfBeginningRound + tmpWin, 1000);
 
       this.prepareNextRound();
@@ -907,9 +958,10 @@ export default class BlackJack {
     this.onHitAndStay();
     this.chips.onReset();
     this.chips.onChip();
-    this.bjlucky.onBet();
+    this.bet.onBet();
     this.bjplayer.initBetAndWinning(); 
-    this.clearElement('prepareNextRound','.ctlBtn','.pointerRight');
+    this.clearElement('prepareNextRound','.ctlBtn, .pointerRight');
+    console.log("prepare next round");
   }
 
 

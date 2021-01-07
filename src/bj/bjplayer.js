@@ -9,8 +9,9 @@ export default class BJPlayer extends BJPublic{
     isDouble = false;
     splitCount = 1;
     
-    balance = 1000;
+    balance = 5000;
     BalanceOfBeginningRound = 0;
+    rebet = 0;
     bet = 0;
     winning = 0;
     winIndex = 0;
@@ -49,8 +50,11 @@ export default class BJPlayer extends BJPublic{
         this.bet = this.bet + bet;
     }
 
+    
+
     setMainBet(bet) {
         this.mainBet = this.mainBet + bet;
+        
     }
 
     setSideBet(bet) {
@@ -64,35 +68,36 @@ export default class BJPlayer extends BJPublic{
     setBalanceOfBeginningRound() {
         this.BalanceOfBeginningRound = this.balance;
 
+    }    
+
+    setRebet() {
+        this.rebet = this.mainBet;
     }
 
-    
-
     setDouble() {
-        let tmpBet = this.bet;
+        let tmpBet = this.mainBet;
         let tmpBalance = this.balance;
-        this.bet = this.bet*2;
+        this.mainBet = this.mainBet*2;
         this.balance = tmpBalance - tmpBet;
         console.log(`setdouble : ${this.bet}, ${this.balance}`);
     }
 
     blackjack() {
-        let winning = this.bet*2.5;
+        let winning = this.mainBet*2.5;
         this.setWinning(winning);
         this.balance = this.balance + this.winning;
-        this.winIndex = 'blackjack';
-        
+        this.winIndex = 'blackjack';        
     }
 
     win() {
-        let winning = this.bet*2;
+        let winning = this.mainBet*2;
         this.setWinning(winning);
         this.balance = this.balance + this.winning ;
         this.winIndex = 'win';
     }
 
     tie() {
-        this.balance = this.balance + this.bet;
+        this.balance = this.balance + this.mainBet;
         this.winIndex = 'tie';
     }
 
@@ -101,7 +106,8 @@ export default class BJPlayer extends BJPublic{
     }
 
     initBetAndWinning() {
-        this.bet = 0
+        this.mainBet = 0;
+        this.sideBet = 0;
         this.winning = 0;
     }
     
