@@ -3,9 +3,9 @@
 export default class Bet {
 
     MAINBET_STACK_UP_CHIP_POS_X = 49.3;
-    MAINBET_STACK_UP_CHIP_POS_Y = 23;
+    MAINBET_STACK_UP_CHIP_POS_Y = 27;
     SIDEBET_STACK_UP_CHIP_POS_X = 56.5;
-    SIDEBET_STACK_UP_CHIP_POS_Y = 36;
+    SIDEBET_STACK_UP_CHIP_POS_Y = 38;
 
     selectedBet = 0;
     BJMainBet = 0;
@@ -39,7 +39,7 @@ export default class Bet {
         this.mainbetSpot.src = '/table_games/img/mainbet.png';
         this.mainbetSpot.style.position = 'absolute';
         this.mainbetSpot.style.left = `45%`;
-        this.mainbetSpot.style.bottom = `22%`;
+        this.mainbetSpot.style.bottom = `24%`;
 
         this.rightSidebetSpot = document.createElement('input');
         this.rightSidebetSpot.setAttribute('class', 'BJbet BJsidebet BJRightSidebet');
@@ -47,10 +47,19 @@ export default class Bet {
         this.rightSidebetSpot.src = '/table_games/img/sidebet_lucky.png';
         this.rightSidebetSpot.style.position = 'absolute';
         this.rightSidebetSpot.style.left = `55%`;
-        this.rightSidebetSpot.style.bottom = `35%`;
+        this.rightSidebetSpot.style.bottom = `37%`;
+
+        this.leftSidebetSpot = document.createElement('input');
+        this.leftSidebetSpot.setAttribute('class', 'BJbet BJsidebet BJLeftSidebet');
+        this.leftSidebetSpot.type = "image";
+        this.leftSidebetSpot.src = '/table_games/img/sidebet_lucky.png';
+        this.leftSidebetSpot.style.position = 'absolute';
+        this.leftSidebetSpot.style.left = `40%`;
+        this.leftSidebetSpot.style.bottom = `37%`;
         
         this.playField.appendChild(this.mainbetSpot);
         this.playField.appendChild(this.rightSidebetSpot);
+        this.playField.appendChild(this.leftSidebetSpot);
 
         this.mainbetSpot.addEventListener('click', this.onclickBet);
         this.rightSidebetSpot.addEventListener('click', this.onclickBet);
@@ -131,34 +140,83 @@ export default class Bet {
     }
 
 
-    stackUpChip(bet, index) {
+    stackUpChip(amount, index, bet) {
+
         let spotX, spotY;
         let chipIndex;
-         
-        if (index === 'main') {
-            spotX = this.MAINBET_STACK_UP_CHIP_POS_X;
-            spotY = this.MAINBET_STACK_UP_CHIP_POS_Y;
-            chipIndex = 'mainBetStackUPChip';
-            console.log(chipIndex);
-        } else if(index === 'rightside') {
-            spotX = this.SIDEBET_STACK_UP_CHIP_POS_X;
-            spotY = this.SIDEBET_STACK_UP_CHIP_POS_Y;
-            chipIndex = 'rightSideBetStackUPChip';
-        } else if (index === 'double') {
-            spotX = this.MAINBET_STACK_UP_CHIP_POS_X - 5;
-            spotY = this.MAINBET_STACK_UP_CHIP_POS_Y;
-            chipIndex = 'doubleDownStackUPChip';
-            console.log(chipIndex);
-        } else if (index === 'win') {
-            spotX = this.MAINBET_STACK_UP_CHIP_POS_X + 5;
-            spotY = this.MAINBET_STACK_UP_CHIP_POS_Y;
-            chipIndex = 'winMainBetStackUPChip';
-            console.log(chipIndex);
-        }
-             
+        let extraX = 0;
 
-        const quo1000 = Math.floor(bet / 1000);
-        const remainder1000 = bet % 1000;
+        let parentPos = document.querySelector('.playField').getBoundingClientRect();
+        let relativePos = {};
+        
+        switch (index) {
+            case 'set' : {
+                if (bet === 'main') {
+                    spotX = this.MAINBET_STACK_UP_CHIP_POS_X;
+                    spotY = this.MAINBET_STACK_UP_CHIP_POS_Y;
+                    chipIndex = 'mainBetStackChip';
+                    console.log(chipIndex);
+                    
+
+                } else if (bet === 'leftside') {
+
+                } else if (bet === 'rightside') {
+                    spotX = this.SIDEBET_STACK_UP_CHIP_POS_X;
+                    spotY = this.SIDEBET_STACK_UP_CHIP_POS_Y;
+                    chipIndex = 'sideBetStackChip rightSideBetStackChip';
+                    console.log("stackup set rightside")
+                }             
+                break;
+            }
+
+            case 'double' : {
+                if (bet === 'main') {                    
+                    this.childPos = document.querySelector(`.mainBetStackChip`).getBoundingClientRect();
+                    chipIndex = 'mainBetStackChip';
+                    
+
+                }  else if (bet === 'splitChipLeft') {                    
+                    this.childPos = document.querySelector(`.splitChipLeft`).getBoundingClientRect();
+                    chipIndex = 'splitChipLeft';
+
+                } else if (bet === 'splitChipRight') {
+                    this.childPos = document.querySelector(`.splitChipRight`).getBoundingClientRect();
+                    chipIndex = 'splitChipRight';
+                    extraX = 15;
+                }
+                relativePos.left = (this.childPos.left - parentPos.left) / parentPos.width * 100;
+                spotX = relativePos.left - 5 - extraX;
+                spotY = this.MAINBET_STACK_UP_CHIP_POS_Y;
+
+                break;
+            }
+
+
+
+            case 'win' : {
+                if (bet === 'main') {                    
+                    this.childPos = document.querySelector(`.mainBetStackChip`).getBoundingClientRect();
+                    chipIndex = 'winMainBetStackChip';
+
+                }  else if (bet === 'splitChipLeft') {                    
+                    this.childPos = document.querySelector(`.splitChipLeft`).getBoundingClientRect();
+                    chipIndex = 'winMainBetStackChipLeft';
+
+                } else if (bet === 'splitChipRight') {
+                    this.childPos = document.querySelector(`.splitChipRight`).getBoundingClientRect();
+                    chipIndex = 'winMainBetStackChipRight';
+
+                }
+                relativePos.left = (this.childPos.left - parentPos.left) / parentPos.width * 100;
+                spotX = relativePos.left + 5;
+                spotY = this.MAINBET_STACK_UP_CHIP_POS_Y;
+
+                break;
+            }
+        }
+
+        const quo1000 = Math.floor(amount / 1000);
+        const remainder1000 = amount % 1000;
         const quo500 = Math.floor(remainder1000 / 500);
         const remainder500 = remainder1000 % 500;
         const quo100 = Math.floor(remainder500 / 100);
@@ -195,9 +253,9 @@ export default class Bet {
 
         for (let i = 0 ; i < quo500 ; i++) {
             test = document.createElement('img');
-            test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip500`);
+            test.setAttribute('class', `stackChip ${chipIndex} stackChip500`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackUpChip500.png';           
+            test.src = '/table_games/img/chips/stackChip500.png';           
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;
@@ -208,9 +266,9 @@ export default class Bet {
 
         for (let i = 0 ; i < quo100 ; i++) {
             test = document.createElement('img');
-            test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip100`);
+            test.setAttribute('class', `stackChip ${chipIndex} stackChip100`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackUpChip100.png';            
+            test.src = '/table_games/img/chips/stackChip100.png';            
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;
@@ -222,9 +280,9 @@ export default class Bet {
 
         for (let i = 0 ; i < quo25 ; i++) {
             test = document.createElement('img');
-            test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip25`);
+            test.setAttribute('class', `stackChip ${chipIndex} stackChip25`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackUpChip25.png';            
+            test.src = '/table_games/img/chips/stackChip25.png';            
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;
@@ -235,9 +293,9 @@ export default class Bet {
 
         for (let i = 0 ; i < quo5 ; i++) {
             test = document.createElement('img');
-            test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip5`);
+            test.setAttribute('class', `stackChip ${chipIndex} stackChip5`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackUpChip5.png';
+            test.src = '/table_games/img/chips/stackChip5.png';
             console.log("testbet25");
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
@@ -249,9 +307,9 @@ export default class Bet {
 
         for (let i = 0 ; i < remainder5 ; i++) {
             test = document.createElement('img');
-            test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip1`);
+            test.setAttribute('class', `stackChip ${chipIndex} stackChip1`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackUpChip1.png';            
+            test.src = '/table_games/img/chips/stackChip1.png';            
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;
@@ -297,7 +355,7 @@ export default class Bet {
             let timePassed = Date.now() - start;
             //console.log(`timepaseed : ${timePassed}`);
 
-            name.style.bottom =  (timePassed / 10 + 195) /10 + 14+ '%'; // digit : as fast as low digit
+            name.style.bottom =  (timePassed / 10 + 235) /10 + 14+ '%'; // digit : as fast as low digit
             
 
             if (timePassed > 600) { // digit : duration

@@ -11,13 +11,14 @@ export default class BJPlayer extends BJPublic{
     
     balance = 5000;
     BalanceOfBeginningRound = 0;
-    rebet = 0;
+    mainRebet = 0;
+    rightSideRebet = 0;
     bet = 0;
     winning = 0;
-    winIndex = 0;
+    winIndex = '';
 
     mainBet = 0;
-    sideBet = 0;
+    rightSideBet = 0;
 
 
     // constructor() {
@@ -30,6 +31,7 @@ export default class BJPlayer extends BJPublic{
         this.handCount = 0;
         this.isDouble = false;
         this.splitCount = 1;
+        this.winIndex = '';
 
     }
 
@@ -57,8 +59,8 @@ export default class BJPlayer extends BJPublic{
         
     }
 
-    setSideBet(bet) {
-        this.sideBet = this.sideBet + bet;
+    setRightSideBet(bet) {
+        this.rightSideBet = this.rightSideBet + bet;
     }
 
     setWinning(bet) {
@@ -71,7 +73,8 @@ export default class BJPlayer extends BJPublic{
     }    
 
     setRebet() {
-        this.rebet = this.mainBet;
+        this.mainRebet = this.mainBet;
+        this.rightSideRebet = this.rightSideBet;
     }
 
     setDouble() {
@@ -107,7 +110,7 @@ export default class BJPlayer extends BJPublic{
 
     initBetAndWinning() {
         this.mainBet = 0;
-        this.sideBet = 0;
+        this.rightSideBet = 0;
         this.winning = 0;
     }
     

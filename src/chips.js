@@ -60,7 +60,7 @@ export default class Chips {
         } else if (target.matches('.chipBtn25')) {
             this.onClickItem && this.onClickItem(25);
         } else if (target.matches('.chipBtn100')) {
-            this.onClickItem && this.onClickItem(100);
+            this.onClickItem && this.onClickItem(100);            
         } else if (target.matches('.rebetBtn')) {
             console.log("chips : rebet");
             this.onClickItem && this.onClickItem('rebet');                        

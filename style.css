@@ -264,6 +264,7 @@ i {
 }
 
 
+/*
 .moneyAnimation {
     width: 100px;
     height: 30px;
@@ -272,7 +273,7 @@ i {
 }
 
 .moneyAnimation.blackjack, .moneyAnimation.win, .moneyAnimation.split.win {
-    color: rgb(114, 132, 214);
+    color: rgb(43, 73, 209);
 }
 
 .moneyAnimation.lose, .moneyAnimation.split.lose {
@@ -282,6 +283,7 @@ i {
 .moneyAnimation.tie  {
     color: white;
 }
+*/
 
 .splitChipLeft {
     transition: .4s;
@@ -500,21 +502,21 @@ i {
 }
 
 .textUp.win, .textUp.blackjack{
-    color: rgb(114, 132, 214);    
+    color: rgb(49, 162, 182);    
 }
 
 .textUp.lose {
     color: red;    
 }
 
-.stackUpChip {
+.stackChip {
     width: 5%;
     height: 5%;
     z-index: 1;
     opacity: 90%;
 }
 
-.stackUpChip:hover {
+.stackChip:hover {
     z-index: 0;
     cursor: pointer;
 }
