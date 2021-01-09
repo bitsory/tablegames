@@ -210,7 +210,20 @@ export default class Bet {
                 relativePos.left = (this.childPos.left - parentPos.left) / parentPos.width * 100;
                 spotX = relativePos.left + 5;
                 spotY = this.MAINBET_STACK_UP_CHIP_POS_Y;
+                break;
+            }
 
+            case 'winSide' : {
+                if (bet === 'rightSide') {
+                this.childPos = document.querySelector(`.rightSideBetStackChip`).getBoundingClientRect();
+                chipIndex = 'rightSideBetStackChip';
+                } else if (bet === 'leftSide') {
+                this.childPos = document.querySelector(`.leftSideBetStackChip`).getBoundingClientRect();
+                chipIndex = 'leftSideBetStackChip';
+                }
+                relativePos.left = (this.childPos.left - parentPos.left) / parentPos.width * 100;
+                spotX = relativePos.left + 5;
+                spotY = this.SIDEBET_STACK_UP_CHIP_POS_Y;
                 break;
             }
         }
@@ -240,9 +253,9 @@ export default class Bet {
 
         for (let i = 0 ; i < quo1000 ; i++) {
             test = document.createElement('img');
-            test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip1000`);
+            test.setAttribute('class', `stackChip ${chipIndex} stackChip1000`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackUpChip1000.png';
+            test.src = '/table_games/img/chips/stackChip1000.png';
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;

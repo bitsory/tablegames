@@ -13,3 +13,25 @@
 .ctlBtn:hover {    
     transform: scale(1.1);
 }
+
+
+.splitChipLeft {
+    transition: .4s;
+    margin-right: 15% !important;
+}
+
+.splitChipRight {
+    transition: .4s;
+    margin-left: 15% !important;
+}
+
+.splitLeft0 {
+    
+    transition: .4s;
+    margin-right: 15% !important;
+}
+
+.splitRight0 {
+    transition: .4s;
+    margin-left: 15% !important;
+}
