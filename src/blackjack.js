@@ -106,11 +106,11 @@ export default class BlackJack {
     this.splitBtn = document.createElement('input');
     this.stayBtn = document.createElement('input');
 
-    this.setControlButtons(this.dealBtn, 'playBtn', '/table_games/img/blackjack/playbtn.png', 45, 0);
-    this.setControlButtons(this.hitBtn, 'ctlBtn hitBtn', '/table_games/img/blackjack/ctrlBtnHit.png', 10, 50);
-    this.setControlButtons(this.doubleBtn, 'ctlBtn doubleBtn', '/table_games/img/blackjack/ctrlBtnDD.png', 10, 35);
-    this.setControlButtons(this.splitBtn, 'ctlBtn splitBtn', '/table_games/img/blackjack/ctrlBtnSplit.png', 10, 20);
-    this.setControlButtons(this.stayBtn, 'ctlBtn stayBtn', '/table_games/img/blackjack/ctrlBtnStand.png', 75, 50);
+    this.setControlButtons(this.dealBtn, 'playBtn', 'img/blackjack/playbtn.png', 45, 0);
+    this.setControlButtons(this.hitBtn, 'ctlBtn hitBtn', 'img/blackjack/ctrlBtnHit.png', 10, 50);
+    this.setControlButtons(this.doubleBtn, 'ctlBtn doubleBtn', 'img/blackjack/ctrlBtnDD.png', 10, 35);
+    this.setControlButtons(this.splitBtn, 'ctlBtn splitBtn', 'img/blackjack/ctrlBtnSplit.png', 10, 20);
+    this.setControlButtons(this.stayBtn, 'ctlBtn stayBtn', 'img/blackjack/ctrlBtnStand.png', 75, 50);
 
     this.chipControlField.appendChild(this.dealBtn);
 
@@ -624,7 +624,7 @@ export default class BlackJack {
     const pointer = document.createElement('img');
     pointer.setAttribute('class', 'pointer animated css');
     
-    pointer.setAttribute('src', '/table_games/img/pointer_white.png');
+    pointer.setAttribute('src', 'img/pointer_white.png');
     pointer.style.position = 'absolute';
     pointer.style.left = `32%`; // this.item.style.left = `${x}px`;
     pointer.style.top = `54%`; // this.item.style.top = `${y}px`;

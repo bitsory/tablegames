@@ -97,7 +97,7 @@ i {
     
     grid-template-columns: 1fr 1fr 1fr;
     
-    background-image: url(/table_games/img/background_blackjack.jpg);
+    background-image: url(img/background_blackjack.jpg);
     /* justify-content: center;
     align-items: center; */
     
@@ -120,7 +120,7 @@ i {
     height: 100%;
     max-width: 100%;
     max-height: 100%;
-    background: url('/table_games/img/tablebackground.jpg') center/cover no-repeat;
+    background: url('img/tablebackground.jpg') center/cover no-repeat;
     /* background-size: 100% 100%;
     background-repeat: no-repeat; */
     /* background-attachment: fixed; */

@@ -97,11 +97,11 @@ window.makeField = (maingame, subgame) => {
 
     switch(maingame) {
         case 'blackjack': {
-            startBtn.src = '/table_games/img/blackjack/bjstart.png';
+            startBtn.src = 'img/blackjack/bjstart.png';
             break;
         }
         case 'baccarat': {
-            startBtn.src = '/table_games/img/baccarat/bcstart.png';
+            startBtn.src = 'img/baccarat/bcstart.png';
             break;
         }
     }

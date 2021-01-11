@@ -36,7 +36,7 @@ export default class Bet {
         this.mainbetSpot = document.createElement('input');
         this.mainbetSpot.setAttribute('class', 'BJbet BJmainbet');
         this.mainbetSpot.type = "image";
-        this.mainbetSpot.src = '/table_games/img/mainbet.png';
+        this.mainbetSpot.src = 'img/mainbet.png';
         this.mainbetSpot.style.position = 'absolute';
         this.mainbetSpot.style.left = `45%`;
         this.mainbetSpot.style.bottom = `24%`;
@@ -44,7 +44,7 @@ export default class Bet {
         this.rightSidebetSpot = document.createElement('input');
         this.rightSidebetSpot.setAttribute('class', 'BJbet BJsidebet BJRightSidebet');
         this.rightSidebetSpot.type = "image";
-        this.rightSidebetSpot.src = '/table_games/img/sidebet_lucky.png';
+        this.rightSidebetSpot.src = 'img/sidebet_lucky.png';
         this.rightSidebetSpot.style.position = 'absolute';
         this.rightSidebetSpot.style.left = `55%`;
         this.rightSidebetSpot.style.bottom = `37%`;
@@ -52,7 +52,7 @@ export default class Bet {
         this.leftSidebetSpot = document.createElement('input');
         this.leftSidebetSpot.setAttribute('class', 'BJbet BJsidebet BJLeftSidebet');
         this.leftSidebetSpot.type = "image";
-        this.leftSidebetSpot.src = '/table_games/img/sidebet_lucky.png';
+        this.leftSidebetSpot.src = 'img/sidebet_lucky.png';
         this.leftSidebetSpot.style.position = 'absolute';
         this.leftSidebetSpot.style.left = `40%`;
         this.leftSidebetSpot.style.bottom = `37%`;
@@ -255,7 +255,7 @@ export default class Bet {
             test = document.createElement('img');
             test.setAttribute('class', `stackChip ${chipIndex} stackChip1000`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackChip1000.png';
+            test.src = 'img/chips/stackChip1000.png';
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;
@@ -268,7 +268,7 @@ export default class Bet {
             test = document.createElement('img');
             test.setAttribute('class', `stackChip ${chipIndex} stackChip500`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackChip500.png';           
+            test.src = 'img/chips/stackChip500.png';           
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;
@@ -281,7 +281,7 @@ export default class Bet {
             test = document.createElement('img');
             test.setAttribute('class', `stackChip ${chipIndex} stackChip100`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackChip100.png';            
+            test.src = 'img/chips/stackChip100.png';            
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;
@@ -295,7 +295,7 @@ export default class Bet {
             test = document.createElement('img');
             test.setAttribute('class', `stackChip ${chipIndex} stackChip25`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackChip25.png';            
+            test.src = 'img/chips/stackChip25.png';            
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;
@@ -308,7 +308,7 @@ export default class Bet {
             test = document.createElement('img');
             test.setAttribute('class', `stackChip ${chipIndex} stackChip5`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackChip5.png';
+            test.src = 'img/chips/stackChip5.png';
             console.log("testbet25");
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
@@ -322,7 +322,7 @@ export default class Bet {
             test = document.createElement('img');
             test.setAttribute('class', `stackChip ${chipIndex} stackChip1`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackChip1.png';            
+            test.src = 'img/chips/stackChip1.png';            
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;

@@ -23,7 +23,7 @@ export default class BJLucky {
         this.mainbetSpot = document.createElement('input');
         this.mainbetSpot.setAttribute('class', 'BJbet BJmainbet');
         this.mainbetSpot.type = "image";
-        this.mainbetSpot.src = '/table_games/img/mainbet.png';
+        this.mainbetSpot.src = 'img/mainbet.png';
         this.mainbetSpot.style.position = 'absolute';
         this.mainbetSpot.style.left = `45%`;
         this.mainbetSpot.style.bottom = `22%`;
@@ -31,7 +31,7 @@ export default class BJLucky {
         this.sidebetSpot = document.createElement('input');
         this.sidebetSpot.setAttribute('class', 'BJbet BJsidebet');
         this.sidebetSpot.type = "image";
-        this.sidebetSpot.src = '/table_games/img/sidebet_lucky.png';
+        this.sidebetSpot.src = 'img/sidebet_lucky.png';
         this.sidebetSpot.style.position = 'absolute';
         this.sidebetSpot.style.left = `55%`;
         this.sidebetSpot.style.bottom = `35%`;
@@ -140,7 +140,7 @@ export default class BJLucky {
             test = document.createElement('img');
             test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip1000`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackUpChip1000.png';
+            test.src = 'img/chips/stackUpChip1000.png';
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;
@@ -153,7 +153,7 @@ export default class BJLucky {
             test = document.createElement('img');
             test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip500`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackUpChip500.png';           
+            test.src = 'img/chips/stackUpChip500.png';           
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;
@@ -166,7 +166,7 @@ export default class BJLucky {
             test = document.createElement('img');
             test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip100`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackUpChip100.png';            
+            test.src = 'img/chips/stackUpChip100.png';            
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;
@@ -180,7 +180,7 @@ export default class BJLucky {
             test = document.createElement('img');
             test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip25`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackUpChip25.png';            
+            test.src = 'img/chips/stackUpChip25.png';            
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;
@@ -193,7 +193,7 @@ export default class BJLucky {
             test = document.createElement('img');
             test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip5`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackUpChip5.png';
+            test.src = 'img/chips/stackUpChip5.png';
             console.log("testbet25");
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
@@ -207,7 +207,7 @@ export default class BJLucky {
             test = document.createElement('img');
             test.setAttribute('class', `stackUpChip ${chipIndex} stackUpChip1`);
             test.type = "image";
-            test.src = '/table_games/img/chips/stackUpChip1.png';            
+            test.src = 'img/chips/stackUpChip1.png';            
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;
@@ -225,7 +225,7 @@ export default class BJLucky {
             test = document.createElement('img');
             test.setAttribute('class', `stackUpChip ${stackUpChip}`);
             test.type = "image";
-            test.src = `/table_games/img/chips/${stackUpChip}.png`;            
+            test.src = `img/chips/${stackUpChip}.png`;            
             test.style.position = 'absolute';
             test.style.left = `49%`;
             test.style.bottom = `${25 + height}%`;

@@ -22,13 +22,13 @@ export default class Chips {
         this.resetBetBtn = document.createElement('input');
         this.configBtn = document.createElement('input');
        
-        this.setChipButtons(this.chipBtn1, "chipBtn chipBtn1", "/table_games/img/chips/chip_one.png", 0);
-        this.setChipButtons(this.chipBtn5, "chipBtn chipBtn5", "/table_games/img/chips/chip_five.png", 10);
-        this.setChipButtons(this.chipBtn25, "chipBtn chipBtn25", "/table_games/img/chips/chip_quater.png", 20);
-        this.setChipButtons(this.chipBtn100, "chipBtn chipBtn100", "/table_games/img/chips/chip_hundred.png", 30);
-        this.setChipButtons(this.rebetBtn, "chipBtn rebetBtn", "/table_games/img/chips/rebet.png", 60);
-        this.setChipButtons(this.resetBetBtn, "chipBtn resetBetBtn", "/table_games/img/chips/reset.png", 70);
-        this.setChipButtons(this.configBtn, "chipBtn configBtn", "/table_games/img/chips/config.png", 80);
+        this.setChipButtons(this.chipBtn1, "chipBtn chipBtn1", "img/chips/chip_one.png", 0);
+        this.setChipButtons(this.chipBtn5, "chipBtn chipBtn5", "img/chips/chip_five.png", 10);
+        this.setChipButtons(this.chipBtn25, "chipBtn chipBtn25", "img/chips/chip_quater.png", 20);
+        this.setChipButtons(this.chipBtn100, "chipBtn chipBtn100", "img/chips/chip_hundred.png", 30);
+        this.setChipButtons(this.rebetBtn, "chipBtn rebetBtn", "img/chips/rebet.png", 60);
+        this.setChipButtons(this.resetBetBtn, "chipBtn resetBetBtn", "img/chips/reset.png", 70);
+        this.setChipButtons(this.configBtn, "chipBtn configBtn", "img/chips/config.png", 80);
         this.chipControlField.addEventListener('click', this.onChipClick);
     }
 
