@@ -179,3 +179,5 @@ window.setButtons = (name, attribute, url) => {
     name.src = url;
     playField.appendChild(name);
 }
+
+

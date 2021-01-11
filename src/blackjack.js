@@ -3,7 +3,7 @@ import Chips from './chips.js';
 import Deck from './deck.js';
 //import BJLucky from './bj/bjlucky.js';
 import Bet from './bet.js';
-import BJPlayer from './bj/bjPlayer.js';
+import BJPlayer from './bj/bjplayer.js';
 import BJDealer from './bj/bjdealer.js';
 import BJSidebet from './bj/bjsidebet.js';
 import Test from './test.js';
