@@ -1,3 +1,36 @@
+.BJbet {
+    
+    outline: none;
+    cursor: pointer;
+    transition: transform 200ms ease-in;
+}
+
+.BJbet:hover {    
+    transform: scale(1.1);
+    opacity: 50%;
+    z-index: 2;
+}
+
+.BJbet:focus {    
+    transform: scale(1.1);
+    /* opacity: 50%; */
+    z-index: 2;
+    /* outline: solid yellow 2px; */
+}
+
+.BJmainbet {
+    width: 13%;
+    /* height: 10%; */
+    z-index: 1;
+    /* opacity: 40%; */
+   
+}
+
+.BJsidebet {
+    width: 8%;
+    /* height: 50px; */
+   
+}
 
 .ctlBtn {
     width: 15%;

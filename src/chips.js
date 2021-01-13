@@ -20,6 +20,7 @@ export default class Chips {
         this.chipBtn100 = document.createElement('input');
         this.rebetBtn = document.createElement('input');
         this.resetBetBtn = document.createElement('input');
+        this.shuffleBtn = document.createElement('input');
         this.configBtn = document.createElement('input');
        
         this.setChipButtons(this.chipBtn1, "chipBtn chipBtn1", "img/chips/chip_one.png", 0);
@@ -28,7 +29,8 @@ export default class Chips {
         this.setChipButtons(this.chipBtn100, "chipBtn chipBtn100", "img/chips/chip_hundred.png", 30);
         this.setChipButtons(this.rebetBtn, "chipBtn rebetBtn", "img/chips/rebet.png", 60);
         this.setChipButtons(this.resetBetBtn, "chipBtn resetBetBtn", "img/chips/reset.png", 70);
-        this.setChipButtons(this.configBtn, "chipBtn configBtn", "img/chips/config.png", 80);
+        this.setChipButtons(this.shuffleBtn, "chipBtn shuffleBtn", "img/chips/shuffle.png", 80);
+        this.setChipButtons(this.configBtn, "chipBtn configBtn", "img/chips/config.png", 90);
         this.chipControlField.addEventListener('click', this.onChipClick);
     }
 

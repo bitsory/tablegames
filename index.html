@@ -86,11 +86,23 @@
         </nav> -->
     </section>
     
-    <section class="mainField">Hello world!!
+    <section class="mainField">
+        <div class="greeting">Hello world!!</div>
+        <div class="bjcheckbox">
+            <input onclick="countCheck(this);" type="checkbox" name="bjchoice" value="BJluckylucky"/>Lucky Lucky
+            <input onclick="countCheck(this);" type="checkbox" name="bjchoice" value="trilux"/>Trilux
+            <input onclick="countCheck(this);" type="checkbox" name="bjchoice" value="kings"/>Kings
+            <input onclick="countCheck(this);" type="checkbox" name="bjchoice" value="tie"/>Tie
+            <input onclick="countCheck(this);" type="checkbox" name="bjchoice" value="pair"/>Pair
+
+
+        </div>
+        <button class="blackjackstart" onclick="bjCheckedValue();">BlackJack</button>
         
         <!-- <div class="game_field"></div> -->
 
     </section>
+    
     <footer class="foot">
         <section class="footer">CopyRight@</section>
     </footer>

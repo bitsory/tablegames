@@ -18,8 +18,7 @@ export default class BJSidebet extends BJPublic {
         switch (luckyTotal) {
             case 19 : {
                 console.log("any 19");
-                return 'any19';
-                
+                return 'any19';                
             }
             case 20: {
                 console.log("any 20");
@@ -27,13 +26,13 @@ export default class BJSidebet extends BJPublic {
             }
             case 21: {
                 console.log("any 21");
-                return 'any21';
-                
-                
+                return 'any21';               
+            }
+            default : {
+                console.log("nothing on lucky lucky");
+                return;
             }
         }
-        console.log('nothing');
-        return;
 
     }
 

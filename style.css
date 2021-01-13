@@ -58,7 +58,7 @@ i {
 }
 
 .mainField {
-    display: flex; 
+    /* display: flex;  */
     position: relative; 
     /* max-width: 70rem;
     max-height: 70rem; */
@@ -66,7 +66,7 @@ i {
     min-width: 600px; */
 
     margin: 30px auto;
-    margin:  auto;
+    /* margin:  auto; */
     
 
     width: 50rem;
@@ -152,7 +152,7 @@ i {
 
 
 .playBtn {
-    width: 8%;
+    width: 9%;
     /* height: 30%; */
     margin: 0rem 0rem 0rem 1.4rem;
     
@@ -213,7 +213,7 @@ i {
 .chipBtn {
     width: 8%;
     /* height: 30%; */
-    margin: 0rem 0rem 0rem 1.4rem;
+    margin: 0rem 0rem 0rem 0.7rem;
     
     outline: none;
     cursor: pointer;
@@ -236,7 +236,7 @@ i {
 
 .startBtn {
     width: 12%;
-    height: 16%;
+    /* height: 16%; */
     -webkit-transform: scale(1);
     -ms-transform: scale(1);
     -o-transform: scale(1);
@@ -246,6 +246,7 @@ i {
 }
 
 
+/*
 .BJbet {
     
     outline: none;
@@ -261,17 +262,18 @@ i {
 
 .BJmainbet {
     width: 13%;
-    /* height: 10%; */
+    /* height: 10%; 
     z-index: 1;
-    /* opacity: 40%; */
+    /* opacity: 40%; 
    
 }
 
 .BJsidebet {
     width: 8%;
-    /* height: 50px; */
+    /* height: 50px; 
    
 }
+*/
 
 .bet {
     margin: 1.8rem;
@@ -573,7 +575,7 @@ i {
     }
 
     .chipBtn {
-        margin: 0rem 0rem 0rem 0.7rem;
+        margin: 0rem 0rem 0rem 0.4rem;
     }
 
     .bet {

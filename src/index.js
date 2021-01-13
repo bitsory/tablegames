@@ -2,6 +2,9 @@
 import Baccarat from './baccarat.js';
 import BlackJack from './blackjack.js';
 
+let totalChecked = 0;
+const maxCheck = 2;
+
 window.BJdropDown = function() {
     document.getElementById("BJsubgameDropDown").classList.toggle("show");
 }
@@ -178,6 +181,40 @@ window.setButtons = (name, attribute, url) => {
     name.type = "image";
     name.src = url;
     playField.appendChild(name);
+}
+
+
+window.bjCheckedValue = () => {
+
+    const query = 'input[name="bjchoice"]:checked';
+    const selectedEls = document.querySelectorAll(query);
+    let result = [];
+    //result = selectedEls[0].value;
+    //   let result = [];
+      selectedEls.forEach((item) => {
+        result.push(item.value);
+      });
+    console.log(result);
+    makeField('blackjack', 'BJluckylucky');
+}
+
+window.countCheck = (item) => {
+    
+    console.log(item.value);
+    console.log(item.checked);
+    if (item.checked) {
+        totalChecked += 1;
+        
+    } else {
+        totalChecked -= 1;
+    }
+
+    if (totalChecked > maxCheck) {
+        alert ("최대 2개 까지만 가능합니다.");
+        item.checked = false;
+        totalChecked -= 1;
+    }
+    console.log(totalChecked);
 }
 
 
