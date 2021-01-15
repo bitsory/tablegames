@@ -158,39 +158,36 @@ i {
     
     outline: none;
     cursor: pointer;
-    transition: transform 200ms ease-in;
+    /* transition: transform 200ms ease-in; */
     border-radius: 50px;
 
-    animation: play-button 1s;
+    /* transform: perspective( 600px ) rotateY( 0deg ); */
+    /* backface-visibility: hidden; */
+    transition: transform 200ms;
+    
 
 }
-/* 
-.playBtn:hover {
-    
-    transform: scale(1.1);
-    transform: rotateY(180deg);
-} */
-
-/* .playBtn:hover {
-    
-    /* transform: scale(1.1); 
-    transform: rotateY(180deg);
-} */
 
 .playBtn:hover {
+    
     transform: scale(1.2);
+   
 }
 
-.playBtn:active {
-    animation: spin-play-button 1s;   
-    /* transform: scale(1.2) rotateY(180deg); */
-}
+.playBtnAnimation {
+    animation: rotation 10s infinite linear;
+  }
+  
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
 
-@keyframes play-button {50%{transform:rotateY(180deg);}}
-@keyframes spin-play-button {50%{transform:rotateY(180deg);}}
 
-
-/* 
 .ctlBtn {
     width: 15%;
     height: 15%;
@@ -204,7 +201,7 @@ i {
 
 .ctlBtn:hover {    
     transform: scale(1.1);
-} */
+} 
 
 
 
@@ -230,7 +227,7 @@ i {
 }
 
 .chipBtn1:focus, .chipBtn5:focus, .chipBtn25:focus, .chipBtn100:focus {    
-    /* transform: scale(1.2); */
+    /* transform: scale(1.2)  rotate(1turn); */
     outline: solid yellow 2px;
 }
 

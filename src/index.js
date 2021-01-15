@@ -75,7 +75,7 @@ window.baccarat = (subgame) => {
 
 // });
 
-window.makeField = (maingame, subgame) => {
+window.makeField = (maingame, subgame1, subgame2) => {
     console.log('field maker initialized...');
 
     const mainField = document.querySelector('.mainField');
@@ -143,18 +143,21 @@ window.makeField = (maingame, subgame) => {
     startBtn.addEventListener('click', () => {
         if (maingame === 'blackjack') {
             console.log("BJ start");
-            console.log(subgame);
-            switch(subgame) {
-                case 'BJluckylucky': {
-                    console.log("switch");
-                    const blackjackLucky = new BlackJack('BJlucky');
-                    break;
-                }
-                case 'BJkings': {
-                    const blackjackKings = new BlackJack('BJkings');
-                    break;
-                }
-            }
+
+            const blackjack = new BlackJack(subgame1, subgame2);
+        
+            // console.log(subgame);
+            // switch(subgame) {
+            //     case 'lucky': {
+            //         console.log("switch");
+            //         const blackjackLucky = new BlackJack('BJlucky');
+            //         break;
+            //     }
+            //     case 'BJkings': {
+            //         const blackjackKings = new BlackJack('BJkings');
+            //         break;
+            //     }
+            // }
             
         } else if (maingame === 'baccarat') {
             console.log("BC start");
@@ -189,13 +192,10 @@ window.bjCheckedValue = () => {
     const query = 'input[name="bjchoice"]:checked';
     const selectedEls = document.querySelectorAll(query);
     let result = [];
-    //result = selectedEls[0].value;
-    //   let result = [];
-      selectedEls.forEach((item) => {
-        result.push(item.value);
-      });
+    
+    selectedEls.forEach((item) => result.push(item.value));
     console.log(result);
-    makeField('blackjack', 'BJluckylucky');
+    makeField('blackjack', result[0], result[1]);
 }
 
 window.countCheck = (item) => {

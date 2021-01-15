@@ -12,8 +12,8 @@
 }
 
 .BJbet:focus {    
-    transform: scale(1.1);
-    /* opacity: 50%; */
+    transform: scale(1.2);
+    opacity: 60%;
     z-index: 2;
     /* outline: solid yellow 2px; */
 }

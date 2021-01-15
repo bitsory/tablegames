@@ -7,6 +7,7 @@ export default class Chips {
     chip1 = false;
 
     tmp = 0;
+    betSpot = '';
 
     constructor() {
         console.log("chips initialized...");
@@ -43,10 +44,14 @@ export default class Chips {
         this.chipControlField.appendChild(name);
     }
 
-    setClickListener = function(click) { 
+    setChipClickListener = function(click) { 
         console.log("chips: setclicklistener before");       
         this.onClickItem = click;        
         console.log("chips: setclicklistener after")
+    }
+
+    setBetSpot = (item) => {        
+        this.betSpot = item;        
     }
 
 
@@ -59,6 +64,7 @@ export default class Chips {
             //console.log(this.onClickItem);
         } else if (target.matches('.chipBtn5')) {
             this.onClickItem && this.onClickItem(5);
+            
         } else if (target.matches('.chipBtn25')) {
             this.onClickItem && this.onClickItem(25);
         } else if (target.matches('.chipBtn100')) {

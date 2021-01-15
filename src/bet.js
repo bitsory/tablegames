@@ -2,20 +2,20 @@
 
 export default class Bet {
 
-    MAINBET_STACK_UP_CHIP_POS_X = 49.3;
+    MAINBET_STACK_UP_CHIP_POS_X = 48.3;
     MAINBET_STACK_UP_CHIP_POS_Y = 27;
-    SIDEBET_STACK_UP_CHIP_POS_X = 56.5;
-    SIDEBET_STACK_UP_CHIP_POS_Y = 38;
-
-    selectedBet = 0;
-    BJMainBet = 0;
-    BJRightSideBet = 0;
-    BJLeftSideBet = 0;
-    //betStack = [];   
+    RIGHT_SIDEBET_STACK_UP_CHIP_POS_X = 55.5;
+    RIGHT_SIDEBET_STACK_UP_CHIP_POS_Y = 38;
+    LEFT_SIDEBET_STACK_UP_CHIP_POS_X = 40.5;
+    LEFT_SIDEBET_STACK_UP_CHIP_POS_Y = 38;
     
     heightForStackChip = 0; 
         
-    constructor() {
+    constructor(right, left) {
+
+        const rightSubgameImage = this.whatIsSubgame(right);
+        const leftSubgameImage = this.whatIsSubgame(left);
+        
         
         this.playControlField = document.querySelector('.playControlField');
         this.playField = document.querySelector('.playField');
@@ -33,112 +33,80 @@ export default class Bet {
         this.playControlField.appendChild(this.showSideBet); 
         this.playControlField.appendChild(this.showWinning);  
         
+
+
         this.mainbetSpot = document.createElement('input');
-        this.mainbetSpot.setAttribute('class', 'BJbet BJmainbet');
-        this.mainbetSpot.type = "image";
-        this.mainbetSpot.src = 'img/mainbet.png';
-        this.mainbetSpot.style.position = 'absolute';
-        this.mainbetSpot.style.left = `45%`;
-        this.mainbetSpot.style.bottom = `24%`;
-
         this.rightSidebetSpot = document.createElement('input');
-        this.rightSidebetSpot.setAttribute('class', 'BJbet BJsidebet BJRightSidebet');
-        this.rightSidebetSpot.type = "image";
-        this.rightSidebetSpot.src = 'img/sidebet_lucky.png';
-        this.rightSidebetSpot.style.position = 'absolute';
-        this.rightSidebetSpot.style.left = `55%`;
-        this.rightSidebetSpot.style.bottom = `37%`;
-
         this.leftSidebetSpot = document.createElement('input');
-        this.leftSidebetSpot.setAttribute('class', 'BJbet BJsidebet BJLeftSidebet');
-        this.leftSidebetSpot.type = "image";
-        this.leftSidebetSpot.src = 'img/sidebet_lucky.png';
-        this.leftSidebetSpot.style.position = 'absolute';
-        this.leftSidebetSpot.style.left = `40%`;
-        this.leftSidebetSpot.style.bottom = `37%`;
-        
-        this.playField.appendChild(this.mainbetSpot);
-        this.playField.appendChild(this.rightSidebetSpot);
-        this.playField.appendChild(this.leftSidebetSpot);
+
+        this.makeBetSpot(this.mainbetSpot, 'BJmainbet', 'mainbet', 44, 24);
+        this.makeBetSpot(this.rightSidebetSpot, 'BJsidebet BJRightSidebet', rightSubgameImage, 54, 37);
+        this.makeBetSpot(this.leftSidebetSpot, 'BJsidebet BJLeftSidebet', leftSubgameImage, 39, 37);
 
         this.mainbetSpot.addEventListener('click', this.onclickBet);
         this.rightSidebetSpot.addEventListener('click', this.onclickBet);
-        //this.chipControlField.addEventListener('click', this.test);
+        this.leftSidebetSpot.addEventListener('click', this.onclickBet);
         
     }
 
-    setMainBetClickListener = function(click) {
-        this.onClickMainItem = click;
-        //console.log(this.onClickItem);
+    makeBetSpot(name, classname, image, left, bottom) {
+        
+        name.setAttribute('class', `BJbet ${classname}`);
+        name.type = "image";
+        name.src = `img/blackjack/bet/${image}.png`;
+        name.style.position = 'absolute';
+        name.style.left = `${left}%`;
+        name.style.bottom = `${bottom}%`;
+        image && this.playField.appendChild(name);
     }
 
-    setRightSideBetClickListener = function(click) {
-        this.onClickRightSideItem = click;
-        //console.log(this.onClickItem);
+    whatIsSubgame(item) {
+        switch (item) {
+            case "lucky" : {
+                return 'sidebet_lucky';
+                
+            }
+            case "kings" : {
+                return 'sidebet_kings';
+                
+            }
+            case "trilux" : {
+                return 'sidebet_trilux';
+                
+            }
+            case "pair" : {
+                return 'sidebet_pair';
+                
+            }
+            case "tie" : {
+                return 'sidebet_tie';
+                
+            }
+        }
     }
 
-    setLeftSideBetClickListener = function(click) {
-        this.onClickLeftSideItem = click;
-        //console.log(this.onClickItem);
-    }
 
-    setSelectedBet(item) {        
-        this.selectedBet = item;        
-    }
-
-    setMainBet(item) {        
-        this.BJMainBet = item;        
-    }
-
-    setRightSideBet(item) {        
-        this.BJRightSideBet = item;        
-    }
-
-    setLeftSideBet(item) {        
-        this.BJLeftSideBet = item;        
+    setBetClickListener = function(click) {
+        
+        this.onClickItem = click; 
     }
 
     onclickBet = (event) => {
 
         console.log("onclick bet");
-        const target = event.target;
-        
+        const target = event.target;        
         
         if (target.matches('.BJmainbet')) {  
             console.log("main Bet target");          
-            this.onClickMainItem && this.onClickMainItem(this.selectedBet);            
+            this.onClickItem && this.onClickItem('main');            
         } else if (target.matches('.BJRightSidebet')) {
             console.log("right side Bet target");
-            this.onClickRightSideItem && this.onClickRightSideItem(this.selectedBet);
+            this.onClickItem && this.onClickItem('rightSide');
         } else if (target.matches('.BJLeftSidebet')) {
             console.log("left side Bet target");
-            this.onClickLeftSideItem && this.onClickLeftSideItem(this.selectedBet);
+            this.onClickItem && this.onClickItem('leftSide');
         }       
     }
-
-    onclickMainbet = (event) => {
-
-        console.log("main bet");
-        const target = event.target;
-        
-        
-        if (target.matches('.BJmainbet')) {
-            
-            this.onClickMainItem && this.onClickMainItem(this.selectedBet);
-            
-        }        
-    }
-
-    onclickRightSidebet = (event) => {
-        console.log("right side Bet");
-        const target = event.target;
-
-        if (target.matches('.BJRightSidebet')) {
-            console.log("right side Bet target");
-            this.onClickRightSideItem && this.onClickRightSideItem(this.selectedBet);
-        }
-    }
-
 
     stackUpChip(amount, index, bet) {
 
@@ -158,13 +126,17 @@ export default class Bet {
                     console.log(chipIndex);
                     
 
-                } else if (bet === 'leftside') {
-
                 } else if (bet === 'rightside') {
-                    spotX = this.SIDEBET_STACK_UP_CHIP_POS_X;
-                    spotY = this.SIDEBET_STACK_UP_CHIP_POS_Y;
+                    spotX = this.RIGHT_SIDEBET_STACK_UP_CHIP_POS_X;
+                    spotY = this.RIGHT_SIDEBET_STACK_UP_CHIP_POS_Y;
                     chipIndex = 'sideBetStackChip rightSideBetStackChip';
                     console.log("stackup set rightside")
+
+                } else if (bet === 'leftside') {
+                    spotX = this.LEFT_SIDEBET_STACK_UP_CHIP_POS_X;
+                    spotY = this.LEFT_SIDEBET_STACK_UP_CHIP_POS_Y;
+                    chipIndex = 'sideBetStackChip leftSideBetStackChip';
+                    console.log("stackup set leftside")
                 }             
                 break;
             }
@@ -191,8 +163,6 @@ export default class Bet {
                 break;
             }
 
-
-
             case 'win' : {
                 if (bet === 'main') {                    
                     this.childPos = document.querySelector(`.mainBetStackChip`).getBoundingClientRect();
@@ -213,17 +183,23 @@ export default class Bet {
                 break;
             }
 
-            case 'winSide' : {
+            case 'winSidebet' : {
                 if (bet === 'rightSide') {
                 this.childPos = document.querySelector(`.rightSideBetStackChip`).getBoundingClientRect();
                 chipIndex = 'rightSideBetStackChip';
+                relativePos.left = (this.childPos.left - parentPos.left) / parentPos.width * 100;
+                spotX = relativePos.left + 5;
+                spotY = this.RIGHT_SIDEBET_STACK_UP_CHIP_POS_Y;
+                
                 } else if (bet === 'leftSide') {
                 this.childPos = document.querySelector(`.leftSideBetStackChip`).getBoundingClientRect();
                 chipIndex = 'leftSideBetStackChip';
-                }
                 relativePos.left = (this.childPos.left - parentPos.left) / parentPos.width * 100;
-                spotX = relativePos.left + 5;
-                spotY = this.SIDEBET_STACK_UP_CHIP_POS_Y;
+                spotX = relativePos.left - 5;
+                spotY = this.LEFT_SIDEBET_STACK_UP_CHIP_POS_Y;
+                
+                }                            
+                
                 break;
             }
         }
