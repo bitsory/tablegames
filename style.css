@@ -152,20 +152,13 @@ i {
 
 
 .playBtn {
-    width: 9%;
-    /* height: 30%; */
+    width: 9%;    
     margin: 0rem 0rem 0rem 1.4rem;
-    
     outline: none;
     cursor: pointer;
-    /* transition: transform 200ms ease-in; */
     border-radius: 50px;
-
-    /* transform: perspective( 600px ) rotateY( 0deg ); */
-    /* backface-visibility: hidden; */
     transition: transform 200ms;
-    
-
+ 
 }
 
 .playBtn:hover {
@@ -176,16 +169,16 @@ i {
 
 .playBtnAnimation {
     animation: rotation 10s infinite linear;
-  }
+}
   
-  @keyframes rotation {
+@keyframes rotation {
     from {
-      transform: rotate(0deg);
+        transform: rotate(0deg);
     }
     to {
-      transform: rotate(359deg);
+        transform: rotate(359deg);
     }
-  }
+}
 
 
 .ctlBtn {
@@ -202,10 +195,6 @@ i {
 .ctlBtn:hover {    
     transform: scale(1.1);
 } 
-
-
-
-
 
 .chipBtn {
     width: 8%;

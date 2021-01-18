@@ -23,6 +23,11 @@ export default class BJPublic {
     }
 
     suitRecognize(item) {
+      let result = item.slice(1,3);
+      return result;
+    }
+
+    shapeRecognize(item) {
       let result = item.slice(0,1);
       return result;
     }
