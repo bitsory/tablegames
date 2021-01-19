@@ -71,10 +71,11 @@ export default class BlackJack {
 
     this.chips = new Chips();
     this.bet = new Bet(rightSubgame, leftSubgame);
+    this.bjsubgame = new BJSidebet(rightSubgame, leftSubgame);
     this.deck = new Deck(2);
     this.bjplayer = new BJPlayer();
     this.bjdealer = new BJDealer();
-    this.bjsubgame = new BJSidebet(rightSubgame, leftSubgame);
+    
     this.rightSubgame = rightSubgame;
     this.leftSubgame = leftSubgame;
     console.log(`subgame : ${this.rightSubgame}`);
@@ -109,11 +110,15 @@ export default class BlackJack {
     this.playField.appendChild(this.doubleBtn);
     this.playField.appendChild(this.stayBtn);
 
-    
+    this.mainbetSpot = document.querySelector('.BJmainbet');
+    this.rightSidebetSpot = document.querySelector('.BJRightSidebet');
+    this.leftSidebetSpot = document.querySelector('.BJLeftSidebet');
     this.hideHitAndStay();
 
     //////////////////////  control button event listener //////////////////
     this.dealBtn.addEventListener('click', () => {
+      //this.mainbetSpot.style.transform = "";
+      this.betSpotTransformRestore();
 
       this.clearElement('clearItemForNewRound' , '.deck, .soft, .judgement, .judgement2, .placebet, .dealerTotal, .playerTotal, .playerTotal2, .textUp, .rightSidebetWin, .leftSidebetWin');
             
@@ -200,9 +205,10 @@ export default class BlackJack {
   }
 
   resetBet() {    
+    let clearBet = - this.bjplayer.mainBet - this.bjplayer.rightSideBet - this.bjplayer.leftSideBet;
     this.clearElement('stackChip', '.stackChip');
     //this.bjlucky.resetBetStack();
-    this.bjplayer.setBalance(-this.bjplayer.mainBet-this.bjplayer.rightSideBet-this.bjplayer.leftSideBet);
+    this.bjplayer.setBalance(clearBet);
     this.bjplayer.initBetAndWinning();    
     this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.mainBet, this.bjplayer.rightSideBet,this.bjplayer.winning);
   }
@@ -211,25 +217,28 @@ export default class BlackJack {
     if (item === 'reset' || item === 'rebet') return;  
     let index = this.chips.betSpot;
     console.log(index);
+    //this.betSpotTransform(index);
+    this.bjplayer.setBalance(item);
+
     if (index === 'main') {      
       console.log("mainbet");
       this.clearElement('stackChip', '.mainBetStackChip, .winMainBetStackChip');
       this.bjplayer.setMainBet(item);
-      this.bjplayer.setBalance(item);
-      this.bet.stackUpChip(this.bjplayer.mainBet, 'set', 'main');
+      //this.bjplayer.setBalance(item);
+      this.bet.stackUpChip(this.bjplayer.mainBet, 'set', 'main');      
     
     } else if(index === 'rightSide') {
       console.log("right sidebet");
       this.clearElement('stackChip', '.rightSideBetStackChip');
       this.bjplayer.setRightSideBet(item);
-      this.bjplayer.setBalance(item);
+      //this.bjplayer.setBalance(item);
       this.bet.stackUpChip(this.bjplayer.rightSideBet, 'set', 'rightside');
 
     } else if(index === 'leftSide') {
       console.log("left sidebet");
       this.clearElement('stackChip', '.leftSideBetStackChip');
       this.bjplayer.setLeftSideBet(item);
-      this.bjplayer.setBalance(item);
+      //this.bjplayer.setBalance(item);
       this.bet.stackUpChip(this.bjplayer.leftSideBet, 'set', 'leftside');
     }
     this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.mainBet, this.bjplayer.rightSideBet,this.bjplayer.winning);
@@ -1027,6 +1036,35 @@ export default class BlackJack {
     
     // this.dealBtn.style.transform = 'true';
     console.log("prepare next round");
+  }
+
+  betSpotTransformRestore() {
+    this.mainbetSpot.style.transform = '';
+    this.rightSidebetSpot.style.transform = '';
+    this.leftSidebetSpot.style.transform = '';
+  }
+
+  betSpotTransform(betSpotIndex) {
+    switch (betSpotIndex) {
+      case 'main' : {
+        this.mainbetSpot.style.transform = 'scale(1.2)';
+        this.rightSidebetSpot.style.transform = '';
+        this.leftSidebetSpot.style.transform = '';
+        break;
+      }
+      case 'rightSide' : {
+        this.mainbetSpot.style.transform = '';
+        this.rightSidebetSpot.style.transform = 'scale(1.2)';
+        this.leftSidebetSpot.style.transform = '';
+        break;
+      }
+      case 'leftSide' : {
+        this.mainbetSpot.style.transform = '';
+        this.rightSidebetSpot.style.transform = '';
+        this.leftSidebetSpot.style.transform = 'scale(1.2)';
+        break;
+      }
+    }
   }
 
 

@@ -217,7 +217,9 @@ i {
 
 .chipBtn1:focus, .chipBtn5:focus, .chipBtn25:focus, .chipBtn100:focus {    
     /* transform: scale(1.2)  rotate(1turn); */
-    outline: solid yellow 2px;
+    /* outline: solid yellow 2px; */
+    /* border-color: lawngreen; */
+    border : solid yellow;
 }
 
 .startBtn {
@@ -528,12 +530,12 @@ i {
 .stackChip {
     width: 5%;
     height: 5%;
-    z-index: 1;
-    opacity: 90%;
+    z-index: 3;
+    
 }
 
 .stackChip:hover {
-    z-index: 0;
+    /* z-index: 0; */
     cursor: pointer;
 }
 

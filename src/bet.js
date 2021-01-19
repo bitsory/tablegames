@@ -43,9 +43,10 @@ export default class Bet {
         this.makeBetSpot(this.rightSidebetSpot, 'BJsidebet BJRightSidebet', rightSubgameImage, 54, 37);
         this.makeBetSpot(this.leftSidebetSpot, 'BJsidebet BJLeftSidebet', leftSubgameImage, 39, 37);
 
-        this.mainbetSpot.addEventListener('click', this.onclickBet);
-        this.rightSidebetSpot.addEventListener('click', this.onclickBet);
-        this.leftSidebetSpot.addEventListener('click', this.onclickBet);
+        this.playField.addEventListener('click', this.onclickBetSpot);
+        // this.mainbetSpot.addEventListener('click', this.onclickBetSpot);
+        // this.rightSidebetSpot.addEventListener('click', this.onclickBetSpot);
+        // this.leftSidebetSpot.addEventListener('click', this.onclickBetSpot);
         
     }
 
@@ -91,21 +92,50 @@ export default class Bet {
         this.onClickItem = click; 
     }
 
-    onclickBet = (event) => {
-
+    onclickBetSpot = (event) => {
         console.log("onclick bet");
-        const target = event.target;        
-        
-        if (target.matches('.BJmainbet')) {  
-            console.log("main Bet target");          
-            this.onClickItem && this.onClickItem('main');            
+        const target = event.target;            
+        let index = [this.mainbetSpot, this.rightSidebetSpot, this.leftSidebetSpot];        
+
+        if (target.matches('.BJmainbet')) {              
+            index.splice(0,1);
+            this.onClickItem && this.onClickItem('main');              
+            this.betSpotTransform(this.mainbetSpot, index);            
         } else if (target.matches('.BJRightSidebet')) {
-            console.log("right side Bet target");
-            this.onClickItem && this.onClickItem('rightSide');
+            index.splice(1,1);            
+            this.onClickItem && this.onClickItem('rightSide');            
+            this.betSpotTransform(this.rightSidebetSpot, index);
         } else if (target.matches('.BJLeftSidebet')) {
-            console.log("left side Bet target");
-            this.onClickItem && this.onClickItem('leftSide');
-        }       
+            index.splice(2,1);
+            this.onClickItem && this.onClickItem('leftSide');            
+            this.betSpotTransform(this.leftSidebetSpot, index);
+        } else {           
+            this.betSpotTransform('', index);           
+        }
+         
+    }
+
+    betSpotTransform(betSpotIndex, others) {
+        if (betSpotIndex) {
+            betSpotIndex.style.transform = 'scale(1.25)';
+            betSpotIndex.style.opacity = "100%";        
+            betSpotIndex.style.border = "3px solid white";
+            betSpotIndex.style.zIndex = '2';
+
+            for (let i = 0 ; i < others.length ; i ++) {
+                others[i].style.transform = '';
+                others[i].style.opacity = "50%";        
+                others[i].style.border = "none";
+                others[i].style.zIndex = '1';
+            }
+            return;
+        }
+
+        for (let i = 0 ; i < others.length ; i ++) {
+            others[i].style.transform = '';
+            others[i].style.opacity = "100%";          
+            others[i].style.zIndex = '1';
+        }
     }
 
     stackUpChip(amount, index, bet) {
