@@ -85,26 +85,59 @@
             </ul>          
         </nav> -->
     </section>
-    
-    <section class="mainField">
-        <div class="greeting">Welcome to the Playground!</div>
-        <div class="bjcheckbox">
-            <input onclick="countCheck(this);" type="checkbox" name="bjchoice" value="lucky" />Lucky Lucky
-            <input onclick="countCheck(this);" type="checkbox" name="bjchoice" value="trilux" checked/>TriLux
-            <input onclick="countCheck(this);" type="checkbox" name="bjchoice" value="kings" checked/>Kings
-            <input onclick="countCheck(this);" type="checkbox" name="bjchoice" value="tie"/>Tie
-            <input onclick="countCheck(this);" type="checkbox" name="bjchoice" value="pair"/>Pair
 
-
-        </div>
-        <button class="blackjackstart" onclick="bjCheckedValue();">BlackJack</button>
-        
-        <!-- <div class="game_field"></div> -->
+    <section class="testField">
+        test Field
 
     </section>
     
+    <section class="mainField">
+        <div class="greeting">Welcome to the Playground!</div>
+        <!-- <div class="bjcheckbox"> -->
+            <ul >
+                <li><input type="checkbox" id="cb1" name="bjchoice" value="lucky" onclick="countCheck(this);"/>
+                  <label for="cb1"><img class="checkSubgame" src="img/blackjack/logos/logo_lucky.png" /></label>
+                </li>
+                <li><input type="checkbox" id="cb2" name="bjchoice" value="kings" onclick="countCheck(this);"/>
+                  <label for="cb2"><img class="checkSubgame" src="img/blackjack/logos/logo_kings.png" /></label>
+                </li>
+                <li><input type="checkbox" id="cb3" name="bjchoice" value="trilux" onclick="countCheck(this);"/>
+                  <label for="cb3"><img class="checkSubgame" src="img/blackjack/logos/logo_trilux.png" /></label>
+                </li>
+                <li><input type="checkbox" id="cb4" name="bjchoice" value="tie" onclick="countCheck(this);"/>
+                  <label for="cb4"><img class="checkSubgame" src="img/blackjack/logos/logo_tie.png" /></label>
+                </li>
+                <li><input type="checkbox" id="cb5" name="bjchoice" value="pair" onclick="countCheck(this);"/>
+                  <label for="cb5"><img class="checkSubgame" src="img/blackjack/logos/logo_pair.png" /></label>
+                </li>
+            </ul>
+
+
+            <!-- <input onclick="countCheck(this);" type="checkbox" name="bjchoice" value="lucky" />Lucky Lucky
+            <input onclick="countCheck(this);" type="checkbox" name="bjchoice" value="trilux" checked/>TriLux
+            <input onclick="countCheck(this);" type="checkbox" name="bjchoice" value="kings" checked/>Kings
+            <input onclick="countCheck(this);" type="checkbox" name="bjchoice" value="tie"/>Tie
+            <input onclick="countCheck(this);" type="checkbox" name="bjchoice" value="pair"/>Pair -->
+
+
+        <!-- </div> -->
+        <input class="blackjackstart" type="image" src="img/blackjack/bjstart.png" onclick="bjCheckedValue();" />
+        <!-- <button class="blackjackstart" onclick="bjCheckedValue();">BlackJack</button> -->
+        <p>
+        <div class="bjArticle">
+            Blackjack, formerly also Black Jack and Vingt-Un, 
+            is the American member of a global family of banking games known as Twenty-One, 
+            whose relatives include the British game of Pontoon and the European game, Vingt-et-Un. 
+            It is a comparing card game between one or more players and a dealer, where each player 
+            in turn competes against the dealer. Players do not compete against each other. 
+            It is played with one or more decks of 52 cards, and is the most widely played casino 
+            banking game in the world.
+        </div>
+        
+    </section>
+    
     <footer class="foot">
-        <section class="footer">CopyRight@</section>
+        <section class="footer">site design @ bitsori.Inc 2021</section>
     </footer>
 </body>
 </html>

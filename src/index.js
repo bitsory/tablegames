@@ -178,6 +178,45 @@ window.makeField = (maingame, subgame1, subgame2) => {
 //     const blackjack = new BlackJack();
 // }
 
+window.selectedGameStart = (maingame, subgame1, subgame2) => {
+    console.log('field maker initialized...');
+
+    const mainField = document.querySelector('.mainField');
+    mainField.innerHTML='';
+    const playField = document.createElement('div');
+    const playControlField = document.createElement('div');
+    const chipControlField = document.createElement('div');
+   
+    
+    playField.setAttribute('class', 'playField');
+    chipControlField.setAttribute('class', 'chipControlField');
+    playControlField.setAttribute('class', 'playControlField');
+    playField.style.position = 'absolute';
+    chipControlField.style.position = 'absolute';
+    playControlField.style.position = 'absolute';
+    
+    
+    chipControlField.style.bottom = `50px`;
+    playControlField.style.bottom = `0px`;
+    mainField.appendChild(playField);
+    mainField.appendChild(chipControlField);
+    mainField.appendChild(playControlField);
+
+    switch(maingame) {
+        case 'blackjack': {
+            const blackjack = new BlackJack(subgame1, subgame2);
+            break;
+        }
+        case 'baccarat': {
+            startBtn.src = 'img/baccarat/bcstart.png';
+            break;
+        }
+    }
+
+    
+
+}
+
 window.setButtons = (name, attribute, url) => {
     const playField = document.querySelector('.playField');
     name.setAttribute('class', attribute);
@@ -195,7 +234,9 @@ window.bjCheckedValue = () => {
     
     selectedEls.forEach((item) => result.push(item.value));
     console.log(result);
-    makeField('blackjack', result[0], result[1]);
+    selectedGameStart('blackjack', result[0], result[1]);
+    //const blackjack = new BlackJack( result[0], result[1]);
+    // makeField('blackjack', result[0], result[1]);
 }
 
 window.countCheck = (item) => {

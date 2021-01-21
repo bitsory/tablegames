@@ -2,34 +2,27 @@
 
 import BJPublic from "./bjpublic.js";
 
-export default class BJSidebet extends BJPublic {
-
-    rightSubgame ='';
-    leftSubgame = '';
-
-    // constructor() {
-    
-    //     console.log("bjsidebet initialized...");
-    //     // console.log(right);
-    //     // console.log(left);
-    //     // this.rightSubgame = right;
-    //     // this.leftSubgame = left;        
-
-    // }
-
+export default class BJSubgame extends BJPublic {
+   
     checkSubgame(index, subgameParam, bet) {
         switch (index) {
             case 'lucky' : {    
-                return this.subgameLucky(subgameParam, bet);
-                                
+                return this.subgameLucky(subgameParam, bet);                                
             }
             case 'kings' : {
-                return this.subgameKings(subgameParam, bet);
-                
+                return this.subgameKings(subgameParam, bet);                
             }
             case 'trilux' : {
-                return this.subgameTrilux(subgameParam, bet);
-                              
+                return this.subgameTrilux(subgameParam, bet);                              
+            }
+            case 'pair' : {
+                return this.subgamePair(subgameParam, bet);                              
+            }
+            case 'tie' : {
+                return this.subgameTie(subgameParam, bet);                              
+            }
+            case 'tie split' : {
+                return this.subgameTieSplit(subgameParam, bet);                              
             }
         }
 
@@ -72,7 +65,7 @@ export default class BJSidebet extends BJPublic {
     subgameKings = (subgameParam, bet) => {
                
         const kingsTotal = this.checkTotal(subgameParam);
-        const kingsSuitArray = this.checkSuit(subgameParam);
+        const kingsSuitArray = this.checkShape(subgameParam);
         console.log(`kings : ${kingsSuitArray}`);
         this.checkFlush(subgameParam);
         let kingsNumberArray = [];
@@ -80,15 +73,13 @@ export default class BJSidebet extends BJPublic {
             kingsNumberArray.push(this.numberRecognizeForSidebet(element));
         });
         console.log(`kings : ${subgameParam}`);
-
-        switch (kingsTotal) {
-            
-            case 20: {
+                    
+            if (kingsTotal === 20) {
                 if ((kingsNumberArray[0] === 13 && kingsNumberArray[1] === 13) && (kingsSuitArray[0] === 'S' && kingsSuitArray[1] === 'S')) {
                     return [bet * 100, 'Kings of Spades'];
                 } else if ((kingsNumberArray[0] === 13 && kingsNumberArray[1] === 13) && (kingsSuitArray[0] === kingsSuitArray[1])) {
-                    return [bet * 30, 'Suited Kings(except Spades)'];
-                } else if ((kingsSuitArray[0] === kingsSuitArray[1]) && this.checkFlush(subgameParam)) {
+                    return [bet * 30, 'Suited Kings(Not Spades)'];
+                } else if ((kingsNumberArray[0] === kingsNumberArray[1]) && this.checkFlush(subgameParam)) {
                     return [bet * 20, 'Suited Qs, Js, or 10s'];
                 } else if (kingsSuitArray[0] === kingsSuitArray[1]) {
                     return [bet * 8, 'Suited 20'];
@@ -98,12 +89,8 @@ export default class BJSidebet extends BJPublic {
                     return [bet * 4, 'Unsuited 20'];
                 }
             }
-            
-            default : {
-                console.log("nothing on kings");
-                return;
-            }
-        }
+        return;            
+        
     }
 
     subgameTrilux = (subgameParam, bet) => {
@@ -115,9 +102,43 @@ export default class BJSidebet extends BJPublic {
             return [bet * 8, 'Straight'];        
         } else if (this.checkFlush(subgameParam)) {
             return [bet * 5, 'Flush'];
-        } else {
-            return;
-        }
+        } else return;        
+    }
+
+    subgamePair = (subgameParam, bet) => {
+        if (this.checkFlush(subgameParam) && this.checkPair(subgameParam)) {
+            return [bet * 25, 'Perfect Pair'];
+        } else if (this.checkColor(subgameParam) && this.checkPair(subgameParam)) {
+            return [bet * 12, 'Colored Pair'];
+        } else if (this.checkPair(subgameParam)) {
+            return [bet * 6, 'Mixed Pair'];
+        } else return;
+    }
+
+    subgameTie = (subgameParam, bet) => {
+        if (subgameParam[0] === subgameParam[1]) {
+            return [bet * 10, 'Tie pays 10 to 1'];
+        } else return;
+    }
+
+    subgameTieSplit = (subgameParam, bet) => {
+        if (subgameParam[0] === subgameParam[1]) {
+            return [bet * 10, 'Tie pays 10 to 1'];
+        } else return;
+    }
+
+    checkPair(array) {
+        if (this.numberRecognizeForSidebet(array[0]) === this.numberRecognizeForSidebet(array[1])) return true;
+        else return false;        
+    }
+
+    checkColor(array) {
+        let shape = this.checkShape(array);
+        if ((shape[0] === 'H' || shape[0] === 'D') && (shape[1] === 'H' || shape[1] === 'D')) {
+            return true;
+        } else if ((shape[0] === 'C' || shape[0] === 'S') && (shape[1] === 'C' || shape[1] === 'S')) {
+            return true;
+        } else return false;
     }
 
     checkTotal(array) {
@@ -130,18 +151,6 @@ export default class BJSidebet extends BJPublic {
         return total;
     }
 
-    checkSuit(array) {
-        console.log(array.length);
-        let suit = [];
-        array.forEach(element => {
-            suit.push(this.suitRecognize(element));
-        })
-        
-        console.log(suit);
-        console.log(suit.length);
-        return suit;
-    }
-
     checkShape(array) {
         console.log(array.length);
         let shape = [];
@@ -149,20 +158,14 @@ export default class BJSidebet extends BJPublic {
             shape.push(this.shapeRecognize(element));
         })
         
-        console.log(shape);
-        console.log(shape.length);
         return shape;
     }
 
     checkFlush(array) {
-        let arr = this.checkShape(array);
-        console.log(arr.length);
+        let arr = this.checkShape(array);        
         for (let i = 0 ; i < arr.length - 1 ; i ++) {
-            if (!(arr[i] === arr[i+1])) return false;
-            console.log(`flush ${i}`);
+            if (!(arr[i] === arr[i+1])) return false;            
         }
-        
-        console.log(`flush : ${arr}`);
         return true;
 
     }
@@ -171,8 +174,7 @@ export default class BJSidebet extends BJPublic {
         let arr = [];
         array.forEach(element => arr.push(this.numberRecognizeForSidebet(element)));
         let sortedArr = arr.sort(this.compareNumbers);
-        console.log(sortedArr);
-
+        
         if (sortedArr[0] === 1 && sortedArr[sortedArr.length-1] === 13) {
             sortedArr.push(14);
             sortedArr.shift();
@@ -227,7 +229,6 @@ export default class BJSidebet extends BJPublic {
             }
         }
         return parseInt(result);
-
     }
 
 

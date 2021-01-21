@@ -10,12 +10,16 @@ export default class Bet {
     LEFT_SIDEBET_STACK_UP_CHIP_POS_Y = 38;
     
     heightForStackChip = 0; 
+
+    rightSubgame = '';
+    leftSubgame = '';
         
     constructor(right, left) {
 
+        this.rightSubgame = right;
+        this.leftSubgame = left;
         const rightSubgameImage = this.whatIsSubgame(right);
         const leftSubgameImage = this.whatIsSubgame(left);
-        
         
         this.playControlField = document.querySelector('.playControlField');
         this.playField = document.querySelector('.playField');
@@ -32,8 +36,6 @@ export default class Bet {
         this.playControlField.appendChild(this.showMainBet); 
         this.playControlField.appendChild(this.showSideBet); 
         this.playControlField.appendChild(this.showWinning);  
-        
-
 
         this.mainbetSpot = document.createElement('input');
         this.rightSidebetSpot = document.createElement('input');
@@ -43,11 +45,7 @@ export default class Bet {
         this.makeBetSpot(this.rightSidebetSpot, 'BJsidebet BJRightSidebet', rightSubgameImage, 54, 37);
         this.makeBetSpot(this.leftSidebetSpot, 'BJsidebet BJLeftSidebet', leftSubgameImage, 39, 37);
 
-        this.playField.addEventListener('click', this.onclickBetSpot);
-        // this.mainbetSpot.addEventListener('click', this.onclickBetSpot);
-        // this.rightSidebetSpot.addEventListener('click', this.onclickBetSpot);
-        // this.leftSidebetSpot.addEventListener('click', this.onclickBetSpot);
-        
+        this.playField.addEventListener('click', this.onclickBetSpot);                
     }
 
     makeBetSpot(name, classname, image, left, bottom) {
@@ -63,26 +61,11 @@ export default class Bet {
 
     whatIsSubgame(item) {
         switch (item) {
-            case "lucky" : {
-                return 'sidebet_lucky';
-                
-            }
-            case "kings" : {
-                return 'sidebet_kings';
-                
-            }
-            case "trilux" : {
-                return 'sidebet_trilux';
-                
-            }
-            case "pair" : {
-                return 'sidebet_pair';
-                
-            }
-            case "tie" : {
-                return 'sidebet_tie';
-                
-            }
+            case "lucky" : return 'sidebet_lucky';                
+            case "kings" : return 'sidebet_kings';                
+            case "trilux" : return 'sidebet_trilux';                
+            case "pair" : return 'sidebet_pair';
+            case "tie" : return 'sidebet_tie';                
         }
     }
 
@@ -120,7 +103,7 @@ export default class Bet {
             betSpotIndex.style.transform = 'scale(1.25)';
             betSpotIndex.style.opacity = "100%";        
             betSpotIndex.style.border = "3px solid white";
-            betSpotIndex.style.zIndex = '2';
+            betSpotIndex.style.zIndex = '3';
 
             for (let i = 0 ; i < others.length ; i ++) {
                 others[i].style.transform = '';
@@ -133,7 +116,8 @@ export default class Bet {
 
         for (let i = 0 ; i < others.length ; i ++) {
             others[i].style.transform = '';
-            others[i].style.opacity = "100%";          
+            others[i].style.opacity = "100%";
+            others[i].style.border = "none";          
             others[i].style.zIndex = '1';
         }
     }
@@ -153,20 +137,18 @@ export default class Bet {
                     spotX = this.MAINBET_STACK_UP_CHIP_POS_X;
                     spotY = this.MAINBET_STACK_UP_CHIP_POS_Y;
                     chipIndex = 'mainBetStackChip';
-                    console.log(chipIndex);
                     
-
                 } else if (bet === 'rightside') {
                     spotX = this.RIGHT_SIDEBET_STACK_UP_CHIP_POS_X;
                     spotY = this.RIGHT_SIDEBET_STACK_UP_CHIP_POS_Y;
-                    chipIndex = 'sideBetStackChip rightSideBetStackChip';
-                    console.log("stackup set rightside")
-
+                    if (this.rightSubgame === 'tie') chipIndex = 'sideBetStackChip rightSideBetStackChip tieSideBetStackChip';
+                    else chipIndex = 'sideBetStackChip rightSideBetStackChip';
+                    
                 } else if (bet === 'leftside') {
                     spotX = this.LEFT_SIDEBET_STACK_UP_CHIP_POS_X;
                     spotY = this.LEFT_SIDEBET_STACK_UP_CHIP_POS_Y;
-                    chipIndex = 'sideBetStackChip leftSideBetStackChip';
-                    console.log("stackup set leftside")
+                    if (this.leftSubgame === 'tie') chipIndex = 'sideBetStackChip leftSideBetStackChip tieSideBetStackChip';
+                    else chipIndex = 'sideBetStackChip leftSideBetStackChip';
                 }             
                 break;
             }
@@ -214,6 +196,7 @@ export default class Bet {
             }
 
             case 'winSidebet' : {
+                if (!amount) return;
                 if (bet === 'rightSide') {
                 this.childPos = document.querySelector(`.rightSideBetStackChip`).getBoundingClientRect();
                 chipIndex = 'rightSideBetStackChip';
@@ -254,8 +237,7 @@ export default class Bet {
         // this.loopForStackChip(quo5, 'stackUpChip5', this.heightForStackChip);
         // this.loopForStackChip(remainder5, 'stackUpChip1', this.heightForStackChip);
 
-        let high = 0;
-        
+        let high = 0;       
 
         for (let i = 0 ; i < quo1000 ; i++) {
             test = document.createElement('img');
@@ -429,11 +411,13 @@ export default class Bet {
     offBet() {
         this.mainbetSpot.disabled = true;
         this.rightSidebetSpot.disabled = true;
+        this.leftSidebetSpot.disabled = true;
     }
 
     onBet() {
         this.mainbetSpot.disabled = false;
         this.rightSidebetSpot.disabled = false;
+        this.leftSidebetSpot.disabled = false;
     }
 
     

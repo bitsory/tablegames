@@ -7,9 +7,9 @@
 }
 
 .BJbet:hover {    
-    transform: scale(1.1);
+    transform: scale(1.2);
     /* opacity: 50%; */
-    z-index: 2;
+    z-index: 3;
 }
 
 /* .BJbet:focus {    
@@ -34,8 +34,8 @@
 }
 
 .ctlBtn {
-    width: 15%;
-    height: 15%;
+    width: 10%;
+    /* height: 10%; */
     /* margin: 10px; */
     outline: none;
     cursor: pointer;
@@ -56,7 +56,7 @@
 
 .splitChipRight {
     transition: .4s;
-    margin-left: 15% !important;
+    margin-left: 17% !important;
 }
 
 .splitLeft0 {
@@ -68,4 +68,55 @@
 .splitRight0 {
     transition: .4s;
     margin-left: 15% !important;
+}
+
+.tieSideBetStackChipLeft {
+    transition: .4s;
+    margin-right: 15% !important;
+}
+/* 
+.tieSideBetStackChipRight {
+    transition: .4s;
+    margin-left: 10% !important; 
+} */
+
+.tieRightSideBetStackChip {
+    transition: .4s;
+    margin-left: 25% !important;
+}
+
+.askShuffleBox {
+    width: 50%;
+    height: 30%;
+    position: absolute;
+    left: 25%;
+    top: 20%;
+    background-color: rgb(58, 58, 57);
+    border-radius: 1.5rem;
+}
+
+.leftSidebetWin {
+    text-align: center;
+    animation: animateleftSidebetWin 1s;
+    right: 57% ; 
+    top: 63%; 
+    /* transform: translate(40%, 61%);  */
+}
+
+@keyframes animateleftSidebetWin {
+    0% {left: 0%;  transform: translate(0%); }
+    100% {right: 45%;  transform: translate(65%); }
+}
+
+.rightSidebetWin {
+    text-align: left;
+    animation: animateRightSidebetWin 1s;
+    left: 58%; 
+    top: 63%; 
+    /* transform: translate(40%, 61%);  */
+}
+
+@keyframes animateRightSidebetWin {
+    0% {left: 80%; transform: translate(100%); }
+    100% {left: 35%;  transform: translate(60%); }
 }
