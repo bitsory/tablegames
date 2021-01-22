@@ -230,11 +230,11 @@ window.bjCheckedValue = () => {
 
     const query = 'input[name="bjchoice"]:checked';
     const selectedEls = document.querySelectorAll(query);
-    let result = [];
+    let selectedSubgame = [];
     
-    selectedEls.forEach((item) => result.push(item.value));
-    console.log(result);
-    selectedGameStart('blackjack', result[0], result[1]);
+    selectedEls.forEach((item) => selectedSubgame.push(item.value));
+    console.log(selectedSubgame);
+    selectedGameStart('blackjack', selectedSubgame);
     //const blackjack = new BlackJack( result[0], result[1]);
     // makeField('blackjack', result[0], result[1]);
 }

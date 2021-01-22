@@ -14,12 +14,12 @@ export default class Bet {
     rightSubgame = '';
     leftSubgame = '';
         
-    constructor(right, left) {
+    constructor(left, right) {
 
-        this.rightSubgame = right;
         this.leftSubgame = left;
-        const rightSubgameImage = this.whatIsSubgame(right);
+        this.rightSubgame = right;        
         const leftSubgameImage = this.whatIsSubgame(left);
+        const rightSubgameImage = this.whatIsSubgame(right);        
         
         this.playControlField = document.querySelector('.playControlField');
         this.playField = document.querySelector('.playField');
@@ -122,29 +122,29 @@ export default class Bet {
         }
     }
 
-    stackUpChip(amount, index, bet) {
+    stackUpChip(amount, index, direction) {
 
         let spotX, spotY;
-        let chipIndex;
-        let extraX = 0;
+        let chipIndex;      
 
+        let childPos = 0;
         let parentPos = document.querySelector('.playField').getBoundingClientRect();
         let relativePos = {};
         
         switch (index) {
             case 'set' : {
-                if (bet === 'main') {
+                if (direction === 'main') {
                     spotX = this.MAINBET_STACK_UP_CHIP_POS_X;
                     spotY = this.MAINBET_STACK_UP_CHIP_POS_Y;
                     chipIndex = 'mainBetStackChip';
                     
-                } else if (bet === 'rightside') {
+                } else if (direction === 'rightside') {
                     spotX = this.RIGHT_SIDEBET_STACK_UP_CHIP_POS_X;
                     spotY = this.RIGHT_SIDEBET_STACK_UP_CHIP_POS_Y;
                     if (this.rightSubgame === 'tie') chipIndex = 'sideBetStackChip rightSideBetStackChip tieSideBetStackChip';
                     else chipIndex = 'sideBetStackChip rightSideBetStackChip';
                     
-                } else if (bet === 'leftside') {
+                } else if (direction === 'leftside') {
                     spotX = this.LEFT_SIDEBET_STACK_UP_CHIP_POS_X;
                     spotY = this.LEFT_SIDEBET_STACK_UP_CHIP_POS_Y;
                     if (this.leftSubgame === 'tie') chipIndex = 'sideBetStackChip leftSideBetStackChip tieSideBetStackChip';
@@ -154,65 +154,44 @@ export default class Bet {
             }
 
             case 'double' : {
-                if (bet === 'main') {                    
-                    this.childPos = document.querySelector(`.mainBetStackChip`).getBoundingClientRect();
-                    chipIndex = 'mainBetStackChip';
-                    
-
-                }  else if (bet === 'splitChipLeft') {                    
-                    this.childPos = document.querySelector(`.splitChipLeft`).getBoundingClientRect();
-                    chipIndex = 'splitChipLeft';
-
-                } else if (bet === 'splitChipRight') {
-                    this.childPos = document.querySelector(`.splitChipRight`).getBoundingClientRect();
-                    chipIndex = 'splitChipRight';
-                    extraX = 15;
-                }
-                relativePos.left = (this.childPos.left - parentPos.left) / parentPos.width * 100;
+                let extraX = 0;
+                if (direction === 'splitChipRight') extraX = 17;
+                
+                chipIndex = `${direction}BetStackChip`;
+                childPos = document.querySelector(`.${direction}BetStackChip`).getBoundingClientRect();
+                relativePos.left = (childPos.left - parentPos.left) / parentPos.width * 100;
                 spotX = relativePos.left - 5 - extraX;
                 spotY = this.MAINBET_STACK_UP_CHIP_POS_Y;
 
                 break;
             }
 
-            case 'win' : {
-                if (bet === 'main') {                    
-                    this.childPos = document.querySelector(`.mainBetStackChip`).getBoundingClientRect();
-                    chipIndex = 'winMainBetStackChip';
-
-                }  else if (bet === 'splitChipLeft') {                    
-                    this.childPos = document.querySelector(`.splitChipLeft`).getBoundingClientRect();
-                    chipIndex = 'winMainBetStackChipLeft';
-
-                } else if (bet === 'splitChipRight') {
-                    this.childPos = document.querySelector(`.splitChipRight`).getBoundingClientRect();
-                    chipIndex = 'winMainBetStackChipRight';
-
-                }
-                relativePos.left = (this.childPos.left - parentPos.left) / parentPos.width * 100;
+            case 'win' : {                               
+                if (direction === 'main') chipIndex = 'winMainBetStackChip';
+                else if (direction === 'splitChipLeft') chipIndex = 'winMainBetStackChipLeft';
+                else if (direction === 'splitChipRight') chipIndex = 'winMainBetStackChipRight';
+                
+                childPos = document.querySelector(`.${direction}BetStackChip`).getBoundingClientRect();
+                relativePos.left = (childPos.left - parentPos.left) / parentPos.width * 100;
                 spotX = relativePos.left + 5;
                 spotY = this.MAINBET_STACK_UP_CHIP_POS_Y;
                 break;
             }
 
             case 'winSidebet' : {
-                if (!amount) return;
-                if (bet === 'rightSide') {
-                this.childPos = document.querySelector(`.rightSideBetStackChip`).getBoundingClientRect();
-                chipIndex = 'rightSideBetStackChip';
-                relativePos.left = (this.childPos.left - parentPos.left) / parentPos.width * 100;
-                spotX = relativePos.left + 5;
-                spotY = this.RIGHT_SIDEBET_STACK_UP_CHIP_POS_Y;
-                
-                } else if (bet === 'leftSide') {
-                this.childPos = document.querySelector(`.leftSideBetStackChip`).getBoundingClientRect();
-                chipIndex = 'leftSideBetStackChip';
-                relativePos.left = (this.childPos.left - parentPos.left) / parentPos.width * 100;
-                spotX = relativePos.left - 5;
-                spotY = this.LEFT_SIDEBET_STACK_UP_CHIP_POS_Y;
-                
-                }                            
-                
+                if (!amount) return;                
+
+                childPos = document.querySelector(`.${direction}BetStackChip`).getBoundingClientRect();
+                chipIndex = `${direction}SideBetStackChip`;
+                relativePos.left = (childPos.left - parentPos.left) / parentPos.width * 100;
+
+                if (direction === 'rightSide' || direction === 'tieRightSide') {
+                    spotX = relativePos.left + 5;
+                    spotY = this.RIGHT_SIDEBET_STACK_UP_CHIP_POS_Y;                
+                } else if (direction === 'leftSide' || direction === 'tieLeftSide') {
+                    spotX = relativePos.left - 5;
+                    spotY = this.LEFT_SIDEBET_STACK_UP_CHIP_POS_Y;                
+                }                      
                 break;
             }
         }

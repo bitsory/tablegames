@@ -21,7 +21,7 @@ export default class BJSubgame extends BJPublic {
             case 'tie' : {
                 return this.subgameTie(subgameParam, bet);                              
             }
-            case 'tie split' : {
+            case 'tieSplit' : {
                 return this.subgameTieSplit(subgameParam, bet);                              
             }
         }
@@ -122,9 +122,15 @@ export default class BJSubgame extends BJPublic {
     }
 
     subgameTieSplit = (subgameParam, bet) => {
-        if (subgameParam[0] === subgameParam[1]) {
-            return [bet * 10, 'Tie pays 10 to 1'];
-        } else return;
+        const result = new Map();
+        if (subgameParam[0] === subgameParam[2]) { // left side bjplayer tie
+            result.set('left', bet * 10);
+        } 
+        if (subgameParam[1] === subgameParam[2]) { // right side secondBJplayer tie
+            result.set('right', bet * 10);
+        }
+        console.log(result);
+        return result;
     }
 
     checkPair(array) {
