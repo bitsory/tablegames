@@ -194,6 +194,7 @@ export default class BlackJack {
       this.currentCardCount = 0;
       this.playField.removeChild(shuffleModalBox);
       this.chips.onChip();
+      this.clearElement('clear', '.deck, .judgement, .judgement2, .dealerTotal, .playerTotal, .playerTotal2, .textUp, .rightSidebetWin, .leftSidebetWin, .stackChip');
     });
 
     denyShuffleBtn.addEventListener('click', ()=> {
@@ -445,22 +446,82 @@ export default class BlackJack {
       
       payoutSidebet.get('left') && this.bet.stackUpChip(payoutSidebet.get('left'), 'winSidebet', `${direction}Side`);
       payoutSidebet.get('right') && this.bet.stackUpChip(payoutSidebet.get('right'), 'winSidebet', `${direction}Side`);
-    }    
-    if (!payoutSidebet && subgameIndex != 'tie' && !this.isSplitSubgameTie) {
-      console.log("not tie sidebet, clear not tie side bet");
-      //console.log(subgameIndex);
-      this.clearElement('clearSidebet', `.${direction}SideBetStackChip`);
-    
-    } else if (!payoutSidebet && subgameIndex === 'tie' && !this.isSplitSubgameTie) {
+    }
+
+    //////////////////// lose side bet ///////////
+    if (!payoutSidebet && subgameIndex != 'tie' && !this.isSplitSubgameTie) { /// general subgame
+      console.log("not tie sidebet, clear not tie side bet");      
+
+      let parentPos = document.querySelector('.playField').getBoundingClientRect();
+      let relativePos = {};
+      let childPos = document.querySelector(`.${direction}SideBetStackChip`).getBoundingClientRect();
+      relativePos.left = (childPos.left - parentPos.left) / parentPos.width * 100;
+      relativePos.top = (childPos.top - parentPos.top) / parentPos.height * 100;
+      console.log(relativePos);
+      const loseItem = document.querySelectorAll(`.${direction}SideBetStackChip`);
+      
+      this.bet.animateLoseBet({duration: 1500,
+        //timing: bounceEaseInOut,
+        
+        // timing(timeFraction) {
+        // return timeFraction;
+        // },
+        back(x, timeFraction) {
+          return Math.pow(timeFraction, 2) * ((x + 1) * timeFraction - x)
+        },
+        draw: function(progress) {
+          loseItem.forEach((item) => {
+            
+            
+              //item.style.bottom = 38 + progress * 100 + '%';
+              //let itemPosYNum = parseInt(item.style.bottom);
+              //console.log(item.style.bottom);
+              //console.log(itemPosYNum);
+            //while(itemPosYNum) {
+              if (direction === 'left' && parseInt(item.style.bottom) <100) { 
+                item.style.left = relativePos.left + progress * 10 + '%';
+                item.style.bottom = 38 + progress * 100 + '%';
+                if (parseInt(item.style.bottom) >90 || parseInt(item.style.bottom) >100) {
+                  console.log("stop draw & disappear");
+                  //item.style.opacity = "0";
+                  item.style.display = "none";
+                }
+                //console.log(`left : ${itemPosYNum}`);
+              }
+              else if (direction === 'right' && parseInt(item.style.bottom) <100) {
+                item.style.right = relativePos.left + progress * 10 + '%';
+                item.style.bottom = 38 + progress * 100 + '%';
+                if (parseInt(item.style.bottom) >90 || parseInt(item.style.bottom) >100) {
+                  console.log("stop draw & disappear");
+                  //item.style.opacity = "0";
+                  item.style.display = "none";
+                }
+                //console.log(`right : ${itemPosYNum}`);
+              } 
+            //}
+          });          
+        }
+      });
+      //this.clearElement('clearTieSidebet', `.${direction}SideBetStackChip`);         
+    } else if (!payoutSidebet && subgameIndex === 'tie' && !this.isSplitSubgameTie) { /// tie subgame
       console.log("tie sidebet, clear tie side bet");
       this.clearElement('clearTieSidebet', `.tieSideBetStackChip`);
-    } else if (!payoutSidebet && this.isSplitSubgameTie) {
-      console.log("tie split sidebet, clear tie split side bet");
-      //this.clearElement('clearTieSidebet', `.tieSideBetStackChip`);
-    }
-    
+    } else if (this.isSplitSubgameTie && (!(payoutSidebet.get('left')) || !(payoutSidebet.get('right'))) ) {  /// tie split subgame
+      if (!(payoutSidebet.get('left')) && this.isSplitSubgameTie) {
+        console.log("tie split sidebet, clear tie split left side bet");
+        //this.clearElement('clearTieSidebet', `.tieSideBetStackChip`);
+        this.clearElement('clearTieSidebet', `.tieLeftSideBetStackChip`);
+      }      
+      if (!(payoutSidebet.get('right')) && this.isSplitSubgameTie) {
+        console.log("tie split sidebet, clear tie split right side bet");
+        this.clearElement('clearTieSidebet', `.tieRightSideBetStackChip`);
+      }
+    }    
   }
 
+  back(x, timeFraction) {
+    return Math.pow(timeFraction, 2) * ((x + 1) * timeFraction - x)
+  }
 
 
   getNextCard(who) {
@@ -625,7 +686,7 @@ export default class BlackJack {
     const mainBetStackUPChipLeft = document.querySelectorAll('.mainBetStackChip');
     mainBetStackUPChipLeft && mainBetStackUPChipLeft.forEach( (item) => {
       const cln = item.cloneNode(true);
-      item.style.left = '32%';
+      item.style.left = '30.5%';
       item.setAttribute('class','stackChip mainBetStackChip splitChipLeftBetStackChip');      
         
       cln.style.right = '';
@@ -640,28 +701,35 @@ export default class BlackJack {
       console.log(tieSidebet);
       tieSidebet && tieSidebet.forEach((item) => {
         const cln = item.cloneNode(true);
-        item.style.left = '32%';
+        console.log(cln);
+        item.style.left = '30.5%';
         item.setAttribute('class','stackChip sideBetStackChip tieLeftSideBetStackChip'); 
 
-        cln.style.right = '';  
-        cln.setAttribute('class','stackChip sideBetStackChip tieRightSideBetStackChip');  
+         cln.style.right = ''; 
+         cln.setAttribute('class','stackChip sideBetStackChip tieRightSideBetStackChip');  
                   
-        
         if (this.rightSubgame === 'tie') {
           //this.rightSubgame = 'tieSplit';
           console.log(`this.rightSubgame : ${this.rightSubgame}`);
-          //cln.setAttribute('class','stackChip sideBetStackChip tieRightSideBetStackChip');
+          console.log(cln);
+          
+          cln.setAttribute('class','stackChip sideBetStackChip tieRightSideBetStackChip');
          
         } else if (this.leftSubgame === 'tie') {
           //this.leftSubgame = 'tieSplit';
           console.log(`this.leftSubgame : ${this.leftSubgame}`);
+          console.log(cln);
+          //cln.forEach((item) => item.style.marginLeft = '25%');
+          //cln.style.right = ''; 
           cln.style.marginLeft = '25%'
           //cln.setAttribute('class','stackChip sideBetStackChip tieRightSideBetStackChip');
-        }        
-        this.rightSubgame = 'tieSplit';  
-        this.leftSubgame = 'tieSplit';
+          
+        }      
+        
         this.playField.appendChild(cln);
       });
+      this.rightSubgame = 'tieSplit';  
+      this.leftSubgame = 'tieSplit';
 
       console.log(`split: ${this.bjplayer.total}, ${this.secondBJplayer.total}`);
 

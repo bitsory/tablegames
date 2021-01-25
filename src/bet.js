@@ -333,18 +333,35 @@ export default class Bet {
 
         let timer = setInterval(() => {
             let timePassed = Date.now() - start;
-            //console.log(`timepaseed : ${timePassed}`);
-
             name.style.bottom =  (timePassed / 10 + 235) /10 + 14+ '%'; // digit : as fast as low digit
             
-
             if (timePassed > 600) { // digit : duration
                 clearInterval(timer);
-                //this.playField.removeChild(name);
-                
+                //this.playField.removeChild(name);                
             }
         }, 1); 
     }
+
+    animateLoseBet({duration, draw, back}) {
+
+        let start = performance.now();
+      
+        requestAnimationFrame(function animate(time) {
+          let timeFraction = (time - start) / duration;
+          if (timeFraction > 1) timeFraction = 1;
+      
+          //let progress = timing(timeFraction);
+      
+          let progress = back(1.5, timeFraction);
+
+          draw(progress);
+      
+          if (timeFraction < 1) {
+            requestAnimationFrame(animate);
+          }
+      
+        });
+      }
 
 
     modifyBalance(balance, mainbet, sidebet, winning) {
