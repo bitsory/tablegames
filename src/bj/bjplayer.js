@@ -17,6 +17,9 @@ export default class BJPlayer extends BJPublic{
     bet = 0;
     winning = 0;
     winIndex = '';
+    leftSideBetWinIndex = false;
+    rightSideBetWinIndex = false;
+
 
     mainBet = 0;
     rightSideBet = 0;
@@ -34,7 +37,8 @@ export default class BJPlayer extends BJPublic{
         this.isDouble = false;
         this.splitCount = 1;
         this.winIndex = '';
-
+        this.leftSideBetWinIndex = false;
+        this.rightSideBetWinIndex = false;
     }
 
     setHand(hand) {

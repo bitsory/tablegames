@@ -138,13 +138,13 @@ export default class Bet {
                     spotY = this.MAINBET_STACK_UP_CHIP_POS_Y;
                     chipIndex = 'mainBetStackChip';
                     
-                } else if (direction === 'rightside') {
+                } else if (direction === 'rightSide') {
                     spotX = this.RIGHT_SIDEBET_STACK_UP_CHIP_POS_X;
                     spotY = this.RIGHT_SIDEBET_STACK_UP_CHIP_POS_Y;
                     if (this.rightSubgame === 'tie') chipIndex = 'sideBetStackChip rightSideBetStackChip tieSideBetStackChip';
                     else chipIndex = 'sideBetStackChip rightSideBetStackChip';
                     
-                } else if (direction === 'leftside') {
+                } else if (direction === 'leftSide') {
                     spotX = this.LEFT_SIDEBET_STACK_UP_CHIP_POS_X;
                     spotY = this.LEFT_SIDEBET_STACK_UP_CHIP_POS_Y;
                     if (this.leftSubgame === 'tie') chipIndex = 'sideBetStackChip leftSideBetStackChip tieSideBetStackChip';
@@ -167,7 +167,7 @@ export default class Bet {
             }
 
             case 'win' : {                               
-                if (direction === 'main') chipIndex = 'winMainBetStackChip';
+                if (direction === 'main') chipIndex = 'mainBetStackChip';
                 else if (direction === 'splitChipLeft') chipIndex = 'winMainBetStackChipLeft';
                 else if (direction === 'splitChipRight') chipIndex = 'winMainBetStackChipRight';
                 
@@ -179,10 +179,11 @@ export default class Bet {
             }
 
             case 'winSidebet' : {
-                if (!amount) return;                
+                if (!amount) return;
+                console.log(`sidebet pay direction : ${direction}`);                
 
                 childPos = document.querySelector(`.${direction}BetStackChip`).getBoundingClientRect();
-                chipIndex = `${direction}SideBetStackChip`;
+                chipIndex = `${direction}BetStackChip`;
                 relativePos.left = (childPos.left - parentPos.left) / parentPos.width * 100;
 
                 if (direction === 'rightSide' || direction === 'tieRightSide') {
@@ -275,8 +276,7 @@ export default class Bet {
             test = document.createElement('img');
             test.setAttribute('class', `stackChip ${chipIndex} stackChip5`);
             test.type = "image";
-            test.src = 'img/chips/stackChip5.png';
-            console.log("testbet25");
+            test.src = 'img/chips/stackChip5.png';            
             test.style.position = 'absolute';
             test.style.left = `${spotX}%`;
             test.style.bottom = `${spotY + high}%`;
@@ -342,7 +342,7 @@ export default class Bet {
         }, 1); 
     }
 
-    animateLoseBet({duration, draw, back}) {
+    animateMovingBet({duration, draw, back}) {
 
         let start = performance.now();
       
@@ -353,7 +353,7 @@ export default class Bet {
           //let progress = timing(timeFraction);
       
           let progress = back(1.5, timeFraction);
-
+          
           draw(progress);
       
           if (timeFraction < 1) {

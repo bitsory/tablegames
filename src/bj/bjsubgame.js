@@ -6,26 +6,18 @@ export default class BJSubgame extends BJPublic {
    
     checkSubgame(index, subgameParam, bet) {
         switch (index) {
-            case 'lucky' : {    
-                return this.subgameLucky(subgameParam, bet);                                
-            }
-            case 'kings' : {
-                return this.subgameKings(subgameParam, bet);                
-            }
-            case 'trilux' : {
-                return this.subgameTrilux(subgameParam, bet);                              
-            }
-            case 'pair' : {
-                return this.subgamePair(subgameParam, bet);                              
-            }
-            case 'tie' : {
-                return this.subgameTie(subgameParam, bet);                              
-            }
-            case 'tieSplit' : {
-                return this.subgameTieSplit(subgameParam, bet);                              
-            }
+            case 'lucky' : return this.subgameLucky(subgameParam, bet);                                
+            
+            case 'kings' : return this.subgameKings(subgameParam, bet);                
+            
+            case 'trilux' : return this.subgameTrilux(subgameParam, bet);                              
+            
+            case 'pair' : return this.subgamePair(subgameParam, bet);                              
+            
+            case 'tie' : return this.subgameTie(subgameParam, bet);                              
+            
+            case 'tieSplit' : return this.subgameTieSplit(subgameParam, bet);                              
         }
-
     }
 
     subgameLucky = (subgameParam, bet) => {
@@ -33,12 +25,10 @@ export default class BJSubgame extends BJPublic {
         const luckyTotal = this.checkTotal(subgameParam);
         
         switch (luckyTotal) {
-            case 19 : {                
-                return [bet * 2, 'Any 19'];                
-            }
-            case 20: {
-                return [bet * 2, 'Any 20'];
-            }
+            case 19 : return [bet * 2, 'Any 19'];                
+            
+            case 20: return [bet * 2, 'Any 20'];
+            
             case 21: {
                 if (this.checkFlush(subgameParam) && this.checkTrips(subgameParam)) { /// suited 777
                     return [bet * 200, 'Suited 777']; 
@@ -54,10 +44,7 @@ export default class BJSubgame extends BJPublic {
                     return [bet * 3, 'Any 21'];          
                 }
             }
-            default : {
-                console.log("nothing on lucky lucky");
-                return;
-            }
+            default : return;            
         }
 
     }
