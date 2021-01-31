@@ -155,7 +155,7 @@ export default class Bet {
 
             case 'double' : {
                 let extraX = 0;
-                if (direction === 'splitChipRight') extraX = 17;
+                if (direction === 'splitRight') extraX = 17;
                 
                 chipIndex = `${direction}BetStackChip`;
                 childPos = document.querySelector(`.${direction}BetStackChip`).getBoundingClientRect();
@@ -168,8 +168,10 @@ export default class Bet {
 
             case 'win' : {                               
                 if (direction === 'main') chipIndex = 'mainBetStackChip';
-                else if (direction === 'splitChipLeft') chipIndex = 'winMainBetStackChipLeft';
-                else if (direction === 'splitChipRight') chipIndex = 'winMainBetStackChipRight';
+                else if (direction === 'splitLeft') chipIndex = 'winMainBetStackChipLeft';
+                else if (direction === 'splitRight') chipIndex = 'winMainBetStackChipRight';
+
+                //chipIndex = `${direction}BetStackChip`;
                 
                 childPos = document.querySelector(`.${direction}BetStackChip`).getBoundingClientRect();
                 relativePos.left = (childPos.left - parentPos.left) / parentPos.width * 100;

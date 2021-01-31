@@ -20,7 +20,7 @@ export default class BlackJack {
   DEALER_SECOND_X = 50;
   DEALER_SECOND_Y = 12;
   
-  JUDGEMENT_X = 45;
+  JUDGEMENT_X = 47;
   JUDGEMENT_Y = 31;
 
   JUDGEMENT_SPLIT_LEFT_X = 30;
@@ -432,11 +432,12 @@ export default class BlackJack {
     console.log(`checkAndPaySubgame : ${subgameParam}`);
     console.log(`checkAndPaySubgame : ${payoutSidebet}`);
 
-    if (payoutSidebet && !this.isSplitSubgameTie) {
+    if (payoutSidebet && !this.isSplitSubgameTie) { //// not split
       direction === 'leftSide' ? this.bjplayer.leftSideBetWinIndex = true : this.bjplayer.rightSideBetWinIndex = true;
       this.bet.stackUpChip(payoutSidebet[0], 'winSidebet', direction);           
       this.showText('', '', `${direction}betWin`, payoutSidebet[1]);
-    } else if (payoutSidebet && this.isSplitSubgameTie) {
+
+    } else if (payoutSidebet && this.isSplitSubgameTie) { //// split 
       console.log(`map left : ${payoutSidebet.get('left')}`);
       console.log(`map right : ${payoutSidebet.get('right')}`);
       
@@ -476,6 +477,20 @@ export default class BlackJack {
     console.log(relativePos);
     const movingItem = document.querySelectorAll(`.${direction}BetStackChip`);
     console.log(movingItem);
+    let i =0;
+      let timer = setInterval(() => {
+
+        if (i === movingItem.length) {
+          clearInterval(timer);
+        } else {
+          if ((direction === 'main' || direction === 'splitLeft' || direction === 'splitRight' || direction === 'leftSide' || direction === 'rightSide' || direction === 'tieSide')) {
+            this.losingChipMove(movingItem, '', i);
+          }
+        }
+        i++;
+      }, 200);
+      
+    /*
     this.bet.animateMovingBet(
       {duration: 1500,        
       back(x, timeFraction) {
@@ -515,6 +530,25 @@ export default class BlackJack {
         });          
       }
     });
+    */
+    
+  }
+
+  losingChipMove(item, relativePosLeft, index) {
+    this.bet.animateMovingBet(
+      { duration: 1500,        
+      back(x, timeFraction) {
+      return Math.pow(timeFraction, 2) * ((x + 1) * timeFraction - x)
+      },
+      draw: (progress) => {
+        //console.log(index);
+        //item[index].style.left = relativePosLeft + progress * 30 + '%';
+        //console.log(item[index].style.left);
+        item[index].style.bottom = 38 + progress * 50 + '%';
+        //console.log(item[index].style.bottom);
+        
+        }
+      });
   }
 
   winningBetHandle(direction) {
@@ -537,23 +571,10 @@ export default class BlackJack {
         if (i === movingItem.length) {
           clearInterval(timer);
         }
-        else {
-          //if ((direction === 'main' || direction === 'leftSide' || direction === 'rightSide')) {
-          if (direction === 'main') {
-            this.winningChipMove(movingItem, relativePos.left, i);        
-          }
-          else if (direction === 'winMain') {
-            this.winningChipMove(movingItem, relativePos.left, i);        
-          }
-          else if (direction === 'leftSide') {
-            this.winningChipMove(movingItem, relativePos.left, i);        
-          }
-          else if (direction === 'rightSide') {
-            this.winningChipMove(movingItem, relativePos.left, i);        
-          }
+        else if ((direction === 'main' || direction === 'leftSide' || direction === 'rightSide' || direction === 'splitLeft' || direction === 'splitRight')) {
+          this.winningChipMove(movingItem, relativePos.left, i);                  
         }
-        i++;
-        
+        i++;        
       }, 200);
   }
 
@@ -690,7 +711,7 @@ export default class BlackJack {
 
   doubleDown() {
     const player = this.isSplit ? (this.isSplitAndLeftHand? this.bjplayer : this.secondBJplayer) : this.bjplayer;
-    const doubleIndex = this.isSplit ? (this.isSplitAndLeftHand? 'splitChipLeft' : 'splitChipRight') : 'main';
+    const doubleIndex = this.isSplit ? (this.isSplitAndLeftHand? 'splitLeft' : 'splitRight') : 'main';
     if ((!this.isSplit) || (this.isSplit && !this.isSplitAndLeftHand)) { this.offHitAndStay(); } // button off
     
     player.isDouble = true;    
@@ -738,10 +759,10 @@ export default class BlackJack {
     mainBetStackUPChipLeft && mainBetStackUPChipLeft.forEach( (item) => {
       const cln = item.cloneNode(true);
       item.style.left = '30.5%';
-      item.setAttribute('class','stackChip mainBetStackChip splitChipLeftBetStackChip');      
+      item.setAttribute('class','stackChip mainBetStackChip splitLeftBetStackChip');      
         
       cln.style.right = '';
-      cln.setAttribute('class','stackChip mainBetStackChip splitChipRightBetStackChip');
+      cln.setAttribute('class','stackChip mainBetStackChip splitRightBetStackChip');
       this.playField.appendChild(cln);   
     });
 
@@ -1011,8 +1032,8 @@ export default class BlackJack {
           this.bet.modifyBalance(player.balance, tmpMainBet, tmpSideBet, tmpWin);
           this.bet.animateBalance(player.BalanceOfBeginningRound, player.BalanceOfBeginningRound + tmpWin, 1000);
           if (this.isSplitSubgameTie) {            
-            this.checkAndPaySubgame(this.rightSubgame, this.bjplayer.rightSideBet, 'tieRight');
-            this.checkAndPaySubgame(this.leftSubgame, this.bjplayer.leftSideBet, 'tieLeft');
+            this.checkAndPaySubgame(this.rightSubgame, this.bjplayer.rightSideBet, 'tieRightSide');
+            this.checkAndPaySubgame(this.leftSubgame, this.bjplayer.leftSideBet, 'tieLeftSide');
             console.log("tie split check and pay");
           }
 
@@ -1097,8 +1118,8 @@ export default class BlackJack {
       this.bet.animateBalance(player.BalanceOfBeginningRound, player.BalanceOfBeginningRound + tmpWin, 1000);
 
       if (this.isSplitSubgameTie) {            
-        this.checkAndPaySubgame(this.rightSubgame, this.bjplayer.rightSideBet, 'tieRight');
-        this.checkAndPaySubgame(this.leftSubgame, this.bjplayer.leftSideBet, 'tieLeft');
+        this.checkAndPaySubgame(this.rightSubgame, this.bjplayer.rightSideBet, 'tieRightSide');
+        this.checkAndPaySubgame(this.leftSubgame, this.bjplayer.leftSideBet, 'tieLeftSide');
         console.log("tie split check and pay");
       }
       this.prepareNextRound();
@@ -1116,7 +1137,7 @@ export default class BlackJack {
     console.log(player);
     for (let i = 0; i < player.length; i++) {
       if ( player[i].winIndex && (player[i].winIndex === 'win')) {        
-        const index = this.isSplit ? ( i === 0? 'splitChipLeft' : 'splitChipRight') : 'main';
+        const index = this.isSplit ? ( i === 0? 'splitLeft' : 'splitRight') : 'main';
         setTimeout(() => {
           this.winningBetHandle(index);      
           
@@ -1124,11 +1145,9 @@ export default class BlackJack {
         this.bet.stackUpChip(player[i].mainBet, 'win', index);
         
         
-      } else if (player[i].winIndex === 'lose') { 
-        // console.log("lose stackup clear");
-        const index = this.isSplit ? ( i === 0? '.splitChipLeftBetStackChip' : '.splitChipRightBetStackChip') : 'main';
-        this.losingBetHandle(index);
-        //this.clearElement('stackChip', index); 
+      } else if (player[i].winIndex === 'lose') {         
+        const index = this.isSplit ? ( i === 0? 'splitLeft' : 'splitRight') : 'main';
+        this.losingBetHandle(index);        
       }
       console.log(player[i].leftSideBetWinIndex);
       console.log(player[i].rightSideBetWinIndex);
@@ -1136,10 +1155,6 @@ export default class BlackJack {
       if (player[i].rightSideBetWinIndex == true) this.winningBetHandle('rightSide');
     }
     console.log("pay stack up chip");
-           
-    
-
-    
     
   }
 

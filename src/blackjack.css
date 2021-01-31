@@ -49,12 +49,12 @@
 }
 
 
-.splitChipLeftBetStackChip {
+.splitLeftBetStackChip {
     transition: .4s;
     margin-right: 15% !important;
 }
 
-.splitChipRightBetStackChip {
+.splitRightBetStackChip {
     transition: .4s;
     margin-left: 17% !important;
 }
