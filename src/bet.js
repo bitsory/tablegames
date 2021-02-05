@@ -23,6 +23,7 @@ export default class Bet {
         
         this.playControlField = document.querySelector('.playControlField');
         this.playField = document.querySelector('.playField');
+        this.labelField = document.querySelector('.labelField');
         this.showBalance = document.createElement('span');
         this.showMainBet = document.createElement('span');
         this.showSideBet = document.createElement('span');
@@ -37,6 +38,29 @@ export default class Bet {
         this.playControlField.appendChild(this.showSideBet); 
         this.playControlField.appendChild(this.showWinning);  
 
+        this.labelBalance = document.createElement('span');
+        this.labelMainBet = document.createElement('span');
+        this.labelSideBet = document.createElement('span');
+        this.labelWinning = document.createElement('span');
+
+        this.labelBalance.setAttribute('class', 'label labelBalance');
+        this.labelMainBet.setAttribute('class', 'label labelMainBet');
+        this.labelSideBet.setAttribute('class', 'label labelSideBet');
+        this.labelWinning.setAttribute('class', 'label labelWinning');
+        this.labelField.appendChild(this.labelBalance);
+        this.labelField.appendChild(this.labelMainBet); 
+        this.labelField.appendChild(this.labelSideBet); 
+        this.labelField.appendChild(this.labelWinning); 
+
+        
+        this.labelBalance.innerHTML = `BALANCE`;
+        
+        this.labelMainBet.innerHTML = `MAINBET`;
+        
+        this.labelSideBet.innerHTML = `SIDEBET`;
+        
+        this.labelWinning.innerHTML = `WINNING `;
+
         this.mainbetSpot = document.createElement('input');
         this.rightSidebetSpot = document.createElement('input');
         this.leftSidebetSpot = document.createElement('input');
@@ -46,6 +70,19 @@ export default class Bet {
         this.makeBetSpot(this.leftSidebetSpot, 'BJsidebet BJLeftSidebet', leftSubgameImage, 39, 37);
 
         this.playField.addEventListener('click', this.onclickBetSpot);                
+    }
+
+    setLabel() {
+           
+        this.showbalance = document.querySelector('.balance');
+        this.showbalance.innerHTML = `Balance : $${balance}`;
+        this.showMainbet = document.querySelector('.mainBet');
+        this.showMainbet.innerHTML = `MainBet : $${mainbet}`;
+        this.showSidebet = document.querySelector('.sideBet');
+        this.showSidebet.innerHTML = `SideBet : $${sidebet}`;
+        this.showWinning = document.querySelector('.winning');
+        this.showWinning.innerHTML = `Win : $${winning}`;
+        
     }
 
     makeBetSpot(name, classname, image, left, bottom) {
@@ -167,15 +204,17 @@ export default class Bet {
             }
 
             case 'win' : {                               
-                if (direction === 'main') chipIndex = 'mainBetStackChip';
-                else if (direction === 'splitLeft') chipIndex = 'winMainBetStackChipLeft';
-                else if (direction === 'splitRight') chipIndex = 'winMainBetStackChipRight';
+                //if (direction === 'main') chipIndex = 'mainBetStackChip';
+                //else if (direction === 'splitLeft') chipIndex = 'winMainBetStackChipLeft';
+                //else if (direction === 'splitRight') chipIndex = 'winMainBetStackChipRight';
+                //else if (direction === 'splitLeft') chipIndex = 'splitLeftBetStackChip';
+                //else if (direction === 'splitRight') chipIndex = 'splitRightBetStackChip';
 
-                //chipIndex = `${direction}BetStackChip`;
+                chipIndex = `${direction}BetStackChip`;
                 
                 childPos = document.querySelector(`.${direction}BetStackChip`).getBoundingClientRect();
                 relativePos.left = (childPos.left - parentPos.left) / parentPos.width * 100;
-                spotX = relativePos.left + 5;
+                spotX = direction === 'splitRight'? relativePos.left -12 : relativePos.left + 5;
                 spotY = this.MAINBET_STACK_UP_CHIP_POS_Y;
                 break;
             }
@@ -188,9 +227,12 @@ export default class Bet {
                 chipIndex = `${direction}BetStackChip`;
                 relativePos.left = (childPos.left - parentPos.left) / parentPos.width * 100;
 
-                if (direction === 'rightSide' || direction === 'tieRightSide') {
+                spotY = this.RIGHT_SIDEBET_STACK_UP_CHIP_POS_Y;                
+
+                if (direction === 'rightSide') {
                     spotX = relativePos.left + 5;
-                    spotY = this.RIGHT_SIDEBET_STACK_UP_CHIP_POS_Y;                
+                } else if (direction === 'tieRightSide') {
+                    spotX = relativePos.left - 5;               
                 } else if (direction === 'leftSide' || direction === 'tieLeftSide') {
                     spotX = relativePos.left - 5;
                     spotY = this.LEFT_SIDEBET_STACK_UP_CHIP_POS_Y;                
@@ -335,7 +377,8 @@ export default class Bet {
 
         let timer = setInterval(() => {
             let timePassed = Date.now() - start;
-            name.style.bottom =  (timePassed / 10 + 235) /10 + 14+ '%'; // digit : as fast as low digit
+            name.style.bottom =  (timePassed / 10 + 50) /10 + 14+ '%'; // digit : as fast as low digit
+            //name.style.bottom =  (timePassed / 10 + 235) /10 + 14+ '%'; // digit : as fast as low digit
             
             if (timePassed > 600) { // digit : duration
                 clearInterval(timer);
@@ -369,24 +412,24 @@ export default class Bet {
     modifyBalance(balance, mainbet, sidebet, winning) {
            
         this.showbalance = document.querySelector('.balance');
-        this.showbalance.innerHTML = `Balance : $${balance}`;
+        this.showbalance.innerHTML = `$${balance}`;
         this.showMainbet = document.querySelector('.mainBet');
-        this.showMainbet.innerHTML = `MainBet : $${mainbet}`;
+        this.showMainbet.innerHTML = `$${mainbet}`;
         this.showSidebet = document.querySelector('.sideBet');
-        this.showSidebet.innerHTML = `SideBet : $${sidebet}`;
+        this.showSidebet.innerHTML = `$${sidebet}`;
         this.showWinning = document.querySelector('.winning');
-        this.showWinning.innerHTML = `Win : $${winning}`;
+        this.showWinning.innerHTML = `$${winning}`;
         
     }
 
-    animateBalance = (start, end, duration) => {
+    animateBalance = (start, end, duration, index) => {
         if (start === end) return;
         var range = end - start;
         var current = start;
         var increment = end > start? 1 : -1;
         var stepTime = Math.abs(Math.floor(duration / range));
               
-        let balance = document.querySelector('.balance');
+        let item = document.querySelector(`.${index}`);
         var timer = setInterval(function() {
             if (end - current > 1000) {
                 current += 100;
@@ -398,7 +441,7 @@ export default class Bet {
                 current += increment;
                 
             }
-            balance.innerHTML = `Balance : $${current}`;
+            item.innerHTML = `$${current}`;
             if (current == end) {
                 clearInterval(timer);
             } 

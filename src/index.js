@@ -184,22 +184,28 @@ window.selectedGameStart = (maingame, subgame1, subgame2) => {
     const mainField = document.querySelector('.mainField');
     mainField.innerHTML='';
     const playField = document.createElement('div');
-    const playControlField = document.createElement('div');
+    
     const chipControlField = document.createElement('div');
+    const labelField = document.createElement('div');
+    const playControlField = document.createElement('div');
    
     
     playField.setAttribute('class', 'playField');
     chipControlField.setAttribute('class', 'chipControlField');
+    labelField.setAttribute('class', 'labelField');
     playControlField.setAttribute('class', 'playControlField');
     playField.style.position = 'absolute';
     chipControlField.style.position = 'absolute';
+    labelField.style.position = 'absolute';
     playControlField.style.position = 'absolute';
     
     
     chipControlField.style.bottom = `50px`;
+    labelField.style.bottom = `20px`;
     playControlField.style.bottom = `0px`;
     mainField.appendChild(playField);
     mainField.appendChild(chipControlField);
+    mainField.appendChild(labelField);
     mainField.appendChild(playControlField);
 
     switch(maingame) {
