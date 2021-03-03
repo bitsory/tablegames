@@ -92,7 +92,17 @@
     left: 25%;
     top: 20%;
     background-color: rgb(58, 58, 57);
-    border-radius: 1.5rem;
+    border-radius: 0.8rem;
+}
+
+.askInsuranceBox {
+    width: 45%;
+    height: 10%;
+    position: absolute;
+    left: 27%;
+    top: 43%;
+    background-color: rgb(58, 58, 57);
+    border-radius: 0.8rem;
 }
 
 .leftSidebetWin {

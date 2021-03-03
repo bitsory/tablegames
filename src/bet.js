@@ -8,6 +8,9 @@ export default class Bet {
     RIGHT_SIDEBET_STACK_UP_CHIP_POS_Y = 38;
     LEFT_SIDEBET_STACK_UP_CHIP_POS_X = 40.5;
     LEFT_SIDEBET_STACK_UP_CHIP_POS_Y = 38;
+    INSURANCE_STACK_UP_CHIP_POS_X = 70;
+    INSURANCE_STACK_UP_CHIP_POS_Y = 64;
+    
     
     heightForStackChip = 0; 
 
@@ -53,12 +56,9 @@ export default class Bet {
         this.labelField.appendChild(this.labelWinning); 
 
         
-        this.labelBalance.innerHTML = `BALANCE`;
-        
-        this.labelMainBet.innerHTML = `MAINBET`;
-        
-        this.labelSideBet.innerHTML = `SIDEBET`;
-        
+        this.labelBalance.innerHTML = `BALANCE`;        
+        this.labelMainBet.innerHTML = `MAINBET`;        
+        this.labelSideBet.innerHTML = `SIDEBET`;        
         this.labelWinning.innerHTML = `WINNING `;
 
         this.mainbetSpot = document.createElement('input');
@@ -186,7 +186,12 @@ export default class Bet {
                     spotY = this.LEFT_SIDEBET_STACK_UP_CHIP_POS_Y;
                     if (this.leftSubgame === 'tie') chipIndex = 'sideBetStackChip leftSideBetStackChip tieSideBetStackChip';
                     else chipIndex = 'sideBetStackChip leftSideBetStackChip';
-                }             
+                
+                } else if (direction === 'insurance') {
+                    spotX = this.INSURANCE_STACK_UP_CHIP_POS_X;
+                    spotY = this.INSURANCE_STACK_UP_CHIP_POS_Y;
+                    chipIndex = 'insuranceBetStackChip';
+                }         
                 break;
             }
 
@@ -204,18 +209,13 @@ export default class Bet {
             }
 
             case 'win' : {                               
-                //if (direction === 'main') chipIndex = 'mainBetStackChip';
-                //else if (direction === 'splitLeft') chipIndex = 'winMainBetStackChipLeft';
-                //else if (direction === 'splitRight') chipIndex = 'winMainBetStackChipRight';
-                //else if (direction === 'splitLeft') chipIndex = 'splitLeftBetStackChip';
-                //else if (direction === 'splitRight') chipIndex = 'splitRightBetStackChip';
-
+                
                 chipIndex = `${direction}BetStackChip`;
                 
                 childPos = document.querySelector(`.${direction}BetStackChip`).getBoundingClientRect();
                 relativePos.left = (childPos.left - parentPos.left) / parentPos.width * 100;
                 spotX = direction === 'splitRight'? relativePos.left -12 : relativePos.left + 5;
-                spotY = this.MAINBET_STACK_UP_CHIP_POS_Y;
+                spotY = direction === 'insurance'? this.INSURANCE_STACK_UP_CHIP_POS_Y : this.MAINBET_STACK_UP_CHIP_POS_Y;
                 break;
             }
 
@@ -346,7 +346,7 @@ export default class Bet {
 
 
 
-    textUp(x, bet, index, name) {
+    textUp(x, y, bet, index, name) {
         
         this.playField = document.querySelector('.playField');
         name = document.createElement('span');        
@@ -357,7 +357,7 @@ export default class Bet {
                 name.innerHTML = `+$${bet}`;
                 break;
             } case 'lose' : {
-                name.innerHTML = `-$${bet}`;
+                name.innerHTML = `-$${bet}`; 
                 break;
             } case 'tie' : {
                 name.innerHTML = `PUSH`;
@@ -365,19 +365,24 @@ export default class Bet {
             } case 'blackjack' : {
                 name.innerHTML = `+$${bet*1.5}`;
                 break;
+            } case '' : {
+                name.innerHTML = `-$${bet}`; 
+                break;
             }
         }
         
         name.style.position = 'absolute';
         name.style.left = `${x}%`;
-        name.style.bottom = '180px';
+        //name.style.bottom = '180px';
+        //name.style.bottom = `${y}%`;
         this.playField.appendChild(name);
 
         let start = Date.now();
 
         let timer = setInterval(() => {
             let timePassed = Date.now() - start;
-            name.style.bottom =  (timePassed / 10 + 50) /10 + 14+ '%'; // digit : as fast as low digit
+            name.style.bottom =  (timePassed / 10 + 50) /10 + y + '%'; // digit : as fast as low digit
+            //name.style.bottom =  (timePassed / 10 + 50) /10 + 14+ '%'; // digit : as fast as low digit
             //name.style.bottom =  (timePassed / 10 + 235) /10 + 14+ '%'; // digit : as fast as low digit
             
             if (timePassed > 600) { // digit : duration
@@ -406,7 +411,7 @@ export default class Bet {
           }
       
         });
-      }
+    }
 
 
     modifyBalance(balance, mainbet, sidebet, winning) {
@@ -414,7 +419,7 @@ export default class Bet {
         this.showbalance = document.querySelector('.balance');
         this.showbalance.innerHTML = `$${balance}`;
         this.showMainbet = document.querySelector('.mainBet');
-        this.showMainbet.innerHTML = `$${mainbet}`;
+        this.showMainbet.innerHTML = `$${mainbet}`;        
         this.showSidebet = document.querySelector('.sideBet');
         this.showSidebet.innerHTML = `$${sidebet}`;
         this.showWinning = document.querySelector('.winning');
@@ -431,6 +436,7 @@ export default class Bet {
               
         let item = document.querySelector(`.${index}`);
         var timer = setInterval(function() {
+            
             if (end - current > 1000) {
                 current += 100;
                 
@@ -442,7 +448,7 @@ export default class Bet {
                 
             }
             item.innerHTML = `$${current}`;
-            if (current == end) {
+            if (current == Math.floor(end)) {
                 clearInterval(timer);
             } 
             

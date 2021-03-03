@@ -84,6 +84,14 @@ i {
     
 }
 
+.judgement, .judgement2, .playerTotal, .playerTotal2, .dealerTotal {
+    color: white;    
+    font-weight: bolder;
+    font-size: larger;
+    
+}
+
+
 
 .playField {
     /* display: flex; */
@@ -96,6 +104,12 @@ i {
     background-repeat: no-repeat; */
     /* background-attachment: fixed; */
     /* background-color:darkgreen; */
+}
+
+.insurance {
+    width: 40%;
+    /* height: 20%; */
+    /* background: url('img/blackjack/insur.png') no-repeat; */ 
 }
 
 .labelField {
@@ -435,13 +449,14 @@ i {
 .textUp {
     color: rgb(255, 255, 255);
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: bold;    
     z-index: 4;
 }
 
 .textUp.win, .textUp.blackjack{
-    color: rgb(161, 175, 255);    
-    /* color: blue; */
+    color: rgb(180, 191, 255);    
+    /* color: rgb(161, 175, 255);     */
+    
 }
 
 .textUp.lose {
@@ -542,6 +557,11 @@ z-index: -1;
     .mainField {
         width: 25rem;
         height: 25rem;
+    }
+
+    .insurance {
+        width: 35%;
+        
     }
 
     .ctlBtn {

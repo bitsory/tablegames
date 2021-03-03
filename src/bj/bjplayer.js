@@ -17,21 +17,22 @@ export default class BJPlayer extends BJPublic{
     bet = 0;
     winning = 0;
     winningForSideBet = 0;
+    winningForLeftSideBet = 0;
+    winningForRightSideBet = 0;
+    winningForLeftTieSideBet = 0;
+    winningForRightTieSideBet = 0;
     winIndex = '';
-    leftSideBetWinIndex = false;
-    rightSideBetWinIndex = false;
-
+    leftSideBetWinIndex = '';
+    rightSideBetWinIndex = '';
+    leftTieSideBetWinIndex = '';
+    rightTieSideBetWinIndex = '';
 
     mainBet = 0;
     sideBet = 0;
     rightSideBet = 0;
     leftSideBet = 0;
     tmpTieBet = 0;
-
-
-    // constructor() {
-    //     //console.log('BJ Player initialized...');
-    // }
+    tieReturn = 0;
 
     init() {
         this.hand = [];
@@ -40,8 +41,16 @@ export default class BJPlayer extends BJPublic{
         this.isDouble = false;
         this.splitCount = 1;
         this.winIndex = '';
-        this.leftSideBetWinIndex = false;
-        this.rightSideBetWinIndex = false;
+        this.leftSideBetWinIndex = '';
+        this.rightSideBetWinIndex = '';
+        this.leftTieSideBetWinIndex = '';
+        this.rightTieSideBetWinIndex = '';
+        this.winning = 0;
+        this.winningForLeftSideBet = 0;
+        this.winningForRightSideBet = 0;
+        this.winningForLeftTieSideBet = 0;
+        this.winningForRightTieSideBet = 0;
+        this.tieReturn = 0;
     }
 
     setHand(hand) {
@@ -87,9 +96,20 @@ export default class BJPlayer extends BJPublic{
         this.winning = bet;
     }
 
-    setWinningForSideBet(winning, bet) {
-        this.winningForSideBet = this.winningForSideBet + winning + bet;
-
+    setWinningForSideBet(winning, bet, direction) {
+        if (direction === 'leftSide') {
+            this.winningForLeftSideBet = this.winningForLeftSideBet + winning + bet;
+            this.leftSideBetWinIndex = 'win';
+        } else if (direction === 'rightSide') {
+            this.winningForRightSideBet = this.winningForRightSideBet + winning + bet;
+            this.rightSideBetWinIndex = 'win';
+        } else if (direction === 'leftTie') {
+            this.winningForLeftTieSideBet = this.winningForLeftTieSideBet + winning + bet;
+            this.leftTieSideBetWinIndex = 'win';
+        } else if (direction === 'rightTie') {
+            this.winningForRightTieSideBet = this.winningForRightTieSideBet + winning + bet;
+            this.rightTieSideBetWinIndex = 'win';
+        }
     }
 
     setBalanceOfBeginningRound() {
@@ -111,6 +131,11 @@ export default class BJPlayer extends BJPublic{
         console.log(`setdouble : ${this.bet}, ${this.balance}`);
     }
 
+    setInsurance(amount) {
+        let tmpBalance = this.balance;
+        this.balance = tmpBalance - amount;
+    }
+
     blackjack() {
         let winning = this.mainBet*2.5;
         this.setWinning(winning);
@@ -128,14 +153,21 @@ export default class BJPlayer extends BJPublic{
     tie() {
         this.balance = this.balance + this.mainBet;
         this.winIndex = 'tie';
+        this.tieReturn = this.mainBet;
     }
 
     lose() {     
         this.winIndex = 'lose';
     }
 
+    getInsurance(amount) {
+        this.balance = this.balance + amount + amount * 2;
+    }
+
+    
+
     initBetAndWinning() {
-        this.balance = this.balance + this.winningForSideBet;
+        this.balance = this.balance + this.winningForLeftSideBet + this.winningForRightSideBet;
         this.mainBet = 0;
         this.sideBet = 0;
         this.rightSideBet = 0;

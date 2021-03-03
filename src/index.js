@@ -81,11 +81,13 @@ window.makeField = (maingame, subgame1, subgame2) => {
     const mainField = document.querySelector('.mainField');
     mainField.innerHTML='';
     const playField = document.createElement('div');
+    const insurance = document.createElement('div');
     const playControlField = document.createElement('div');
     const chipControlField = document.createElement('div');
    
     
     playField.setAttribute('class', 'playField');
+    insurance.setAttribute('class', 'insurance');
     chipControlField.setAttribute('class', 'chipControlField');
     playControlField.setAttribute('class', 'playControlField');
     
@@ -136,7 +138,8 @@ window.makeField = (maingame, subgame1, subgame2) => {
     mainField.appendChild(chipControlField);
     mainField.appendChild(playControlField);
     
-    
+    playField.appendChild(insurance);
+
     playField.appendChild(startBtn);
     playField.appendChild(settingBtn);
 
@@ -184,6 +187,7 @@ window.selectedGameStart = (maingame, subgame1, subgame2) => {
     const mainField = document.querySelector('.mainField');
     mainField.innerHTML='';
     const playField = document.createElement('div');
+    // const insurance = document.createElement('div');
     
     const chipControlField = document.createElement('div');
     const labelField = document.createElement('div');
@@ -191,15 +195,18 @@ window.selectedGameStart = (maingame, subgame1, subgame2) => {
    
     
     playField.setAttribute('class', 'playField');
+    // insurance.setAttribute('class', 'insurance');
     chipControlField.setAttribute('class', 'chipControlField');
     labelField.setAttribute('class', 'labelField');
     playControlField.setAttribute('class', 'playControlField');
     playField.style.position = 'absolute';
+    // insurance.style.position = 'absolute';
     chipControlField.style.position = 'absolute';
     labelField.style.position = 'absolute';
     playControlField.style.position = 'absolute';
     
-    
+    // insurance.style.bottom = `50%`;
+    // insurance.style.left = `10%`;
     chipControlField.style.bottom = `50px`;
     labelField.style.bottom = `20px`;
     playControlField.style.bottom = `0px`;
@@ -207,6 +214,7 @@ window.selectedGameStart = (maingame, subgame1, subgame2) => {
     mainField.appendChild(chipControlField);
     mainField.appendChild(labelField);
     mainField.appendChild(playControlField);
+    // mainField.appendChild(insurance);
 
     switch(maingame) {
         case 'blackjack': {

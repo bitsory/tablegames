@@ -60,6 +60,7 @@ export default class BJSubgame extends BJPublic {
             kingsNumberArray.push(this.numberRecognizeForSidebet(element));
         });
         console.log(`kings : ${subgameParam}`);
+        //const result = new Map();
                     
             if (kingsTotal === 20) {
                 if ((kingsNumberArray[0] === 13 && kingsNumberArray[1] === 13) && (kingsSuitArray[0] === 'S' && kingsSuitArray[1] === 'S')) {
@@ -111,10 +112,10 @@ export default class BJSubgame extends BJPublic {
     subgameTieSplit = (subgameParam, bet) => {
         const result = new Map();
         if (subgameParam[0] === subgameParam[2]) { // left side bjplayer tie
-            result.set('left', bet * 10);
+            result.set('leftTie', bet * 10);
         } 
         if (subgameParam[1] === subgameParam[2]) { // right side secondBJplayer tie
-            result.set('right', bet * 10);
+            result.set('rightTie', bet * 10);
         }
         console.log(result);
         return result;
