@@ -564,6 +564,11 @@ z-index: -1;
         
     }
 
+    .checkSubgame {
+        width: 3rem;
+        height: 3rem; 
+    }
+
     .ctlBtn {
         width: 12%;
         height: 12%;
@@ -606,6 +611,19 @@ z-index: -1;
 
     .textUp {
         font-size: 1rem;
+    }
+
+    .label {
+        margin: 1rem;
+        /* padding-right: 0.5rem; */
+        padding-top: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .bet {
+        margin: 0rem;
+        padding-right: 0.5rem;
+        font-size: 0.8rem;
     }
 
     

@@ -75,8 +75,8 @@ export default class Deck {
   
   constructor(decks) {
       console.log("deck initialized...");
-      this.shuffle(decks); 
-       //this.shuffledCard = ['H10', 'H10', 'H10', 'H10', 'H10', 'H10', 'H10','H10','C10'];
+      //this.shuffle(decks); 
+      this.shuffledCard = ['H10', 'H10', 'HA', 'H10', 'H10', 'H10', 'H10','H10','C10'];
       //this.shuffledCard = ['H10', 'H5', 'H10', 'H8', 'H10', 'H10', 'H10','H10','CK'];
       //this.shuffledCard = ['H5', 'H5', 'H5', 'H8', 'H10', 'H10', 'H10','H10','CK'];
       //this.shuffledCard = ['H10', 'H10', 'H10', 'H10', 'H10', 'H10', 'H10','H10','CK'];

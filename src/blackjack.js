@@ -543,8 +543,10 @@ export default class BlackJack {
 
       if (this.isBlackjack(0, 0, this.bjplayer.total, this.bjplayer.hand)) {
         console.log("player blackjack function run");
+        this.bjplayer.blackjack();
         this.bet.modifyBalance(this.bjplayer.balance, this.bjplayer.mainBet, this.bjplayer.rightSideBet + this.bjplayer.leftSideBet, this.bjplayer.winning);
         this.bet.textUp(this.TEXTUP_SINGLE_PLAY_X, this.TEXTUP_SINGLE_PLAY_Y, this.bjplayer.mainBet, this.bjplayer.winIndex);
+        this.bet.animateBalance(this.bjplayer.BalanceOfBeginningRound, this.bjplayer.BalanceOfBeginningRound + this.bjplayer.winning, 1000, 'balance');
         //this.payStackUpChip();
         this.openDealerBackSideCard();
         this.prepareNextRound();        
