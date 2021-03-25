@@ -69,6 +69,7 @@ export default class Bet {
         this.makeBetSpot(this.rightSidebetSpot, 'BJsidebet BJRightSidebet', rightSubgameImage, 54, 37);
         this.makeBetSpot(this.leftSidebetSpot, 'BJsidebet BJLeftSidebet', leftSubgameImage, 39, 37);
 
+        // this.test();
         this.playField.addEventListener('click', this.onclickBetSpot);                
     }
 
@@ -104,6 +105,18 @@ export default class Bet {
             case "pair" : return 'sidebet_pair';
             case "tie" : return 'sidebet_tie';                
         }
+    }
+
+    test() {
+        const test = document.createElement('img');
+        test.setAttribute('class', 'desc');
+        // test.type = "image";
+        test.src = 'img/blackjack/sidebet_payout/payout_kings.png';
+        test.style.position = 'absolute';
+        test.style.left = '30%';
+        test.style.top = '30%';
+        // test.style.width = '100%';
+        this.playField.appendChild(test);
     }
 
 
